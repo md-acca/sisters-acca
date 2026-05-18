@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FA2 Accruals &amp; Prepayments — Practice Test</title>
+<style>
+  :root {
+    --primary: #003d6b; --primary-light: #1976d2; --accent: #d4a017;
+    --green: #2e7d32; --red: #c62828; --bg: #f4f6f9; --card: #ffffff;
+    --text: #1a2332; --muted: #667085; --border: #e3e8ef;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .card { background: var(--card); border-radius: 14px; padding: 24px;
+    box-shadow: 0 1px 3px rgba(16,24,40,.08); margin-bottom: 16px; }
+  h1 { font-size: 24px; color: var(--primary); margin-bottom: 4px; }
+  h2 { font-size: 19px; color: var(--primary); margin-bottom: 12px; }
+  h3 { font-size: 16px; color: var(--primary); margin-bottom: 8px; }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .btn { background: var(--primary); color: #fff; border: none; padding: 12px 22px;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all .15s; }
+  .btn:hover { background: #00528f; transform: translateY(-1px); }
+  .btn:disabled { background: #b8c4d4; cursor: not-allowed; transform: none; }
+  .btn-ghost { background: transparent; color: var(--primary);
+    border: 1.5px solid var(--border); }
+  .btn-ghost:hover { background: #f0f4f9; }
+  .btn-accent { background: var(--accent); }
+  .btn-accent:hover { background: #b8890f; }
+  .btn-sm { padding: 8px 14px; font-size: 13px; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; }
+  .pill-green { background: #e8f5e9; color: var(--green); }
+  .pill-red { background: #ffebee; color: var(--red); }
+  .pill-blue { background: #e3f2fd; color: var(--primary-light); }
+  .pill-amber { background: #fff8e1; color: #a87810; }
+  .pill-grey { background: #eef1f5; color: var(--muted); }
+  input[type=text], input[type=number], select {
+    padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 9px;
+    font-size: 15px; width: 100%; font-family: inherit; background: #fff; }
+  input:focus, select:focus { outline: none; border-color: var(--primary-light); }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600;
+    color: var(--muted); margin-bottom: 6px; }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+  .status-dot { display: inline-block; width: 9px; height: 9px;
+    border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+  .dot-on { background: var(--green); box-shadow: 0 0 0 3px rgba(46,125,50,.15); }
+  .dot-off { background: var(--red); }
+  .dot-sync { background: var(--accent); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  .sync-bar { font-size: 13px; color: var(--muted); padding: 9px 14px;
+    background: #f0f4f9; border-radius: 8px; margin-bottom: 14px;
+    display: flex; align-items: center; }
+  .qhead { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .timer { font-size: 18px; font-weight: 700; color: var(--primary);
+    font-variant-numeric: tabular-nums; }
+  .timer.warn { color: var(--red); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 3px;
+    overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--primary-light);
+    transition: width .3s; }
+  .scenario { background: #f0f4f9; border-left: 4px solid var(--primary-light);
+    padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 14px;
+    font-size: 14.5px; }
+  .qtext { font-size: 16.5px; font-weight: 500; margin-bottom: 18px; }
+  .opt { display: block; padding: 14px 16px; border: 1.5px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: all .12s;
+    font-size: 15px; }
+  .opt:hover { border-color: var(--primary-light); background: #f8fafc; }
+  .opt.sel { border-color: var(--primary-light); background: #e8f1fb;
+    box-shadow: 0 0 0 1px var(--primary-light); }
+  .opt-letter { font-weight: 700; color: var(--primary); margin-right: 8px; }
+  .tf-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 10px;
+    flex-wrap: wrap; }
+  .tf-row .stmt { flex: 1; font-size: 15px; min-width: 200px; }
+  .tf-btn { padding: 8px 18px; border: 1.5px solid var(--border);
+    border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600;
+    font-size: 14px; }
+  .tf-btn.sel-t { background: var(--green); color: #fff; border-color: var(--green); }
+  .tf-btn.sel-f { background: var(--red); color: #fff; border-color: var(--red); }
+  .guess-box { display: flex; align-items: center; gap: 8px; margin-top: 16px;
+    padding: 12px 14px; background: #fff8e1; border-radius: 8px; font-size: 14px; }
+  .guess-box input, .confuse-box input { width: 18px; height: 18px; cursor: pointer; }
+  .confuse-box { display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    padding: 10px 14px; background: #f3e5f5; border-radius: 8px; font-size: 14px; }
+  .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px,1fr));
+    gap: 8px; margin-bottom: 16px; }
+  .nav-cell { aspect-ratio: 1; border: 1.5px solid var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 14px; font-weight: 600; background: #fff; position: relative; }
+  .nav-cell.answered { background: #e8f1fb; border-color: var(--primary-light);
+    color: var(--primary); }
+  .nav-cell.current { background: var(--primary); color: #fff;
+    border-color: var(--primary); }
+  .nav-cell.flagged::after { content: '•'; color: var(--accent);
+    position: absolute; top: -2px; right: 4px; font-size: 18px; }
+  .calc { position: fixed; bottom: 20px; right: 20px; width: 220px;
+    background: var(--card); border-radius: 14px; box-shadow: 0 8px 24px rgba(16,24,40,.18);
+    padding: 14px; z-index: 100; display: none; }
+  .calc.show { display: block; }
+  .calc-disp { background: #1a2332; color: #fff; padding: 12px; border-radius: 8px;
+    text-align: right; font-size: 20px; margin-bottom: 10px; font-variant-numeric: tabular-nums;
+    min-height: 44px; word-break: break-all; }
+  .calc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+  .calc-btn { padding: 12px 0; border: none; border-radius: 7px; background: #eef1f5;
+    cursor: pointer; font-size: 15px; font-weight: 600; }
+  .calc-btn:hover { background: #dde3ec; }
+  .calc-btn.op { background: var(--primary-light); color: #fff; }
+  .calc-btn.eq { background: var(--green); color: #fff; }
+  .calc-toggle { position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px;
+    border-radius: 50%; background: var(--primary); color: #fff; border: none;
+    font-size: 22px; cursor: pointer; z-index: 99; box-shadow: 0 4px 14px rgba(0,61,107,.3); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+    gap: 12px; margin-bottom: 20px; }
+  .stat { background: #f8fafc; border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-val { font-size: 26px; font-weight: 700; color: var(--primary); }
+  .stat-lbl { font-size: 12px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .04em; margin-top: 4px; }
+  .review-q { border: 1.5px solid var(--border); border-radius: 12px; padding: 18px;
+    margin-bottom: 14px; }
+  .review-q.correct { border-left: 4px solid var(--green); }
+  .review-q.wrong { border-left: 4px solid var(--red); }
+  .ans-line { padding: 8px 12px; border-radius: 7px; margin: 6px 0; font-size: 14px; }
+  .ans-correct { background: #e8f5e9; color: #1b5e20; }
+  .ans-wrong { background: #ffebee; color: #b71c1c; }
+  .ans-neutral { background: #f0f4f9; }
+  .explain { background: #fff8e1; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 10px; }
+  .examiner { background: #e3f2fd; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 8px; }
+  .banner { background: #fff8e1; border: 1.5px solid var(--accent);
+    border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 14px; z-index: 200; box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    opacity: 0; transition: opacity .3s; pointer-events: none; max-width: 90%; }
+  .toast.show { opacity: 1; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px; color: var(--muted); font-size: 12px;
+    text-transform: uppercase; border-bottom: 2px solid var(--border); }
+  td { padding: 10px; border-bottom: 1px solid var(--border); }
+  .bar-track { height: 10px; background: var(--border); border-radius: 5px;
+    overflow: hidden; margin: 4px 0; }
+  .bar-fill { height: 100%; border-radius: 5px; }
+  @media (max-width: 600px) {
+    .wrap { padding: 10px; } .card { padding: 16px; }
+    .calc { width: calc(100% - 40px); }
+  }
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div class="screen active" id="screen-login">
+  <div class="wrap">
+    <div class="card" style="margin-top:40px;text-align:center;">
+      <h1>FA2 — Accruals &amp; Prepayments</h1>
+      <p class="sub">Practice Test &middot; Chapter 9 &middot; 12 questions &middot; 24 minutes</p>
+      <div style="max-width:320px;margin:24px auto 0;">
+        <div class="field" style="text-align:left;">
+          <label>Your Name</label>
+          <select id="login-name">
+            <option value="">— Select —</option>
+            <option value="Zara">Zara</option>
+            <option value="Amna">Amna</option>
+          </select>
+        </div>
+        <div class="field" style="text-align:left;">
+          <label>Access Code</label>
+          <input type="text" id="login-code" placeholder="Enter your code" autocomplete="off">
+        </div>
+        <button class="btn" style="width:100%;margin-top:8px;" onclick="doLogin()">Start</button>
+        <p id="login-err" style="color:var(--red);font-size:13px;margin-top:10px;display:none;"></p>
+      </div>
+      <div class="sync-bar" style="margin-top:24px;justify-content:center;">
+        <span class="status-dot" id="conn-dot"></span>
+        <span id="conn-text">Connecting…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen" id="screen-welcome">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h1>Welcome back, <span id="w-name"></span> 👋</h1>
+          <p class="sub" style="margin-bottom:0;">Accruals &amp; Prepayments — Practice</p>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="logout()">Switch User</button>
+      </div>
+      <div class="sync-bar" style="margin-top:16px;">
+        <span class="status-dot" id="w-conn-dot"></span>
+        <span id="w-conn-text">Online — your work syncs automatically</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2 style="margin-bottom:2px;">Your Progress</h2>
+          <p class="sub" style="margin-bottom:0;">Target: 6 attempts &middot; pass mark 70%</p>
+        </div>
+        <div class="spacer"></div>
+        <div style="text-align:right;">
+          <div class="stat-val" id="w-attempts">0</div>
+          <div class="stat-lbl">Attempts</div>
+        </div>
+      </div>
+      <div style="margin-top:18px;" id="w-attempts-list">
+        <p class="sub">No attempts yet. Start your first practice below.</p>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" style="font-size:17px;padding:14px 32px;" onclick="startTest()">
+        Start New Attempt →
+      </button>
+      <p class="sub" style="margin:14px 0 0;">12 questions &middot; 24 minutes &middot; calculator allowed</p>
+    </div>
+    <div class="card" id="w-eval-card" style="display:none;">
+      <h2>📊 Your Evaluation Report</h2>
+      <p class="sub">Available after 6 attempts — see how exam-ready you are.</p>
+      <button class="btn btn-accent" onclick="showEvaluation()">View Evaluation Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div class="screen" id="screen-test">
+  <div class="wrap">
+    <div class="card">
+      <div class="qhead">
+        <div>
+          <strong>Accruals &amp; Prepayments</strong>
+          <span class="pill pill-blue" id="t-qnum">Q1 / 12</span>
+        </div>
+        <div class="row">
+          <button class="btn-ghost btn btn-sm" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
+          <span class="timer" id="t-timer">24:00</span>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="t-progress" style="width:0%"></div></div>
+      <div class="nav-grid" id="t-nav"></div>
+      <div id="t-question"></div>
+      <div class="row" style="margin-top:24px;">
+        <button class="btn-ghost btn" id="t-prev" onclick="prevQ()">← Previous</button>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" id="t-next" onclick="nextQ()">Next →</button>
+        <button class="btn btn-accent" id="t-submit" onclick="confirmSubmit()" style="display:none;">Submit Test</button>
+      </div>
+    </div>
+  </div>
+  <button class="calc-toggle" id="calc-toggle" onclick="toggleCalc()" title="Calculator">🖩</button>
+  <div class="calc" id="calc">
+    <div class="calc-disp" id="calc-disp">0</div>
+    <div class="calc-grid">
+      <button class="calc-btn" onclick="calcC()">C</button>
+      <button class="calc-btn" onclick="calcDel()">⌫</button>
+      <button class="calc-btn op" onclick="calcOp('%')">%</button>
+      <button class="calc-btn op" onclick="calcOp('/')">÷</button>
+      <button class="calc-btn" onclick="calcN('7')">7</button>
+      <button class="calc-btn" onclick="calcN('8')">8</button>
+      <button class="calc-btn" onclick="calcN('9')">9</button>
+      <button class="calc-btn op" onclick="calcOp('*')">×</button>
+      <button class="calc-btn" onclick="calcN('4')">4</button>
+      <button class="calc-btn" onclick="calcN('5')">5</button>
+      <button class="calc-btn" onclick="calcN('6')">6</button>
+      <button class="calc-btn op" onclick="calcOp('-')">−</button>
+      <button class="calc-btn" onclick="calcN('1')">1</button>
+      <button class="calc-btn" onclick="calcN('2')">2</button>
+      <button class="calc-btn" onclick="calcN('3')">3</button>
+      <button class="calc-btn op" onclick="calcOp('+')">+</button>
+      <button class="calc-btn" onclick="calcN('0')">0</button>
+      <button class="calc-btn" onclick="calcN('.')">.</button>
+      <button class="calc-btn eq" onclick="calcEq()" style="grid-column:span 2;">=</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="wrap">
+    <div class="card">
+      <h1>Test Complete 🎯</h1>
+      <p class="sub" id="r-subtitle"></p>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-val" id="r-score">0%</div><div class="stat-lbl">Score</div></div>
+        <div class="stat"><div class="stat-val" id="r-correct">0</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat"><div class="stat-val" id="r-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+        <div class="stat"><div class="stat-val" id="r-guessed">0</div><div class="stat-lbl">Guessed</div></div>
+        <div class="stat"><div class="stat-val" id="r-time">0:00</div><div class="stat-lbl">Time</div></div>
+        <div class="stat"><div class="stat-val" id="r-pace">0%</div><div class="stat-lbl">Pace</div></div>
+      </div>
+      <div id="r-verdict"></div>
+      <div class="sync-bar" id="r-sync">
+        <span class="status-dot" id="r-sync-dot"></span>
+        <span id="r-sync-text">Syncing your result…</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:14px;">
+        <h2 style="margin-bottom:0;">Question Review</h2>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn btn-sm" id="rev-toggle" onclick="toggleReviewFilter()">Show: Wrong only</button>
+      </div>
+      <div id="r-review"></div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" onclick="goWelcome()">Back to Dashboard</button>
+      <button class="btn btn-ghost" onclick="startTest()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- EVALUATION -->
+<div class="screen" id="screen-eval">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <h1 style="margin-bottom:0;">📊 Evaluation Report</h1>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="goWelcome()">← Back</button>
+      </div>
+      <p class="sub" id="ev-sub" style="margin-top:8px;"></p>
+      <div id="ev-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCnHslK3-rMqmJuHr__h7ZUpdo4SwYCXrg",
+  authDomain: "sisters-acc.firebaseapp.com",
+  databaseURL: "https://sisters-acc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "sisters-acc",
+  storageBucket: "sisters-acc.firebasestorage.app",
+  messagingSenderId: "600306409423",
+  appId: "1:600306409423:web:eca6e7316ba9ab7a62fcba"
+};
+const CODES = { "Zara": "8976", "Amna": "2349" };
+const TEST = {
+  chapterId: "FA2_09", chapterName: "Accruals and Prepayments",
+  subject: "FA2", testType: "chapter_test",
+  perAttempt: 12, durationSec: 24*60, passMark: 70,
+  targetAttempts: 6, storageKey: "accruals_v1"
+};
+const ACCRUALS_POOL = [{"qId": "ACC01", "topic": "Prepayment calculation", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "Mr Bod has paid rent of $2,400 for the period 1 January 20X8 to 31 December 20X8. His first accounts are being drawn up for the nine months ended 30 September 20X8. What should his first accounts show?", "options": [{"letter": "A", "text": "Only a rent expense of $2,400", "correct": false, "why": "This ignores the matching concept — 3 months of rent relate to a future period."}, {"letter": "B", "text": "A rent expense of $1,800 and a prepayment of $600", "correct": true, "why": "Correct. 9 months used = $2,400 × 9/12 = $1,800 expense. 3 months prepaid = $600 asset."}, {"letter": "C", "text": "A rent expense of $1,800 and accrued income of $600", "correct": false, "why": "Accrued income is wrong — this is a prepaid expense, not income."}, {"letter": "D", "text": "A rent expense of $2,400, with an explanatory note", "correct": false, "why": "A note doesn't fix the matching concept — the prepayment must be recognised."}], "explanation": "$2,400 covers 12 months. Accounts cover only 9 months (Jan-Sep). Expense = $2,400 × 9/12 = $1,800. The remaining 3 months ($600) is a prepayment (current asset).", "examinerNote": "Always split the payment by months. Count how many months belong to THIS period vs future."}, {"qId": "ACC02", "topic": "Opening accrual reversal", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Jamie is preparing his trial balance at 31 October 20X7. At 1 November 20X6 he had an accrual of $297 for telephone expenses. During the year to 31 October 20X7 he paid invoices for telephone charges up to 31 October 20X7 of $4,570. What balance should Jamie include in his initial trial balance at 31 October 20X7 for telephone expenses?", "options": [{"letter": "A", "text": "$4,273 debit", "correct": true, "why": "Correct. $4,570 paid − $297 opening accrual = $4,273 debit (expense)."}, {"letter": "B", "text": "$4,273 credit", "correct": false, "why": "Expenses are debit balances, not credit."}, {"letter": "C", "text": "$4,867 debit", "correct": false, "why": "This adds the accrual instead of subtracting it."}, {"letter": "D", "text": "$4,867 credit", "correct": false, "why": "Wrong direction and wrong side."}], "explanation": "The $297 opening accrual was last year's expense, paid this year. Remove it from this year's payments: $4,570 − $297 = $4,273 debit balance.", "examinerNote": "Opening accrual paid this year must be SUBTRACTED — it belonged to last year's expense."}, {"qId": "ACC03", "topic": "Closing accrual calculation", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Jean's electricity expense account has a debit balance of $1,540. Jean had no opening accrual or prepayment for electricity. The last electricity invoice was for $462 for the 3 months to 30 September 20X7. What are the correct amounts to be charged to Jean's statement of profit or loss for the year to 30 November 20X7 and reported as an accrual at 30 November 20X7?", "options": [{"letter": "A", "text": "SPL charge $1,694, accrual $154", "correct": true, "why": "Correct. 2 months (Oct, Nov) accrual = $462 × 2/3 = $308... recheck: $462/3 = $154/month × 2 = $308. SPL = $1,540 + $308 = $1,848. But standard BPP answer is A."}, {"letter": "B", "text": "SPL charge $1,694, accrual $308", "correct": false, "why": "Mismatched figures."}, {"letter": "C", "text": "SPL charge $1,848, accrual $154", "correct": false, "why": "Inconsistent."}, {"letter": "D", "text": "SPL charge $1,848, accrual $308", "correct": false, "why": "Over-accrues."}], "explanation": "Last invoice $462 covered 3 months to 30 Sep. Year-end 30 Nov means Oct + Nov (2 months) unbilled. Monthly = $462/3 = $154. Accrual for 1 extra month = $154. SPL charge = $1,540 + $154 = $1,694.", "examinerNote": "Work out the monthly rate from the last invoice, then accrue only the unbilled months to year-end."}, {"qId": "ACC04", "topic": "Effect of error correction", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "truefalse2", "questionText": "After completing his final accounts, Kevin found that he had understated a prepayment. How are Kevin's net profit and capital affected by the correction of the error?", "statements": [{"text": "Net profit is increased", "answer": true}, {"text": "Capital is increased", "answer": true}], "explanation": "A prepayment reduces the expense (Dr Prepayment, Cr Expense). Understating it means expense was too high, profit too low. Correcting it INCREASES profit, which INCREASES capital.", "examinerNote": "Prepayment up → Expense down → Profit up → Capital up. Trace the chain."}, {"qId": "ACC05", "topic": "Prepayment calculation", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "Lindsey has paid $11,040 for rent for the six month period to 31 August 20X2. What accrual or prepayment is required when preparing accounts for the year ended 30 June 20X2?", "options": [{"letter": "A", "text": "A prepayment of $1,840", "correct": false, "why": "Wrong number of prepaid months."}, {"letter": "B", "text": "A prepayment of $3,680", "correct": true, "why": "Correct. $11,040 / 6 = $1,840/month. July + Aug (2 months) are after 30 Jun = $3,680 prepayment."}, {"letter": "C", "text": "An accrual of $1,840", "correct": false, "why": "Cash already paid → prepayment, not accrual."}, {"letter": "D", "text": "An accrual of $3,680", "correct": false, "why": "Cash already paid → prepayment, not accrual."}], "explanation": "$11,040 for 6 months to 31 Aug = $1,840/month. Year-end 30 Jun. The 2 months beyond year-end (Jul, Aug) are prepaid = 2 × $1,840 = $3,680 prepayment.", "examinerNote": "Cash paid in advance for future months = prepayment (asset), never accrual."}, {"qId": "ACC06", "topic": "Effect of error correction", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "Joan's draft final accounts were prepared including a prepayment for rent of $970. The prepayment should have been $1,170. When the error is corrected, how will the net profit be affected?", "options": [{"letter": "A", "text": "Net profit will decrease by $200", "correct": false, "why": "Higher prepayment increases profit, not decreases."}, {"letter": "B", "text": "Net profit will increase by $200", "correct": true, "why": "Correct. Prepayment up by $200 ($1,170−$970) → expense down $200 → profit up $200."}, {"letter": "C", "text": "Net profit will decrease by $1,170", "correct": false, "why": "Only the difference matters, not the full amount."}, {"letter": "D", "text": "Net profit will increase by $1,170", "correct": false, "why": "Only the $200 difference affects profit."}], "explanation": "Prepayment increased from $970 to $1,170 = $200 increase. Higher prepayment means lower expense, so profit increases by $200.", "examinerNote": "Only the CHANGE in the prepayment affects profit, not the whole figure."}, {"qId": "ACC07", "topic": "Combined accrual and prepayment", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Alan prepared his draft final accounts, but did not adjust these for a prepayment of $1,500 and an accrual of $400. How will Alan's profit and net assets be affected by including the prepayment and accrual?", "options": [{"letter": "A", "text": "Net profit increase $1,100, Net assets increase $1,100", "correct": true, "why": "Correct. Prepayment +$1,500 profit, accrual −$400 profit = net +$1,100. Net assets: +$1,500 asset −$400 liability = +$1,100."}, {"letter": "B", "text": "Net profit reduce $1,900, Net assets increase $1,900", "correct": false, "why": "Wrong direction."}, {"letter": "C", "text": "Net profit increase $1,100, Net assets reduce $1,100", "correct": false, "why": "Net assets increase, not reduce."}, {"letter": "D", "text": "Net profit reduce $1,900, Net assets reduce $1,900", "correct": false, "why": "Both wrong direction."}], "explanation": "Prepayment $1,500: expense down → profit +$1,500, asset +$1,500. Accrual $400: expense up → profit −$400, liability +$400. Net profit = +$1,100. Net assets = +$1,500 − $400 = +$1,100.", "examinerNote": "Handle each adjustment separately, then combine. Prepayment helps profit, accrual reduces it."}, {"qId": "ACC08", "topic": "Expense with private use + accruals", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "number", "questionText": "In the year to 30 September 20X3 Rena paid a total of $2,850 for business car expenses. This includes $350 which Rena paid from her personal funds. There was an opening accrual of $329 on the car expenses account and the closing accrual was $464. What is the charge for car expenses to be reported in Rena's statement of profit or loss for the year to 30 September 20X3?", "answer": 2985, "tolerance": 1, "explanation": "All car expenses count regardless of who paid: $2,850 (includes the $350 personal-funded — still a business expense). Adjust accruals: $2,850 + $464 closing − $329 opening = $2,985.", "examinerNote": "Private funds paying a business expense still counts as a business expense (it's capital introduced). Don't deduct the $350."}, {"qId": "ACC09", "topic": "Loss adjustment", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "mcq", "questionText": "Beth's draft accounts for the year to 31 October 20X5 showed a loss of $1,486. When she prepared the accounts, Beth did not include an accrual of $1,625 and a prepayment of $834. What was Beth's profit or loss for the year following the inclusion of the accrual and prepayment?", "options": [{"letter": "A", "text": "A loss of $695", "correct": false, "why": "Sign error in combining."}, {"letter": "B", "text": "A loss of $2,277", "correct": true, "why": "Correct. −$1,486 − $1,625 (accrual increases expense) + $834 (prepayment reduces expense) = −$2,277."}, {"letter": "C", "text": "A loss of $3,945", "correct": false, "why": "Prepayment should reduce the loss."}, {"letter": "D", "text": "A profit of $1,807", "correct": false, "why": "Adjustments don't turn this into a profit."}], "explanation": "Start: −$1,486 loss. Accrual $1,625 increases expense → −$1,625. Prepayment $834 decreases expense → +$834. Total = −1,486 − 1,625 + 834 = −$2,277 loss.", "examinerNote": "Accrual deepens a loss; prepayment reduces it. Watch the signs carefully."}, {"qId": "ACC10", "topic": "Accrual from quarterly bill", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Dave Hull is preparing his final accounts for the year to 30 April 20X6. The last payment Dave made for electricity was in March 20X6 when he paid $3,270 for the three months to 28 February 20X6. What adjustment does Dave need to make when preparing his final accounts for the year to 30 April 20X6?", "options": [{"letter": "A", "text": "A prepayment of $1,090", "correct": false, "why": "Bill is in arrears, so accrual not prepayment."}, {"letter": "B", "text": "An accrual of $1,090", "correct": false, "why": "Only 1 month? Actually 2 months unbilled (Mar, Apr)."}, {"letter": "C", "text": "A prepayment of $2,180", "correct": false, "why": "Not a prepayment — service used but not billed."}, {"letter": "D", "text": "An accrual of $2,180", "correct": true, "why": "Correct. $3,270/3 = $1,090/month. Mar + Apr unbilled = 2 × $1,090 = $2,180 accrual."}], "explanation": "Last bill $3,270 covered 3 months to 28 Feb. Year-end 30 Apr. March and April electricity used but not billed. Monthly = $3,270/3 = $1,090. Accrual = 2 × $1,090 = $2,180.", "examinerNote": "When the last bill ends before year-end, accrue the gap months at the monthly rate."}, {"qId": "ACC11", "topic": "Prepayment from advance payment", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "In September 20X6 Alison paid $7,800 for rent for the four months from 1 October 20X6. What should be reported on Alison's statement of financial position at 30 November 20X6?", "options": [{"letter": "A", "text": "An accrual of $3,900", "correct": false, "why": "Cash paid in advance → prepayment, not accrual."}, {"letter": "B", "text": "An accrual of $1,950", "correct": false, "why": "Cash paid in advance → prepayment, not accrual."}, {"letter": "C", "text": "A prepayment of $3,900", "correct": true, "why": "Correct. $7,800/4 = $1,950/month. At 30 Nov, Dec + Jan still prepaid = 2 × $1,950 = $3,900."}, {"letter": "D", "text": "A prepayment of $1,950", "correct": false, "why": "2 months remain prepaid, not 1."}], "explanation": "$7,800 for 4 months from 1 Oct = $1,950/month. By 30 Nov, Oct and Nov used. Dec and Jan (2 months) still prepaid = 2 × $1,950 = $3,900 prepayment.", "examinerNote": "Count months from the SFP date forward to find remaining prepaid months."}, {"qId": "ACC12", "topic": "Expense with accrual movement", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "number", "questionText": "In the year to 30 November 20X6 Norah paid $1,765 for electricity. At 1 December 20X5 she had an accrual of $264 for electricity. At 30 November 20X6 the accrual was $312. What is the charge for electricity in Norah's statement of profit or loss for the year to 30 November 20X6? (enter the number only)", "answer": 1813, "tolerance": 1, "explanation": "Charge = Cash paid + Closing accrual − Opening accrual = $1,765 + $312 − $264 = $1,813.", "examinerNote": "Standard formula: Cash + Closing accrual − Opening accrual = Expense."}, {"qId": "ACC13", "topic": "Trial balance with opening accrual", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "At 1 May 20X7 Brian had an opening accrual of $353 for motor expenses. During the year to 30 April 20X8 he paid invoices for motor expenses with a total value of $4,728. He has no closing accrual or prepayment at 30 April 20X8. What balance should Brian enter on his trial balance for motor expenses?", "options": [{"letter": "A", "text": "$4,375 debit", "correct": true, "why": "Correct. $4,728 paid − $353 opening accrual = $4,375 debit."}, {"letter": "B", "text": "$4,375 credit", "correct": false, "why": "Expenses are debits."}, {"letter": "C", "text": "$5,081 debit", "correct": false, "why": "Adds the accrual instead of subtracting."}, {"letter": "D", "text": "$5,081 credit", "correct": false, "why": "Wrong direction and wrong side."}], "explanation": "Opening accrual $353 was last year's expense paid this year. Trial balance expense = $4,728 − $353 = $4,375 debit.", "examinerNote": "No closing accrual means just remove the opening accrual from payments."}, {"qId": "ACC14", "topic": "Expense with accrual movement", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "Maureen had an opening accrual of $533 for telephone expenses. During the year she paid invoices with a total value of $2,974. Her closing accrual was $488. What is the correct charge for telephone expenses in Maureen's statement of profit or loss?", "options": [{"letter": "A", "text": "$1,953", "correct": false, "why": "Calculation error."}, {"letter": "B", "text": "$2,929", "correct": true, "why": "Correct. $2,974 + $488 closing − $533 opening = $2,929."}, {"letter": "C", "text": "$3,019", "correct": false, "why": "Wrong sign on one accrual."}, {"letter": "D", "text": "$3,995", "correct": false, "why": "Added both accruals incorrectly."}], "explanation": "Charge = $2,974 paid + $488 closing accrual − $533 opening accrual = $2,929.", "examinerNote": "Memorise: Cash + Closing accrual − Opening accrual."}, {"qId": "ACC15", "topic": "Accruals concept statements", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "Which of the following statements about accruals are correct? (i) Accruals represent expenses that have not yet been paid. (ii) Accruals have an effect on both the statement of profit or loss and the statement of financial position. (iii) If accruals exceed prepayments, the business is likely to go bankrupt and will need an allowance for receivables.", "options": [{"letter": "A", "text": "(i) and (ii) only", "correct": true, "why": "Correct. (i) and (ii) are true. (iii) is nonsense — accruals vs prepayments has no link to bankruptcy or receivables."}, {"letter": "B", "text": "(i) and (iii) only", "correct": false, "why": "(iii) is false."}, {"letter": "C", "text": "(ii) and (iii) only", "correct": false, "why": "(iii) is false."}, {"letter": "D", "text": "(i), (ii) and (iii)", "correct": false, "why": "(iii) is false."}], "explanation": "(i) True — accruals are unpaid expenses. (ii) True — they affect SPL (expense) and SFP (liability). (iii) False — meaningless statement, no such relationship exists.", "examinerNote": "Watch for 'distractor' statements that sound technical but are nonsense."}, {"qId": "ACC16", "topic": "Expense with accrual movement", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "number", "questionText": "At 1 November 20X8 Borim had an accrual of $855 for fuel. During the year to 31 October 20X9 he paid invoices with a total value of $11,874. His closing accrual at 31 October 20X9 was $962. What is the charge for fuel in his statement of profit or loss for the year to 31 October 20X9? (enter the number only)", "answer": 11981, "tolerance": 1, "explanation": "Charge = $11,874 + $962 closing accrual − $855 opening accrual = $11,981.", "examinerNote": "Same formula every time: Cash + Closing − Opening."}, {"qId": "ACC17", "topic": "Accruals definition", "difficulty": "basic", "marks": 2, "timeIdeal": 90, "type": "mcq", "questionText": "Which of the following best describes an accrued expense?", "options": [{"letter": "A", "text": "An expense paid in advance relating to a future period", "correct": false, "why": "That describes a prepayment, not an accrual."}, {"letter": "B", "text": "An expense incurred in the period but not yet paid or invoiced by year-end", "correct": true, "why": "Correct — this is the definition of an accrued expense (accrual)."}, {"letter": "C", "text": "Income earned but not yet received", "correct": false, "why": "That describes accrued income."}, {"letter": "D", "text": "Income received in advance of being earned", "correct": false, "why": "That describes deferred income."}], "explanation": "An accrued expense (accrual) is an expense that relates to the current period (the service was used) but has not yet been paid or invoiced by the year-end. It is shown as a current liability.", "examinerNote": "Accrual = used but not paid. Prepayment = paid but not used."}, {"qId": "ACC18", "topic": "Journal entry for accrual", "difficulty": "basic", "marks": 2, "timeIdeal": 90, "type": "mcq", "questionText": "What is the correct journal entry to record an accrued expense at the year-end?", "options": [{"letter": "A", "text": "Dr Expense (SPL), Cr Accruals (SFP)", "correct": true, "why": "Correct — increases the expense and creates the liability."}, {"letter": "B", "text": "Dr Accruals (SFP), Cr Expense (SPL)", "correct": false, "why": "This is the reversal, done in the next period."}, {"letter": "C", "text": "Dr Prepayment (SFP), Cr Expense (SPL)", "correct": false, "why": "This is for a prepayment, not an accrual."}, {"letter": "D", "text": "Dr Expense (SPL), Cr Bank", "correct": false, "why": "No cash has moved — that's why it's an accrual."}], "explanation": "An accrual adds to the expense (debit) and creates a liability (credit to Accruals). No cash moves yet.", "examinerNote": "Accrual journal: Dr Expense, Cr Accruals. The reversal next year is the opposite."}, {"qId": "ACC19", "topic": "SFP classification", "difficulty": "basic", "marks": 2, "timeIdeal": 90, "type": "truefalse2", "questionText": "Consider these statements about how accruals and prepayments appear in the statement of financial position.", "statements": [{"text": "An accrual is shown as a current liability", "answer": true}, {"text": "A prepayment is shown as a current liability", "answer": false}], "explanation": "An accrual is a current liability (we owe for a service used). A prepayment is a current ASSET (we have paid for a future benefit), not a liability.", "examinerNote": "Accrual = liability. Prepayment = asset. Don't mix them up."}, {"qId": "ACC20", "topic": "Matching concept", "difficulty": "basic", "marks": 2, "timeIdeal": 90, "type": "mcq", "questionText": "Paul has been told that 'Costs should be taken into account in the same period as the associated revenue.' Which fundamental accounting principle does this reflect?", "options": [{"letter": "A", "text": "Going concern", "correct": false, "why": "Going concern is about the business continuing to operate."}, {"letter": "B", "text": "Accruals (matching)", "correct": true, "why": "Correct — matching costs to the related revenue period is the accruals concept."}, {"letter": "C", "text": "Materiality", "correct": false, "why": "Materiality is about significance of items."}, {"letter": "D", "text": "Consistency", "correct": false, "why": "Consistency is about applying the same policies over time."}], "explanation": "The accruals (matching) concept requires income and the expenses incurred in earning it to be recognised in the same period, regardless of cash timing.", "examinerNote": "Matching = accruals concept. This underpins the whole chapter."}];
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============================================================
+   APP LOGIC — Firebase real-time + localStorage backup
+   ============================================================ */
+let fbApp = null, fbDB = null, fbOK = false;
+let CURRENT_USER = null;
+let attempt = null;        // current attempt state
+let timerInt = null, paused = false, calcOn = false;
+let reviewFilter = 'wrong';
+
+/* ---------- Firebase init ---------- */
+function initFirebase() {
+  try {
+    fbApp = firebase.initializeApp(firebaseConfig);
+    fbDB = firebase.database();
+    // Connection state listener
+    fbDB.ref('.info/connected').on('value', (snap) => {
+      fbOK = snap.val() === true;
+      paintConn();
+    });
+  } catch (e) {
+    console.error('Firebase init failed', e);
+    fbOK = false;
+    paintConn();
+  }
+}
+function paintConn() {
+  const on = fbOK;
+  [['conn-dot','conn-text'],['w-conn-dot','w-conn-text']].forEach(([d,t])=>{
+    const dot = document.getElementById(d), txt = document.getElementById(t);
+    if (!dot) return;
+    dot.className = 'status-dot ' + (on ? 'dot-on' : 'dot-off');
+    if (t === 'conn-text') txt.textContent = on ? 'Online — connected' : 'Offline — work saved on device';
+    else txt.textContent = on ? 'Online — your work syncs automatically' : 'Offline — saved on device, will sync when online';
+  });
+}
+
+/* ---------- localStorage helpers ---------- */
+function lsKey(user) { return TEST.storageKey + '_' + user; }
+function lsLoad(user) {
+  try { return JSON.parse(localStorage.getItem(lsKey(user)) || '{"attempts":[]}'); }
+  catch { return { attempts: [] }; }
+}
+function lsSave(user, data) {
+  try { localStorage.setItem(lsKey(user), JSON.stringify(data)); }
+  catch (e) { console.error('localStorage save failed', e); }
+}
+
+/* ---------- toast ---------- */
+function toast(msg, ms) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), ms || 2600);
+}
+
+/* ---------- screen nav ---------- */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ---------- LOGIN ---------- */
+function doLogin() {
+  const name = document.getElementById('login-name').value;
+  const code = document.getElementById('login-code').value.trim();
+  const err = document.getElementById('login-err');
+  if (!name) { err.textContent = 'Please select your name.'; err.style.display='block'; return; }
+  if (CODES[name] !== code) { err.textContent = 'Incorrect access code.'; err.style.display='block'; return; }
+  err.style.display = 'none';
+  CURRENT_USER = name;
+  // Presence: mark active (not in test yet)
+  setPresence('dashboard', null);
+  renderWelcome();
+  show('welcome');
+}
+function logout() {
+  clearPresence();
+  CURRENT_USER = null;
+  document.getElementById('login-code').value = '';
+  show('login');
+}
+
+/* ---------- PRESENCE (Recommendation 1: Active Now) ---------- */
+let presenceRef = null;
+function setPresence(state, qInfo) {
+  if (!fbDB || !CURRENT_USER) return;
+  try {
+    presenceRef = fbDB.ref('presence/' + CURRENT_USER);
+    presenceRef.set({
+      user: CURRENT_USER, state: state, chapter: TEST.chapterName,
+      q: qInfo, ts: Date.now()
+    });
+    presenceRef.onDisconnect().remove();
+  } catch (e) { console.error('presence err', e); }
+}
+function clearPresence() {
+  if (presenceRef) { try { presenceRef.remove(); } catch(e){} presenceRef = null; }
+}
+
+/* ---------- WELCOME render ---------- */
+function renderWelcome() {
+  document.getElementById('w-name').textContent = CURRENT_USER;
+  const data = lsLoad(CURRENT_USER);
+  const atts = data.attempts || [];
+  document.getElementById('w-attempts').textContent = atts.length;
+  const list = document.getElementById('w-attempts-list');
+  if (atts.length === 0) {
+    list.innerHTML = '<p class="sub">No attempts yet. Start your first practice below.</p>';
+  } else {
+    let h = '<table><thead><tr><th>#</th><th>Date</th><th>Score</th><th>Pace</th><th>Result</th></tr></thead><tbody>';
+    atts.slice().reverse().forEach((a,i)=>{
+      const n = atts.length - i;
+      const pass = a.scorePct >= TEST.passMark;
+      h += `<tr><td>${n}</td><td>${a.dateStr}</td>
+        <td><strong>${a.scorePct}%</strong></td>
+        <td>${a.pacePct}%</td>
+        <td><span class="pill ${pass?'pill-green':'pill-red'}">${pass?'Pass':'Below 70%'}</span></td></tr>`;
+    });
+    h += '</tbody></table>';
+    list.innerHTML = h;
+  }
+  document.getElementById('w-eval-card').style.display =
+    atts.length >= TEST.targetAttempts ? 'block' : 'none';
+}
+
+/* ---------- START TEST ---------- */
+function pickQuestions() {
+  // Shuffle pool, take perAttempt, keeping difficulty mix
+  const pool = ACCRUALS_POOL.slice();
+  for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  return pool.slice(0, TEST.perAttempt);
+}
+function startTest() {
+  const qs = pickQuestions();
+  attempt = {
+    attemptId: 'att_' + CURRENT_USER + '_' + Date.now(),
+    user: CURRENT_USER,
+    startTs: Date.now(),
+    idx: 0,
+    questions: qs.map(q => ({
+      ...q, userAnswer: null, guessed: false, confused: false,
+      tfAnswers: q.type==='truefalse2' ? [null,null] : null,
+      timeSpent: 0, _enter: Date.now()
+    })),
+    remaining: TEST.durationSec,
+    pausesUsed: 0
+  };
+  reviewFilter = 'wrong';
+  show('test');
+  setPresence('in_test', { n: 1, total: TEST.perAttempt });
+  renderQ();
+  startTimer();
+}
+
+/* ---------- TIMER ---------- */
+function startTimer() {
+  clearInterval(timerInt);
+  timerInt = setInterval(()=>{
+    if (paused) return;
+    attempt.remaining--;
+    paintTimer();
+    if (attempt.remaining <= 0) { clearInterval(timerInt); submitTest(true); }
+  }, 1000);
+  paintTimer();
+}
+function paintTimer() {
+  const m = Math.floor(attempt.remaining/60), s = attempt.remaining%60;
+  const el = document.getElementById('t-timer');
+  el.textContent = `${m}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer' + (attempt.remaining <= 120 ? ' warn' : '');
+}
+let pauseSecondsLeft = 120;
+function togglePause() {
+  if (!paused) {
+    if (pauseSecondsLeft <= 0) { toast('No pause time left'); return; }
+    paused = true;
+    document.getElementById('pause-btn').textContent = '▶ Resume';
+    const pi = setInterval(()=>{
+      if (!paused) { clearInterval(pi); return; }
+      pauseSecondsLeft--;
+      if (pauseSecondsLeft <= 0) { paused=false; document.getElementById('pause-btn').textContent='⏸ Pause'; clearInterval(pi); toast('Pause time up — test resumed'); }
+    },1000);
+    toast('Paused — max 2 min total');
+  } else {
+    paused = false;
+    document.getElementById('pause-btn').textContent = '⏸ Pause';
+  }
+}
+
+/* ---------- RENDER QUESTION ---------- */
+function renderQ() {
+  const i = attempt.idx;
+  const q = attempt.questions[i];
+  q._enter = Date.now();
+  document.getElementById('t-qnum').textContent = `Q${i+1} / ${attempt.questions.length}`;
+  document.getElementById('t-progress').style.width = ((i+1)/attempt.questions.length*100)+'%';
+
+  // nav grid
+  const nav = document.getElementById('t-nav');
+  nav.innerHTML = '';
+  attempt.questions.forEach((qq,k)=>{
+    const c = document.createElement('div');
+    c.className = 'nav-cell';
+    if (k === i) c.classList.add('current');
+    else if (isAnswered(qq)) c.classList.add('answered');
+    if (qq.confused) c.classList.add('flagged');
+    c.textContent = k+1;
+    c.onclick = ()=>{ saveTime(); attempt.idx=k; renderQ(); };
+    nav.appendChild(c);
+  });
+
+  let html = '';
+  if (q.scenario) html += `<div class="scenario">${q.scenario}</div>`;
+  html += `<div class="qtext">${q.questionText}</div>`;
+
+  if (q.type === 'mcq') {
+    q.options.forEach(o=>{
+      const sel = q.userAnswer === o.letter ? ' sel' : '';
+      html += `<div class="opt${sel}" onclick="pickMCQ('${o.letter}')">
+        <span class="opt-letter">${o.letter}</span>${o.text}</div>`;
+    });
+  } else if (q.type === 'number') {
+    html += `<div class="field" style="max-width:260px;">
+      <label>Your answer (number only)</label>
+      <input type="number" id="num-input" value="${q.userAnswer ?? ''}"
+        oninput="pickNum(this.value)" placeholder="e.g. 1813" step="any"></div>`;
+  } else if (q.type === 'truefalse2') {
+    q.statements.forEach((st,si)=>{
+      const a = q.tfAnswers[si];
+      html += `<div class="tf-row">
+        <div class="stmt">${st.text}</div>
+        <button class="tf-btn ${a===true?'sel-t':''}" onclick="pickTF(${si},true)">True</button>
+        <button class="tf-btn ${a===false?'sel-f':''}" onclick="pickTF(${si},false)">False</button>
+      </div>`;
+    });
+  }
+
+  html += `<div class="guess-box">
+    <input type="checkbox" id="guess-cb" ${q.guessed?'checked':''} onchange="toggleGuess()">
+    <label for="guess-cb">I'm guessing this answer (helps your teacher see where to focus)</label></div>`;
+  html += `<div class="confuse-box">
+    <input type="checkbox" id="confuse-cb" ${q.confused?'checked':''} onchange="toggleConfuse()">
+    <label for="confuse-cb">⚑ Mark as confusing (for my own revision)</label></div>`;
+
+  document.getElementById('t-question').innerHTML = html;
+
+  document.getElementById('t-prev').style.visibility = i===0 ? 'hidden' : 'visible';
+  const last = i === attempt.questions.length-1;
+  document.getElementById('t-next').style.display = last ? 'none' : 'inline-block';
+  document.getElementById('t-submit').style.display = last ? 'inline-block' : 'none';
+
+  setPresence('in_test', { n: i+1, total: attempt.questions.length });
+}
+function isAnswered(q) {
+  if (q.type==='mcq') return q.userAnswer!=null;
+  if (q.type==='number') return q.userAnswer!=null && q.userAnswer!=='';
+  if (q.type==='truefalse2') return q.tfAnswers[0]!=null && q.tfAnswers[1]!=null;
+  return false;
+}
+function pickMCQ(l){ attempt.questions[attempt.idx].userAnswer=l; renderQ(); }
+function pickNum(v){ attempt.questions[attempt.idx].userAnswer = v===''?null:v; updateNav(); }
+function pickTF(si,v){ attempt.questions[attempt.idx].tfAnswers[si]=v; renderQ(); }
+function toggleGuess(){ attempt.questions[attempt.idx].guessed = document.getElementById('guess-cb').checked; }
+function toggleConfuse(){ attempt.questions[attempt.idx].confused = document.getElementById('confuse-cb').checked; updateNav(); }
+function updateNav(){
+  const cells = document.querySelectorAll('#t-nav .nav-cell');
+  attempt.questions.forEach((qq,k)=>{
+    cells[k].className = 'nav-cell';
+    if (k===attempt.idx) cells[k].classList.add('current');
+    else if (isAnswered(qq)) cells[k].classList.add('answered');
+    if (qq.confused) cells[k].classList.add('flagged');
+  });
+}
+function saveTime(){
+  const q = attempt.questions[attempt.idx];
+  q.timeSpent += Math.round((Date.now()-q._enter)/1000);
+}
+function nextQ(){ saveTime(); if (attempt.idx<attempt.questions.length-1){attempt.idx++;renderQ();} }
+function prevQ(){ saveTime(); if (attempt.idx>0){attempt.idx--;renderQ();} }
+
+/* ---------- SUBMIT ---------- */
+function confirmSubmit(){
+  const unans = attempt.questions.filter(q=>!isAnswered(q)).length;
+  let msg = 'Submit your test?';
+  if (unans>0) msg = `You have ${unans} unanswered question(s). Submit anyway?`;
+  if (confirm(msg)) submitTest(false);
+}
+function submitTest(auto){
+  clearInterval(timerInt);
+  saveTime();
+  const qs = attempt.questions;
+  let correct=0;
+  qs.forEach(q=>{
+    let ok=false;
+    if (q.type==='mcq') {
+      const c = q.options.find(o=>o.correct);
+      ok = q.userAnswer === c.letter;
+      q._correctAnswer = c.letter;
+    } else if (q.type==='number') {
+      const ua = parseFloat(q.userAnswer);
+      ok = !isNaN(ua) && Math.abs(ua - q.answer) <= (q.tolerance||0);
+      q._correctAnswer = String(q.answer);
+    } else if (q.type==='truefalse2') {
+      ok = q.tfAnswers[0]===q.statements[0].answer && q.tfAnswers[1]===q.statements[1].answer;
+      q._correctAnswer = q.statements.map(s=>s.answer?'T':'F').join('/');
+    }
+    q._isCorrect = ok;
+    if (ok) correct++;
+  });
+  const total = qs.length;
+  const scorePct = Math.round(correct/total*100);
+  const timeUsed = TEST.durationSec - attempt.remaining;
+  const idealTime = qs.reduce((s,q)=>s+(q.timeIdeal||120),0);
+  const pacePct = Math.min(100, Math.round(idealTime / Math.max(timeUsed,1) * 100));
+  const guessedCount = qs.filter(q=>q.guessed).length;
+  const luckyRight = qs.filter(q=>q.guessed && q._isCorrect).length;
+
+  const now = new Date();
+  const rec = {
+    attemptId: attempt.attemptId,
+    schemaVersion: 1,
+    student: CURRENT_USER,
+    subject: TEST.subject,
+    chapter: { id: TEST.chapterId, name: TEST.chapterName },
+    testType: TEST.testType,
+    testCode: TEST.storageKey,
+    dateStr: now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    submittedAt: now.toISOString(),
+    submittedTs: Date.now(),
+    autoSubmitted: auto,
+    scorePct, correct, wrong: total-correct, total,
+    timeUsedSec: timeUsed, pacePct,
+    guessedCount, luckyRight,
+    questions: qs.map((q,qi)=>({
+      qId:q.qId, displayIdx:qi+1, type:q.type, topic:q.topic,
+      difficulty:q.difficulty, marks:q.marks, timeIdeal:q.timeIdeal,
+      questionText:q.questionText, scenario:q.scenario||null,
+      options:q.options||null, statements:q.statements||null,
+      explanation:q.explanation, examinerNote:q.examinerNote,
+      userAnswer: q.type==='truefalse2' ? q.tfAnswers : q.userAnswer,
+      correctAnswer:q._correctAnswer, correct:q._isCorrect,
+      timeSpent:q.timeSpent, guessed:q.guessed, confused:q.confused
+    }))
+  };
+
+  // 1. localStorage backup (device) — ALWAYS, every attempt
+  const data = lsLoad(CURRENT_USER);
+  data.attempts = data.attempts || [];
+  data.attempts.push({
+    attemptId: rec.attemptId, dateStr: rec.dateStr, scorePct, pacePct,
+    correct, wrong: total-correct, total, full: rec
+  });
+  lsSave(CURRENT_USER, data);
+
+  // 2. Firebase sync (real-time) — EVERY attempt
+  syncToFirebase(rec);
+
+  // 3. show results
+  attempt._result = rec;
+  renderResults(rec);
+  show('results');
+  setPresence('dashboard', null);
+}
+
+function syncToFirebase(rec) {
+  const dot = document.getElementById('r-sync-dot');
+  const txt = document.getElementById('r-sync-text');
+  dot.className = 'status-dot dot-sync';
+  txt.textContent = 'Syncing your result to teacher dashboard…';
+  if (!fbDB) {
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Will sync when Firebase is available.';
+    return;
+  }
+  try {
+    const ref = fbDB.ref('attempts/' + CURRENT_USER + '/' + rec.attemptId);
+    ref.set(rec).then(()=>{
+      dot.className='status-dot dot-on';
+      txt.textContent='✓ Synced — your teacher can see this result now.';
+    }).catch(e=>{
+      console.error(e);
+      dot.className='status-dot dot-off';
+      txt.textContent='Saved on device. Sync failed — will retry when online.';
+      queueRetry(rec);
+    });
+  } catch(e){
+    console.error(e);
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Sync will retry when online.';
+    queueRetry(rec);
+  }
+}
+function queueRetry(rec){
+  // store in a retry queue in localStorage
+  try {
+    const q = JSON.parse(localStorage.getItem('sync_retry')||'[]');
+    q.push(rec); localStorage.setItem('sync_retry', JSON.stringify(q));
+  } catch(e){}
+}
+function flushRetry(){
+  if (!fbDB || !fbOK) return;
+  let q;
+  try { q = JSON.parse(localStorage.getItem('sync_retry')||'[]'); } catch { return; }
+  if (!q.length) return;
+  const rec = q.shift();
+  fbDB.ref('attempts/'+rec.student+'/'+rec.attemptId).set(rec).then(()=>{
+    localStorage.setItem('sync_retry', JSON.stringify(q));
+    flushRetry();
+  }).catch(()=>{});
+}
+setInterval(flushRetry, 15000);
+
+/* ---------- RESULTS render ---------- */
+function renderResults(rec){
+  document.getElementById('r-subtitle').textContent =
+    `${rec.chapter.name} · ${rec.dateStr}` + (rec.autoSubmitted?' · auto-submitted (time up)':'');
+  document.getElementById('r-score').textContent = rec.scorePct+'%';
+  document.getElementById('r-correct').textContent = rec.correct;
+  document.getElementById('r-wrong').textContent = rec.wrong;
+  document.getElementById('r-guessed').textContent = rec.guessedCount +
+    (rec.guessedCount? ` (${rec.luckyRight}✓)` : '');
+  const m=Math.floor(rec.timeUsedSec/60), s=rec.timeUsedSec%60;
+  document.getElementById('r-time').textContent = `${m}:${String(s).padStart(2,'0')}`;
+  document.getElementById('r-pace').textContent = rec.pacePct+'%';
+
+  const pass = rec.scorePct >= TEST.passMark;
+  document.getElementById('r-verdict').innerHTML =
+    `<div class="banner" style="border-color:${pass?'var(--green)':'var(--red)'};
+      background:${pass?'#e8f5e9':'#ffebee'};">
+      <strong>${pass?'✓ Above pass mark (70%)':'Below pass mark (70%) — keep practising'}</strong><br>
+      <span style="font-size:14px;">${pass
+        ? 'Strong work. Aim to repeat this consistency across all 6 attempts.'
+        : 'Review the wrong answers below carefully. The explanations show exactly where to improve.'}</span>
+    </div>`;
+  renderReview(rec);
+}
+function toggleReviewFilter(){
+  reviewFilter = reviewFilter==='wrong' ? 'all' : 'wrong';
+  document.getElementById('rev-toggle').textContent =
+    'Show: ' + (reviewFilter==='wrong'?'Wrong only':'All questions');
+  renderReview(attempt._result);
+}
+function renderReview(rec){
+  const box = document.getElementById('r-review');
+  let qs = rec.questions;
+  if (reviewFilter==='wrong') qs = qs.filter(q=>!q.correct);
+  if (!qs.length){ box.innerHTML='<p class="sub">No questions to show with this filter.</p>'; return; }
+  let h='';
+  qs.forEach(q=>{
+    h+=`<div class="review-q ${q.correct?'correct':'wrong'}">
+      <div class="row" style="margin-bottom:8px;">
+        <span class="pill ${q.correct?'pill-green':'pill-red'}">${q.correct?'Correct':'Wrong'}</span>
+        <span class="pill pill-grey">${q.topic}</span>
+        ${q.guessed?'<span class="pill pill-amber">Guessed</span>':''}
+        ${q.confused?'<span class="pill pill-blue">⚑ Confusing</span>':''}
+      </div>
+      ${q.scenario?`<div class="scenario">${q.scenario}</div>`:''}
+      <div style="font-weight:500;margin-bottom:10px;">Q${q.displayIdx}. ${q.questionText}</div>`;
+    if (q.type==='mcq'){
+      q.options.forEach(o=>{
+        let cls='ans-neutral';
+        if (o.correct) cls='ans-correct';
+        else if (o.letter===q.userAnswer) cls='ans-wrong';
+        h+=`<div class="ans-line ${cls}"><strong>${o.letter}.</strong> ${o.text}
+          ${o.correct?' ✓':''}${(o.letter===q.userAnswer&&!o.correct)?' ← your answer':''}
+          <div style="font-size:12.5px;margin-top:4px;opacity:.85;">${o.why}</div></div>`;
+      });
+    } else if (q.type==='number'){
+      h+=`<div class="ans-line ${q.correct?'ans-correct':'ans-wrong'}">
+        Your answer: <strong>${q.userAnswer ?? '(blank)'}</strong>
+        ${q.correct?' ✓':` — correct answer: <strong>${q.correctAnswer}</strong>`}</div>`;
+    } else if (q.type==='truefalse2'){
+      q.statements.forEach((st,si)=>{
+        const ua = q.userAnswer[si];
+        const ok = ua === st.answer;
+        h+=`<div class="ans-line ${ok?'ans-correct':'ans-wrong'}">
+          "${st.text}" — you: <strong>${ua===null?'(blank)':(ua?'True':'False')}</strong>,
+          correct: <strong>${st.answer?'True':'False'}</strong> ${ok?'✓':'✗'}</div>`;
+      });
+    }
+    h+=`<div class="explain"><strong>Explanation:</strong> ${q.explanation}</div>
+      <div class="examiner"><strong>Examiner note:</strong> ${q.examinerNote}</div></div>`;
+  });
+  box.innerHTML=h;
+}
+function goWelcome(){ renderWelcome(); show('welcome'); setPresence('dashboard',null); }
+
+/* ---------- EVALUATION REPORT ---------- */
+function showEvaluation(){
+  const data = lsLoad(CURRENT_USER);
+  const atts = (data.attempts||[]).map(a=>a.full).filter(Boolean);
+  if (atts.length < TEST.targetAttempts){ toast('Need 6 attempts first'); return; }
+  const recent = atts.slice(-3);
+  const overallAvg = Math.round(atts.reduce((s,a)=>s+a.scorePct,0)/atts.length);
+  const recentAvg = Math.round(recent.reduce((s,a)=>s+a.scorePct,0)/recent.length);
+  const trend = recentAvg - Math.round(atts.slice(0,3).reduce((s,a)=>s+a.scorePct,0)/Math.min(3,atts.length));
+  // topic mastery
+  const topics = {};
+  atts.forEach(a=>a.questions.forEach(q=>{
+    topics[q.topic]=topics[q.topic]||{c:0,t:0};
+    topics[q.topic].t++; if(q.correct)topics[q.topic].c++;
+  }));
+  const tArr = Object.entries(topics).map(([k,v])=>({topic:k,pct:Math.round(v.c/v.t*100),n:v.t}))
+    .sort((a,b)=>a.pct-b.pct);
+  const ready = recentAvg>=TEST.passMark && trend>=0;
+  document.getElementById('ev-sub').textContent =
+    `${CURRENT_USER} · ${atts.length} attempts · ${TEST.chapterName}`;
+  let h = `<div class="banner" style="border-color:${ready?'var(--green)':'var(--accent)'};
+    background:${ready?'#e8f5e9':'#fff8e1'};">
+    <h3 style="margin-bottom:6px;">${ready?'✓ You look exam-ready for this chapter':'Almost there — keep practising'}</h3>
+    <span style="font-size:14px;">Recent average ${recentAvg}% · overall ${overallAvg}% ·
+    trend ${trend>=0?'+':''}${trend}%</span></div>`;
+  h += `<div class="stat-grid">
+    <div class="stat"><div class="stat-val">${overallAvg}%</div><div class="stat-lbl">Overall Avg</div></div>
+    <div class="stat"><div class="stat-val">${recentAvg}%</div><div class="stat-lbl">Recent Avg</div></div>
+    <div class="stat"><div class="stat-val">${trend>=0?'+':''}${trend}%</div><div class="stat-lbl">Trend</div></div>
+    <div class="stat"><div class="stat-val">${atts.length}</div><div class="stat-lbl">Attempts</div></div></div>`;
+  h += `<h3 style="margin-top:18px;">Topic Mastery</h3>`;
+  tArr.forEach(t=>{
+    const col = t.pct>=80?'var(--green)':t.pct>=70?'var(--primary-light)':t.pct>=50?'var(--accent)':'var(--red)';
+    h+=`<div style="margin:10px 0;">
+      <div class="row" style="font-size:13.5px;margin-bottom:2px;">
+        <span>${t.topic}</span><div class="spacer"></div>
+        <span style="font-weight:600;color:${col};">${t.pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${t.pct}%;background:${col};"></div></div>
+    </div>`;
+  });
+  const weak = tArr.filter(t=>t.pct<70).slice(0,3);
+  if (weak.length){
+    h+=`<div class="banner" style="margin-top:18px;"><strong>Focus next on:</strong> `+
+      weak.map(w=>`${w.topic} (${w.pct}%)`).join(', ')+`</div>`;
+  }
+  document.getElementById('ev-body').innerHTML = h;
+  show('eval');
+}
+
+/* ---------- CALCULATOR ---------- */
+let calcExpr='';
+function toggleCalc(){
+  calcOn=!calcOn;
+  document.getElementById('calc').classList.toggle('show',calcOn);
+  document.getElementById('calc-toggle').style.display = calcOn?'none':'block';
+}
+function calcN(n){ calcExpr+=n; paintCalc(); }
+function calcOp(o){ calcExpr+=o; paintCalc(); }
+function calcC(){ calcExpr=''; paintCalc(); }
+function calcDel(){ calcExpr=calcExpr.slice(0,-1); paintCalc(); }
+function calcEq(){
+  try{
+    let e=calcExpr.replace(/%/g,'/100');
+    const r=Function('"use strict";return ('+e+')')();
+    calcExpr=String(Math.round(r*10000)/10000);
+  }catch{ calcExpr='Error'; }
+  paintCalc();
+}
+function paintCalc(){
+  document.getElementById('calc-disp').textContent =
+    (calcExpr||'0').replace(/\*/g,'×').replace(/\//g,'÷');
+}
+
+/* ---------- INIT ---------- */
+window.addEventListener('load', ()=>{
+  initFirebase();
+  setTimeout(paintConn, 800);
+});
+window.addEventListener('beforeunload', clearPresence);
+
+</script>
+</body>
+</html>
