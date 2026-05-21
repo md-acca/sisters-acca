@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relevant Costing & Prepayments — FA2 Practice Test (v2)</title>
+<style>
+  :root {
+    --primary: #003d6b; --primary-light: #1976d2; --accent: #d4a017;
+    --green: #2e7d32; --red: #c62828; --bg: #f4f6f9; --card: #ffffff;
+    --text: #1a2332; --muted: #667085; --border: #e3e8ef;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .card { background: var(--card); border-radius: 14px; padding: 24px;
+    box-shadow: 0 1px 3px rgba(16,24,40,.08); margin-bottom: 16px; }
+  h1 { font-size: 24px; color: var(--primary); margin-bottom: 4px; }
+  h2 { font-size: 19px; color: var(--primary); margin-bottom: 12px; }
+  h3 { font-size: 16px; color: var(--primary); margin-bottom: 8px; }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .btn { background: var(--primary); color: #fff; border: none; padding: 12px 22px;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all .15s; }
+  .btn:hover { background: #00528f; transform: translateY(-1px); }
+  .btn:disabled { background: #b8c4d4; cursor: not-allowed; transform: none; }
+  .btn-ghost { background: transparent; color: var(--primary);
+    border: 1.5px solid var(--border); }
+  .btn-ghost:hover { background: #f0f4f9; }
+  .btn-accent { background: var(--accent); }
+  .btn-accent:hover { background: #b8890f; }
+  .btn-sm { padding: 8px 14px; font-size: 13px; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; }
+  .pill-green { background: #e8f5e9; color: var(--green); }
+  .pill-red { background: #ffebee; color: var(--red); }
+  .pill-blue { background: #e3f2fd; color: var(--primary-light); }
+  .pill-amber { background: #fff8e1; color: #a87810; }
+  .pill-grey { background: #eef1f5; color: var(--muted); }
+  input[type=text], input[type=number], select {
+    padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 9px;
+    font-size: 15px; width: 100%; font-family: inherit; background: #fff; }
+  input:focus, select:focus { outline: none; border-color: var(--primary-light); }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600;
+    color: var(--muted); margin-bottom: 6px; }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+  .status-dot { display: inline-block; width: 9px; height: 9px;
+    border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+  .dot-on { background: var(--green); box-shadow: 0 0 0 3px rgba(46,125,50,.15); }
+  .dot-off { background: var(--red); }
+  .dot-sync { background: var(--accent); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  .sync-bar { font-size: 13px; color: var(--muted); padding: 9px 14px;
+    background: #f0f4f9; border-radius: 8px; margin-bottom: 14px;
+    display: flex; align-items: center; }
+  .qhead { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .timer { font-size: 18px; font-weight: 700; color: var(--primary);
+    font-variant-numeric: tabular-nums; }
+  .timer.warn { color: var(--red); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 3px;
+    overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--primary-light);
+    transition: width .3s; }
+  .scenario { background: #f0f4f9; border-left: 4px solid var(--primary-light);
+    padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 14px;
+    font-size: 14.5px; }
+  .qtext { font-size: 16.5px; font-weight: 500; margin-bottom: 18px; }
+  .opt { display: block; padding: 14px 16px; border: 1.5px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: all .12s;
+    font-size: 15px; }
+  .opt:hover { border-color: var(--primary-light); background: #f8fafc; }
+  .opt.sel { border-color: var(--primary-light); background: #e8f1fb;
+    box-shadow: 0 0 0 1px var(--primary-light); }
+  .opt-letter { font-weight: 700; color: var(--primary); margin-right: 8px; }
+  .tf-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 10px;
+    flex-wrap: wrap; }
+  .tf-row .stmt { flex: 1; font-size: 15px; min-width: 200px; }
+  .tf-btn { padding: 8px 18px; border: 1.5px solid var(--border);
+    border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600;
+    font-size: 14px; }
+  .tf-btn.sel-t { background: var(--green); color: #fff; border-color: var(--green); }
+  .tf-btn.sel-f { background: var(--red); color: #fff; border-color: var(--red); }
+  .guess-box { display: flex; align-items: center; gap: 8px; margin-top: 16px;
+    padding: 12px 14px; background: #fff8e1; border-radius: 8px; font-size: 14px; }
+  .guess-box input, .confuse-box input { width: 18px; height: 18px; cursor: pointer; }
+  .confuse-box { display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    padding: 10px 14px; background: #f3e5f5; border-radius: 8px; font-size: 14px; }
+  .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px,1fr));
+    gap: 8px; margin-bottom: 16px; }
+  .nav-cell { aspect-ratio: 1; border: 1.5px solid var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 14px; font-weight: 600; background: #fff; position: relative; }
+  .nav-cell.answered { background: #e8f1fb; border-color: var(--primary-light);
+    color: var(--primary); }
+  .nav-cell.current { background: var(--primary); color: #fff;
+    border-color: var(--primary); }
+  .nav-cell.flagged::after { content: '•'; color: var(--accent);
+    position: absolute; top: -2px; right: 4px; font-size: 18px; }
+  .calc { position: fixed; bottom: 20px; right: 20px; width: 220px;
+    background: var(--card); border-radius: 14px; box-shadow: 0 8px 24px rgba(16,24,40,.18);
+    padding: 14px; z-index: 100; display: none; }
+  .calc.show { display: block; }
+  .calc-disp { background: #1a2332; color: #fff; padding: 12px; border-radius: 8px;
+    text-align: right; font-size: 20px; margin-bottom: 10px; font-variant-numeric: tabular-nums;
+    min-height: 44px; word-break: break-all; }
+  .calc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+  .calc-btn { padding: 12px 0; border: none; border-radius: 7px; background: #eef1f5;
+    cursor: pointer; font-size: 15px; font-weight: 600; }
+  .calc-btn:hover { background: #dde3ec; }
+  .calc-btn.op { background: var(--primary-light); color: #fff; }
+  .calc-btn.eq { background: var(--green); color: #fff; }
+  .calc-toggle { position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px;
+    border-radius: 50%; background: var(--primary); color: #fff; border: none;
+    font-size: 22px; cursor: pointer; z-index: 99; box-shadow: 0 4px 14px rgba(0,61,107,.3); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+    gap: 12px; margin-bottom: 20px; }
+  .stat { background: #f8fafc; border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-val { font-size: 26px; font-weight: 700; color: var(--primary); }
+  .stat-lbl { font-size: 12px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .04em; margin-top: 4px; }
+  .review-q { border: 1.5px solid var(--border); border-radius: 12px; padding: 18px;
+    margin-bottom: 14px; }
+  .review-q.correct { border-left: 4px solid var(--green); }
+  .review-q.wrong { border-left: 4px solid var(--red); }
+  .ans-line { padding: 8px 12px; border-radius: 7px; margin: 6px 0; font-size: 14px; }
+  .ans-correct { background: #e8f5e9; color: #1b5e20; }
+  .ans-wrong { background: #ffebee; color: #b71c1c; }
+  .ans-neutral { background: #f0f4f9; }
+  .working { background: #f4f7fb; border:1px dashed #9bb0c9; border-radius: 8px;
+    padding: 12px 14px; margin-top:10px; font-size:13.5px; }
+  .working pre { font-family: 'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+    white-space: pre-wrap; margin:6px 0 0; line-height:1.55; color:#1a2840; }
+  .explain { background: #fff8e1; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 10px; }
+  .examiner { background: #e3f2fd; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 8px; }
+  .banner { background: #fff8e1; border: 1.5px solid var(--accent);
+    border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 14px; z-index: 200; box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    opacity: 0; transition: opacity .3s; pointer-events: none; max-width: 90%; }
+  .toast.show { opacity: 1; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px; color: var(--muted); font-size: 12px;
+    text-transform: uppercase; border-bottom: 2px solid var(--border); }
+  td { padding: 10px; border-bottom: 1px solid var(--border); }
+  .bar-track { height: 10px; background: var(--border); border-radius: 5px;
+    overflow: hidden; margin: 4px 0; }
+  .bar-fill { height: 100%; border-radius: 5px; }
+  @media (max-width: 600px) {
+    .wrap { padding: 10px; } .card { padding: 16px; }
+    .calc { width: calc(100% - 40px); }
+  }
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div class="screen active" id="screen-login">
+  <div class="wrap">
+    <div class="card" style="margin-top:40px;text-align:center;">
+      <h1>FA2 — Accruals &amp; Prepayments</h1>
+      <p class="sub">Practice Test &middot; Chapter 9 &middot; 15 questions &middot; 24 minutes</p>
+      <div style="max-width:320px;margin:24px auto 0;">
+        <div class="field" style="text-align:left;">
+          <label>Your Name</label>
+          <select id="login-name">
+            <option value="">— Select —</option>
+            <option value="Zara">Zara</option>
+            <option value="Amna">Amna</option>
+          </select>
+        </div>
+        <div class="field" style="text-align:left;">
+          <label>Access Code</label>
+          <input type="text" id="login-code" placeholder="Enter your code" autocomplete="off">
+        </div>
+        <button class="btn" style="width:100%;margin-top:8px;" onclick="doLogin()">Start</button>
+        <p id="login-err" style="color:var(--red);font-size:13px;margin-top:10px;display:none;"></p>
+      </div>
+      <div class="sync-bar" style="margin-top:24px;justify-content:center;">
+        <span class="status-dot" id="conn-dot"></span>
+        <span id="conn-text">Connecting…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen" id="screen-welcome">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h1>Welcome back, <span id="w-name"></span> 👋</h1>
+          <p class="sub" style="margin-bottom:0;">Accruals &amp; Prepayments — Practice</p>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="logout()">Switch User</button>
+      </div>
+      <div class="sync-bar" style="margin-top:16px;">
+        <span class="status-dot" id="w-conn-dot"></span>
+        <span id="w-conn-text">Online — your work syncs automatically</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2 style="margin-bottom:2px;">Your Progress</h2>
+          <p class="sub" style="margin-bottom:0;">Target: 6 attempts &middot; pass mark 70%</p>
+        </div>
+        <div class="spacer"></div>
+        <div style="text-align:right;">
+          <div class="stat-val" id="w-attempts">0</div>
+          <div class="stat-lbl">Attempts</div>
+        </div>
+      </div>
+      <div style="margin-top:18px;" id="w-attempts-list">
+        <p class="sub">No attempts yet. Start your first practice below.</p>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" style="font-size:17px;padding:14px 32px;" onclick="startTest()">
+        Start New Attempt →
+      </button>
+      <p class="sub" style="margin:14px 0 0;">15 questions &middot; 24 minutes &middot; calculator allowed</p>
+    </div>
+    <div class="card" id="w-eval-card" style="display:none;">
+      <h2>📊 Your Evaluation Report</h2>
+      <p class="sub">Available after 6 attempts — see how exam-ready you are.</p>
+      <button class="btn btn-accent" onclick="showEvaluation()">View Evaluation Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div class="screen" id="screen-test">
+  <div class="wrap">
+    <div class="card">
+      <div class="qhead">
+        <div>
+          <strong>Accruals &amp; Prepayments</strong>
+          <span class="pill pill-blue" id="t-qnum">Q1 / 15</span>
+        </div>
+        <div class="row">
+          <button class="btn-ghost btn btn-sm" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
+          <span class="timer" id="t-timer">24:00</span>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="t-progress" style="width:0%"></div></div>
+      <div class="nav-grid" id="t-nav"></div>
+      <div id="t-question"></div>
+      <div class="row" style="margin-top:24px;">
+        <button class="btn-ghost btn" id="t-prev" onclick="prevQ()">← Previous</button>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" id="t-next" onclick="nextQ()">Next →</button>
+        <button class="btn btn-accent" id="t-submit" onclick="confirmSubmit()" style="display:none;">Submit Test</button>
+      </div>
+    </div>
+  </div>
+  <button class="calc-toggle" id="calc-toggle" onclick="toggleCalc()" title="Calculator">🖩</button>
+  <div class="calc" id="calc">
+    <div class="calc-disp" id="calc-disp">0</div>
+    <div class="calc-grid">
+      <button class="calc-btn" onclick="calcC()">C</button>
+      <button class="calc-btn" onclick="calcDel()">⌫</button>
+      <button class="calc-btn op" onclick="calcOp('%')">%</button>
+      <button class="calc-btn op" onclick="calcOp('/')">÷</button>
+      <button class="calc-btn" onclick="calcN('7')">7</button>
+      <button class="calc-btn" onclick="calcN('8')">8</button>
+      <button class="calc-btn" onclick="calcN('9')">9</button>
+      <button class="calc-btn op" onclick="calcOp('*')">×</button>
+      <button class="calc-btn" onclick="calcN('4')">4</button>
+      <button class="calc-btn" onclick="calcN('5')">5</button>
+      <button class="calc-btn" onclick="calcN('6')">6</button>
+      <button class="calc-btn op" onclick="calcOp('-')">−</button>
+      <button class="calc-btn" onclick="calcN('1')">1</button>
+      <button class="calc-btn" onclick="calcN('2')">2</button>
+      <button class="calc-btn" onclick="calcN('3')">3</button>
+      <button class="calc-btn op" onclick="calcOp('+')">+</button>
+      <button class="calc-btn" onclick="calcN('0')">0</button>
+      <button class="calc-btn" onclick="calcN('.')">.</button>
+      <button class="calc-btn eq" onclick="calcEq()" style="grid-column:span 2;">=</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="wrap">
+    <div class="card">
+      <h1>Test Complete 🎯</h1>
+      <p class="sub" id="r-subtitle"></p>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-val" id="r-score">0%</div><div class="stat-lbl">Score</div></div>
+        <div class="stat"><div class="stat-val" id="r-correct">0</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat"><div class="stat-val" id="r-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+        <div class="stat"><div class="stat-val" id="r-guessed">0</div><div class="stat-lbl">Guessed</div></div>
+        <div class="stat"><div class="stat-val" id="r-time">0:00</div><div class="stat-lbl">Time</div></div>
+        <div class="stat"><div class="stat-val" id="r-pace">0%</div><div class="stat-lbl">Pace</div></div>
+      </div>
+      <div id="r-verdict"></div>
+      <div class="sync-bar" id="r-sync">
+        <span class="status-dot" id="r-sync-dot"></span>
+        <span id="r-sync-text">Syncing your result…</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:14px;">
+        <h2 style="margin-bottom:0;">Question Review</h2>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn btn-sm" id="rev-toggle" onclick="toggleReviewFilter()">Show: Wrong only</button>
+      </div>
+      <div id="r-review"></div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" onclick="goWelcome()">Back to Dashboard</button>
+      <button class="btn btn-ghost" onclick="startTest()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- EVALUATION -->
+<div class="screen" id="screen-eval">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <h1 style="margin-bottom:0;">📊 Evaluation Report</h1>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="goWelcome()">← Back</button>
+      </div>
+      <p class="sub" id="ev-sub" style="margin-top:8px;"></p>
+      <div id="ev-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCnHslK3-rMqmJuHr__h7ZUpdo4SwYCXrg",
+  authDomain: "sisters-acc.firebaseapp.com",
+  databaseURL: "https://sisters-acc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "sisters-acc",
+  storageBucket: "sisters-acc.firebasestorage.app",
+  messagingSenderId: "600306409423",
+  appId: "1:600306409423:web:eca6e7316ba9ab7a62fcba"
+};
+const CODES = { "Zara": "8976", "Amna": "2349" };
+const TEST = {
+  subject: "MA2",
+  chapterId: "MA2_20",
+  chapterName: "Relevant Costing for Decisions",
+  testType: "chapter_test",
+  storageKey: "rc_ma2_v1",
+  perAttempt: 15,
+  durationSec: 1800,
+  pauseSec: 120,
+  maxPauses: 2
+};
+const ACCRUALS_POOL = [{"qId": "RC01", "topic": "Opportunity cost definition", "difficulty": "medium", "marks": 2, "timeIdeal": 80, "type": "mcq", "questionText": "Which term describes the benefit forgone when one course of action is chosen in preference to another?", "options": [{"letter": "A", "text": "Avoidable cost", "correct": false, "why": "An avoidable cost is one that can be eliminated by choosing not to undertake an activity. It describes costs that go away, not benefits given up."}, {"letter": "B", "text": "Differential cost", "correct": false, "why": "A differential (or incremental) cost is the difference in total cost between two alternatives. It measures a change in costs, not a forgone benefit."}, {"letter": "C", "text": "Opportunity cost", "correct": true, "why": "Correct. Opportunity cost is the value of the best alternative forgone when a particular course of action is chosen. It is a key relevant cost in decision-making."}, {"letter": "D", "text": "Sunk cost", "correct": false, "why": "A sunk cost is one already incurred and unrecoverable, which makes it irrelevant for decision-making. It is the opposite of what is being asked."}], "workingNote": "Definitions:\n  Avoidable cost = cost that can be avoided by NOT doing something\n  Differential / incremental cost = change in cost between alternatives\n  Opportunity cost = value of the BEST alternative forgone\n  Sunk cost = already-incurred, unrecoverable cost (irrelevant)", "explanation": "Opportunity cost captures the most important hidden cost in any decision: by choosing option A, you give up the value that option B would have created. It is one of the cardinal relevant costs and must always be included in decision analysis even though it never appears in conventional accounting records.", "examinerNote": "Memorise the four cost terms. The exam tests the precise definition, not loose synonyms."}, {"qId": "RC02", "topic": "Which costs are relevant", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "Which of the following are relevant costs in short-term decision-making?\n\n(i) Future cash flows directly affected by the decision\n(ii) Historical cost of an asset already owned\n(iii) Opportunity costs\n(iv) Apportioned head office overheads (which would not change as a result of the decision)", "options": [{"letter": "A", "text": "(i), (ii) and (iii) only", "correct": false, "why": "Historical cost of an asset already owned is a sunk cost — the money is gone and cannot be recovered by any future decision. It is not relevant."}, {"letter": "B", "text": "(i) and (iii) only", "correct": true, "why": "Correct. Only future cash flows that change because of the decision (i) and opportunity costs (iii) are relevant. Historical costs (ii) are sunk; allocations that don’t change (iv) are not incremental."}, {"letter": "C", "text": "(i), (iii) and (iv) only", "correct": false, "why": "Allocated head office overheads that would not change as a result of the decision are not incremental cash flows. The allocation merely redistributes a fixed total; it doesn’t change what the firm spends."}, {"letter": "D", "text": "All of (i), (ii), (iii) and (iv)", "correct": false, "why": "Both historical cost (sunk) and unchanged allocations (notional) fail the relevance test. Only future, incremental, decision-driven cash flows and opportunity costs qualify."}], "workingNote": "Relevance test = FUTURE + INCREMENTAL + CASH FLOW driven by the decision.\n  (i) future, incremental, cash flow      -> RELEVANT\n  (ii) historical (sunk)                  -> not relevant\n  (iii) opportunity cost                  -> RELEVANT\n  (iv) apportioned and unchanged          -> not incremental, not relevant", "explanation": "The three-part relevance test (future, incremental, cash-flow) is the framework that decides every other question in this topic. Historical costs fail the 'future' test — they’ve already happened. Apportionments that don’t change fail the 'incremental' test — the firm pays the same total either way; only the label changes.", "examinerNote": "Three tests: FUTURE, INCREMENTAL, CASH FLOW. A cost must pass all three to be relevant."}, {"qId": "RC03", "topic": "Sunk costs in decision making", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "mcq", "questionText": "A company has spent $8,000 on a feasibility study for a new product. To take the product to market, a further $3,000 of market testing would be needed before launch. How should these amounts be treated in the decision whether to proceed?", "options": [{"letter": "A", "text": "$8,000 is a sunk cost (irrelevant); $3,000 is a future incremental cost (relevant)", "correct": true, "why": "Correct. The $8,000 has already been spent and cannot be recovered — it is sunk and irrelevant to today’s decision. The $3,000 is a future cost that will only be incurred if the company proceeds — incremental and relevant."}, {"letter": "B", "text": "$11,000 is relevant (the total amount spent on the product so far and in future)", "correct": false, "why": "This treats already-spent money as if it could be recovered by making the right decision. The $8,000 cannot be undone — it must be excluded from a forward-looking analysis."}, {"letter": "C", "text": "$8,000 is relevant; $3,000 is sunk", "correct": false, "why": "This reverses the correct treatment. The $8,000 has been incurred (past) and the $3,000 has not yet been spent (future). Sunk applies to the past, not the future."}, {"letter": "D", "text": "Both are irrelevant because they are not direct production costs", "correct": false, "why": "Relevance does not depend on whether a cost is ‘direct’. A future cash flow caused by the decision (the $3,000) is relevant whatever its category."}], "workingNote": "$8,000 feasibility study: ALREADY paid -> sunk -> IRRELEVANT.\n$3,000 future market testing: paid ONLY IF the project proceeds -> future incremental cash flow -> RELEVANT.\nThe past is irreversible; only the future is subject to the decision.", "explanation": "Sunk cost is the most common trap in decision-making. The $8,000 might feel important because ‘money has been spent on this product’, but a rational decision today asks only: do future inflows exceed future outflows? The $8,000 will not change regardless of what is decided now; it must be excluded.", "examinerNote": "Cost is sunk = cost has been paid. Sunk costs never enter a relevant-cost analysis, no matter how large or how recent."}, {"qId": "RC04", "topic": "Notional cost — use of owned space", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "mcq", "questionText": "Belmont Co owns its head office. For a one-off contract, a corner of currently empty office space would be used for six weeks. The space cannot be sublet (long-term lease restrictions). Belmont charges a notional rent internally to departmental accounts based on market rates. What is the relevant cost of using the space for the contract?", "options": [{"letter": "A", "text": "Notional rent equivalent to the market rental value", "correct": false, "why": "Notional rent is an internal allocation, not a cash flow. The company does not pay anyone the notional rent — it is a number used for performance reporting. Relevant costs must be actual cash flows."}, {"letter": "B", "text": "A share of the building’s depreciation for the six-week period", "correct": false, "why": "Depreciation is the systematic write-down of a past investment. The cost is sunk and continues whether or not the space is used. It is not a future incremental cash flow."}, {"letter": "C", "text": "Zero — no incremental cash flow arises from using the otherwise-empty space", "correct": true, "why": "Correct. The space is owned, idle, and cannot be sublet, so its use creates no extra cash outflow and forgoes no actual revenue. The relevant cost of using owned, otherwise-idle space with no alternative use is nil."}, {"letter": "D", "text": "A share of total office running costs for the six-week period", "correct": false, "why": "Office overheads such as rates, lighting and maintenance would be incurred whether or not the contract is taken. Only any incremental costs (e.g., extra electricity) actually caused by the contract would be relevant."}], "workingNote": "Three tests applied to each option:\n  Notional rent        -> not a cash flow      -> NOT relevant\n  Depreciation         -> sunk, non-cash      -> NOT relevant\n  Office overheads     -> unchanged           -> NOT relevant\n  Incremental cost     -> none (cannot sublet, otherwise idle) -> $0\nRelevant cost = $0.", "explanation": "This question isolates two distinct traps: notional charges and unavoidable overheads. Both are common in management accounts but neither is a real cash outflow caused by the decision. Where owned space has no alternative use (cannot be sublet, would otherwise be empty), using it costs nothing extra — the relevant cost is zero. If instead the space COULD be sublet for $X, then $X would be an opportunity cost.", "examinerNote": "Notional and apportioned charges are not relevant. Owned, idle space with no alternative use has zero relevant cost."}, {"qId": "RC05", "topic": "Committed costs", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "Sigma Co signed a non-cancellable five-year lease last year on warehouse space, at $40,000 per year. The lease has four years left to run. For a decision today on whether to launch a new product range that would use part of this warehouse, the annual lease cost is:", "options": [{"letter": "A", "text": "Relevant, because it is a future cost", "correct": false, "why": "Being a future cost is necessary but not sufficient. The cost must also be incremental — it must change as a result of the decision. The lease payments are fixed by contract and do not change whether or not the new product is launched."}, {"letter": "B", "text": "Irrelevant, because it is a committed cost that will be paid regardless of the decision", "correct": true, "why": "Correct. The lease is unavoidable for four more years. Whether or not the new product is launched, the same $40,000 per year is payable. It is a committed cost — effectively sunk in decision terms — and so is not relevant."}, {"letter": "C", "text": "Relevant, because the warehouse will be used by the new product", "correct": false, "why": "Use of warehouse space the company is already paying for does not create any additional lease cost. The lease will be paid whether or not the space is used. Use alone does not make a cost relevant."}, {"letter": "D", "text": "Half-relevant, since only part of the warehouse will be used", "correct": false, "why": "A cost is either relevant (it changes with the decision) or not (it doesn’t). Apportioning by usage area is a management reporting convention; it does not create a real cash-flow change."}], "workingNote": "Lease commitment: 4 years remaining at $40,000/year, non-cancellable.\nIf new product launched: lease still costs $40,000/year.\nIf new product NOT launched: lease still costs $40,000/year.\nCommitted cost -> unchanged by the decision -> NOT relevant.", "explanation": "A committed cost is one the firm has bound itself to in the past and cannot now avoid. For decision purposes it behaves exactly like a sunk cost — it will be paid regardless of what is decided now, so it cannot change the decision’s outcome. Only future costs that CAN be avoided by changing the decision are relevant.", "examinerNote": "Committed = legally bound (lease, long-term contract). It looks like a future cost but it is unavoidable, so it behaves as a sunk cost for decision-making."}, {"qId": "RC06", "topic": "Material in stock — regular use", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "number", "questionText": "R Co has 800 kg of material in stock at a book value of $5 per kg. The material is regularly used in normal production at the rate of 50 kg per week. The current market price is $7 per kg. A new special job requires 200 kg of the material. What is the relevant cost of the material for the special job? (Enter the amount in $.)", "numericAnswer": 1400, "tolerance": 0, "workingNote": "Material in stock AND regularly used in normal operations.\nKey insight: any stock taken for the special job must be replaced for normal use.\nReplacement cost = current market price = $7/kg.\nRelevant cost = 200 kg × $7 = $1,400.\n(Book value $5/kg is the past price actually paid and is irrelevant.)", "explanation": "When a material is regularly used, every kg drawn from stock for a new job must eventually be replaced — the firm pays today’s market price for that replacement. So the relevant cost is the replacement (market) price, not what was paid in the past. The historic book value of $5/kg is a sunk cost and plays no part. This is the most important single rule on material relevant cost.", "examinerNote": "Regularly used material in stock -> RELEVANT COST = quantity needed × REPLACEMENT (current market) price. Book value is sunk."}, {"qId": "RC07", "topic": "Material in stock — no regular use, scrap alternative", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "number", "questionText": "P Co has 300 kg of material X in stock at a book value of $8 per kg. Material X is no longer used in normal production. If not used on a new contract, the stock would be sold for scrap at $3 per kg. The current purchase price of X is $9 per kg. The new contract requires 250 kg of material X. What is the relevant cost of material X for the contract? (Enter the amount in $.)", "numericAnswer": 750, "tolerance": 0, "workingNote": "Material in stock, NOT regularly used.\nIf used on the contract: cannot be sold for scrap.\nIf NOT used on the contract: would be sold for $3/kg scrap.\nOpportunity cost = scrap revenue forgone = 250 kg × $3 = $750.\nReplacement cost ($9/kg) is irrelevant — the firm has no reason to replace material it no longer uses.\nBook value ($8/kg) is sunk — irrelevant.", "explanation": "For non-regularly-used material already in stock, the relevant cost is the value the firm gives up by using it on the contract instead of the next-best alternative. Here that alternative is selling for scrap at $3/kg. Replacement cost is not relevant because the firm would not buy more of a material it no longer uses. The deliberate trap is the $9 replacement figure, which is the right answer ONLY when the material is regularly used.", "examinerNote": "Non-regularly-used material in stock -> relevant cost = opportunity cost of the alternative use (scrap value, sale price, etc.), NOT replacement cost."}, {"qId": "RC08", "topic": "Material not in stock", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "number", "questionText": "T Co requires 400 kg of material Z for a special contract. The material is not currently held in stock. The current purchase price of Z is $6 per kg. What is the relevant cost of material Z for the contract? (Enter the amount in $.)", "numericAnswer": 2400, "tolerance": 0, "workingNote": "Material not held in stock -> must be purchased.\nQuantity needed: 400 kg.\nCurrent purchase price: $6/kg.\nRelevant cost = 400 × $6 = $2,400.", "explanation": "When material is not held in stock, the firm must buy the full quantity needed. The relevant cost is straightforwardly the cash outflow: quantity required multiplied by current purchase price. This is the simplest of the three material scenarios but a useful baseline for the more complex mixed-stock cases that follow.", "examinerNote": "Material not in stock -> RELEVANT COST = quantity needed × current purchase price. Pure incremental cash outflow."}, {"qId": "RC09", "topic": "Material — mixed source, regular use", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "number", "questionText": "Q Co holds 400 kg of material M in stock at a book value of $4 per kg. Material M is regularly used in normal production. The current market price is $9 per kg. A new contract requires 700 kg of material M. What is the relevant cost of material M for the contract? (Enter the amount in $.)", "numericAnswer": 6300, "tolerance": 0, "workingNote": "Regular-use rule applies to the WHOLE quantity:\n  400 kg from stock (must later be replaced at $9/kg)\n  300 kg additional, bought directly at $9/kg\nEffectively the firm buys 700 kg at $9/kg.\nRelevant cost = 700 × $9 = $6,300.\n(Book value $4/kg is sunk; the quantity in stock makes no difference to the cost.)", "explanation": "When the entire material is regularly used, the SOURCE of each kg does not matter — stock or fresh purchase. Anything taken from stock is replaced; anything bought directly is, well, bought. Either way the firm spends the current market price per kg. So the relevant cost is simply 'quantity needed' × 'market price'. Notice how completely irrelevant the book value of $4/kg is.", "examinerNote": "Regular-use material: relevant cost = TOTAL QUANTITY NEEDED × replacement price. The split between stock and purchase doesn’t affect the answer."}, {"qId": "RC10", "topic": "Material — mixed source, no regular use", "difficulty": "hard", "marks": 2, "timeIdeal": 170, "type": "number", "questionText": "S Co holds 200 kg of material N in stock at a book value of $5 per kg. Material N is no longer used in normal production. If not used on the new contract, the stock would be sold for scrap at $2 per kg. The current purchase price of N is $7 per kg. The new contract requires 350 kg of N. What is the relevant cost of material N for the contract? (Enter the amount in $.)", "numericAnswer": 1450, "tolerance": 0, "workingNote": "Material N is NOT regularly used — split the calculation:\n  In-stock portion (200 kg):\n    Alternative use = sell as scrap at $2/kg\n    Opportunity cost = 200 × $2 = $400\n  Additional needed (150 kg):\n    Must be purchased at current price\n    Incremental cost = 150 × $7 = $1,050\nTotal relevant cost = $400 + $1,050 = $1,450.\n(Book value $5/kg is sunk — ignored.)", "explanation": "Mixed-source decisions on non-regularly-used material require splitting: stock at opportunity cost (the scrap revenue forgone) and any additional quantity at current purchase price. The trap is to apply replacement cost to the in-stock portion (which would give 200 × $7 + 150 × $7 = $2,450). That treats the firm as if it were going to replace material it doesn’t use — which it isn’t.", "examinerNote": "Mixed source, NOT regularly used: stock kg × alternative-use value + extra kg × purchase price. Don't apply replacement cost to stock the firm wouldn't replace."}, {"qId": "RC11", "topic": "Rework vs scrap — incremental analysis", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "D Co holds materials that originally cost $30,000 and are no longer usable in normal operations. Two options are available:\n\n  (1) Sell as-is for scrap: $8,000\n  (2) Rework at additional cost of $5,000, then sell: $16,000\n\nWhich option is better, and by how much (incremental basis)?", "options": [{"letter": "A", "text": "Sell as scrap — better by $7,000", "correct": false, "why": "This appears to compare scrap revenue ($8,000) with rework cost alone ($5,000) and treats the rework as a $5,000 loss. It ignores the $16,000 of revenue from selling the reworked material, which is the whole point of doing the rework."}, {"letter": "B", "text": "Rework — better by $3,000", "correct": true, "why": "Correct. Rework option net cash flow = $16,000 − $5,000 = $11,000. Scrap option = $8,000. Incremental gain from reworking = $11,000 − $8,000 = $3,000. The $30,000 original cost is sunk and irrelevant."}, {"letter": "C", "text": "Rework — better by $11,000", "correct": false, "why": "This is the net cash from reworking ($16,000 − $5,000 = $11,000), but it ignores the alternative — selling as scrap would still earn $8,000. The incremental gain is the DIFFERENCE between the two options, not the absolute value of one of them."}, {"letter": "D", "text": "Rework — better by $16,000", "correct": false, "why": "This is the gross revenue from selling reworked material with no costs deducted and no comparison to the scrap option. Neither the rework cost nor the scrap option is taken into account."}], "workingNote": "Original cost $30,000 = sunk -> IGNORE.\nOption 1 (sell as scrap):\n  Net cash flow = $8,000\nOption 2 (rework then sell):\n  Revenue $16,000 − rework cost $5,000 = $11,000 net\nIncremental gain from reworking instead of scrapping:\n  $11,000 − $8,000 = $3,000\nDecision: REWORK (better by $3,000).", "explanation": "Incremental decisions compare net cash flows of each alternative — they never use sunk historic costs. The $30,000 originally paid is gone, and the question is purely: which of two future actions creates more cash? Rework generates $11,000 net; scrap generates $8,000. Rework wins by $3,000. Even though the company is selling for less than it originally paid, the right decision is the one with the better incremental outcome.", "examinerNote": "Compare NET cash flows of each option; ignore sunk original cost. ‘Better by’ = difference between the two options' net cash flows."}, {"qId": "RC12", "topic": "Material — mixed source, no regular use (variant)", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "number", "questionText": "L Co requires 800 litres of material V for a project. The company currently holds 500 litres in stock, originally bought for $3 per litre. Material V is not used in normal production; if not used on this project, the stock would be sold for $1 per litre (the only alternative use). The current purchase price is $5 per litre. What is the relevant cost of material V for the project? (Enter the amount in $.)", "numericAnswer": 2000, "tolerance": 0, "workingNote": "Material V: not regularly used — split the calculation:\n  500 litres from stock:\n    Opportunity cost = sale value forgone = 500 × $1 = $500\n  300 litres additional purchase:\n    Incremental cost = 300 × $5 = $1,500\nTotal relevant cost = $500 + $1,500 = $2,000.\n(Book value $3/litre is sunk — ignored.)", "explanation": "The pattern is identical to mixed-source non-regularly-used material: the in-stock portion is valued at its forgone alternative use ($1/litre scrap), while the additional quantity is valued at the current purchase price ($5/litre). Notice how the past purchase price of $3 plays no role at all — it is sunk. The relevant figure for stock is the cash the firm could otherwise have received for it.", "examinerNote": "Stock not regularly used: value at NEXT-BEST ALTERNATIVE USE (here, scrap sale), never historic cost."}, {"qId": "RC13", "topic": "Equipment — relevant cost", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "U Co has a piece of machinery currently idle, with net book value of $5,000. The machinery could be used on a new contract. If not used on the contract, it would be sold now for $4,000 net. After use on the contract it would have no resale value and would cost $700 to dismantle and dispose of. What is the relevant cost of using the machinery on the contract?", "options": [{"letter": "A", "text": "$4,000", "correct": false, "why": "This captures the opportunity cost (sale value forgone) but omits the future disposal cost. Both are real cash-flow consequences of using the machinery and both must be included."}, {"letter": "B", "text": "$4,700", "correct": true, "why": "Correct. Relevant cost = sale value forgone ($4,000 opportunity cost) + future disposal cost incurred only if used on the contract ($700). Net book value of $5,000 is sunk and ignored."}, {"letter": "C", "text": "$5,000", "correct": false, "why": "Net book value reflects past cost less accumulated depreciation — it is a sunk historic figure. It does not measure either the cash forgone or the cash that will be spent because of the decision."}, {"letter": "D", "text": "$5,700", "correct": false, "why": "This adds the disposal cost ($700) to the sunk net book value ($5,000). The sunk amount should not be there. The right opportunity cost is the current sale value ($4,000), not the NBV."}], "workingNote": "Net book value $5,000  -> SUNK -> ignore.\nIf used on contract:\n  Opportunity cost: sale value forgone     = $4,000\n  Future cash outflow on disposal          = $700\n  Total relevant cost                      = $4,700", "explanation": "Net book value is a bookkeeping figure, not a cash flow. The two real consequences of using the machinery on the contract are: (1) losing the $4,000 sale that would otherwise be made now, and (2) paying $700 to dismantle the machinery later (a cost only incurred IF used on the contract). Adding these gives $4,700. Treat NBV like any other sunk cost — ignore it.", "examinerNote": "Equipment relevant cost = SALE VALUE FORGONE + future incremental disposal cost. NBV and depreciation are sunk and never appear."}, {"qId": "RC14", "topic": "Idle labour (spare capacity)", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "number", "questionText": "X Co employs 8 production workers on fixed-wage contracts. They are paid $20 per hour regardless of workload. The workers currently have spare capacity of 200 hours per week. A new special contract would require 150 hours of their time over one week. What is the relevant labour cost of the contract for that week? (Enter the amount in $.)", "numericAnswer": 0, "tolerance": 0, "workingNote": "Workers on fixed wages, fully paid whether busy or idle.\nSpare capacity available: 200 hours/week.\nContract requires: 150 hours/week (≤ spare capacity).\nIncremental cash flow caused by accepting the contract: $0 (no extra wages, no displacement).\nRelevant labour cost = $0.", "explanation": "When workers are paid regardless and have spare capacity sufficient for the new work, accepting the contract causes no additional wage cost. The wages are committed; they would be paid whether the contract is accepted or not. So the relevant labour cost is zero. The trap is to multiply 150 hours × $20 = $3,000 — a number that exists in cost accounts but does not reflect any real cash-flow change.", "examinerNote": "Spare-capacity workers on fixed wages -> RELEVANT LABOUR COST = ZERO. No incremental cash flow."}, {"qId": "RC15", "topic": "Fully employed labour — contribution forgone", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "number", "questionText": "Y Co's skilled workers are fully utilized on Product W. They are paid $15 per hour, and will be paid the same regardless of which work they do. A new contract requires 100 hours of skilled labour. If accepted, the workers would be moved off Product W. Each unit of Product W generates a contribution of $40 after deducting ALL variable costs including wages, and requires 4 hours of skilled labour. What is the relevant labour cost of the new contract? (Enter the amount in $.)", "numericAnswer": 1000, "tolerance": 0, "workingNote": "Skilled labour fully employed AND paid regardless -> wages are COMMITTED, not relevant.\nContribution per unit of W: $40 (already net of wages and other VC).\nContribution per labour hour of W: $40 ÷ 4 = $10/hour.\nOpportunity cost of diverting 100 hours: 100 × $10 = $1,000 contribution forgone.\nRelevant labour cost = $1,000.", "explanation": "This is the cardinal labour rule that the exam tests over and over. When labour is fully employed and paid the same regardless, the wages are committed: paying them doesn’t change because of the decision. The cost that DOES change is the contribution lost from the work the workers are no longer doing. Because contribution is already after wages, you don’t add wages on top — the relevant cost is just the contribution forgone.", "examinerNote": "Fully employed labour diverted -> RELEVANT COST = CONTRIBUTION FORGONE (× hours). Wages are committed and NOT added on top."}, {"qId": "RC16", "topic": "Labour hired for the contract", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "number", "questionText": "Z Co has no spare labour capacity and no labour can be diverted from other work. To accept a new contract, the company would need to hire 50 hours of skilled labour at $20 per hour and 30 hours of semi-skilled labour at $12 per hour, specifically for the contract. What is the relevant labour cost of the new contract? (Enter the amount in $.)", "numericAnswer": 1360, "tolerance": 0, "workingNote": "All labour HIRED specifically for the contract -> wages are fully incremental.\n  Skilled:      50 × $20 = $1,000\n  Semi-skilled: 30 × $12 = $360\nTotal relevant labour cost = $1,360.", "explanation": "When labour is hired (or paid through overtime) specifically for a decision, every dollar of wage is a future incremental cash outflow caused by the decision. The relevant cost is then the entire wage cost. This is in sharp contrast to fully employed workers whose wages are committed regardless.", "examinerNote": "Hired-for-the-contract labour -> RELEVANT COST = full wage cost (incremental cash outflow)."}, {"qId": "RC17", "topic": "Mixed labour categories", "difficulty": "hard", "marks": 2, "timeIdeal": 200, "type": "mcq", "questionText": "A new contract requires the following labour:\n\n  Skilled: 80 hours at $10/hour. Workers are fully employed; to do the contract they would be moved off Product P. Each unit of P generates a contribution of $18 (after wages) and takes 2 skilled labour hours.\n\n  Semi-skilled: 40 hours at $8/hour. To be hired specifically for the contract.\n\n  Supervisor: 5 hours required. The supervisor is salaried at the equivalent of $50/hour and currently has plenty of spare time.\n\nWhat is the relevant labour cost of the contract?", "options": [{"letter": "A", "text": "$720", "correct": false, "why": "This is the skilled opportunity cost alone (80 hrs × $9 contribution per hour). It omits the incremental semi-skilled wages ($320), which are a genuine extra cash outflow."}, {"letter": "B", "text": "$1,040", "correct": true, "why": "Correct. Skilled opportunity cost = 80 × ($18÷2) = $720. Semi-skilled (hired) = 40 × $8 = $320. Supervisor (spare capacity) = $0. Total relevant = $720 + $320 + $0 = $1,040."}, {"letter": "C", "text": "$1,290", "correct": false, "why": "This adds the supervisor’s notional cost (5 × $50 = $250) to the right answer. The supervisor is already paid, has spare capacity, and his salary will not change — supervisor cost is zero."}, {"letter": "D", "text": "$1,370", "correct": false, "why": "This is the sum of all labour quoted at the stated rates (80×$10 + 40×$8 + 5×$50 = $800 + $320 + $250). It ignores the capacity status of each labour category and applies wage rates uniformly."}], "workingNote": "Three labour categories — three different rules:\n  Skilled (fully employed, diverted from P):\n    Contribution per labour hour from P: $18 ÷ 2 = $9\n    Opportunity cost = 80 × $9 = $720\n    (Wages $10/hr are committed -> not relevant)\n  Semi-skilled (hired for the contract):\n    Wages fully incremental = 40 × $8 = $320\n  Supervisor (spare capacity):\n    Salary unchanged -> $0\nTotal relevant labour cost = $720 + $320 + $0 = $1,040", "explanation": "Mixed labour problems require classifying each category by its capacity status. Three rules cover almost everything: (1) hired-for-the-job -> full wage relevant; (2) fully-employed-and-diverted -> opportunity cost (contribution forgone), wages committed and excluded; (3) spare capacity -> zero relevant cost. Adding the three together gives the answer. The grand trap (option D) is to apply the same rate to everyone regardless of capacity.", "examinerNote": "Classify each labour category by capacity status, then apply the appropriate rule. Never assume the wage rate applies uniformly."}, {"qId": "RC18", "topic": "Manager / supervisor with spare capacity", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "A new one-year contract is being considered. It would require 20% of an existing manager’s time during the year. The manager earns $80,000 per year, has 30% spare capacity, and would NOT be replaced or paid extra in respect of the contract. What is the relevant manager cost for the decision?", "options": [{"letter": "A", "text": "$16,000 (20% of $80,000)", "correct": false, "why": "This treats the manager’s time as proportionally costed. But the company pays the manager the same salary whether or not the contract is taken, and the manager has more than enough spare time to handle it. No incremental cash flow arises."}, {"letter": "B", "text": "Zero — the manager has spare capacity and no extra payment is made", "correct": true, "why": "Correct. The manager’s salary is committed at $80,000 regardless of the decision. With spare capacity ≥ the time the contract needs, no additional wages, hires, or displacement of other work arises. Relevant cost = $0."}, {"letter": "C", "text": "$80,000 — the full salary", "correct": false, "why": "This treats the entire salary as caused by the contract. Most of the manager’s time and salary continues regardless. A salary that would be paid in full whether or not the contract proceeds cannot be a relevant cost."}, {"letter": "D", "text": "$24,000 (30% of $80,000, the spare-capacity portion)", "correct": false, "why": "Spare capacity is not a cost — it is unused time the firm has already paid for. Treating it as a cost would imply the firm should be charging for time that is, by definition, idle."}], "workingNote": "Manager salary: $80,000 (committed, paid regardless).\nContract uses: 20% of time.\nSpare capacity: 30% (more than enough).\nNo hire, no replacement, no overtime, no displacement.\nIncremental cost = $0.\nRelevant cost of manager time = $0.", "explanation": "A salaried manager with spare capacity is the cleanest ‘zero relevant cost’ scenario. The firm has already committed to the full salary; using some idle time creates no additional cash outflow. Apportioning the salary in proportion to the time used (option A) is conventional internal reporting — but it is not a real cash flow. If the manager were already fully busy and overtime were needed, then the OVERTIME cost (incremental) would be relevant.", "examinerNote": "Salaried staff with spare capacity -> ZERO relevant cost. Apportioning salary by usage % is internal reporting, not relevant costing."}, {"qId": "RC19", "topic": "When are wages relevant?", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "When is the wage cost of labour a RELEVANT cost in short-term decision-making?", "options": [{"letter": "A", "text": "Always, because wages are a variable cost", "correct": false, "why": "Wages are sometimes variable but often committed (fixed-wage contracts, salaries, fully-employed workers on flat pay). Categorising wages as ‘always variable’ misses the whole point of relevant costing: a cost is relevant only when it CHANGES because of the decision."}, {"letter": "B", "text": "Only when the decision causes wages to change — hiring extra workers, paying overtime, redundancy payments, or similar incremental cash flows", "correct": true, "why": "Correct. The wage cost is relevant only when it is a future incremental cash flow caused by the decision: new hires, overtime, redundancy, etc. Where wages are paid identically regardless of the decision (fully employed, fixed-wage staff), they are committed and irrelevant — but a contribution-forgone opportunity cost may still apply."}, {"letter": "C", "text": "Only when skilled labour is involved", "correct": false, "why": "The skill level of the worker is incidental. What matters is whether the wage CHANGES because of the decision — which depends on capacity and contract type, not skill."}, {"letter": "D", "text": "Never — wages are always sunk because they are paid weekly", "correct": false, "why": "Wages aren’t ‘sunk’ just because they are paid out periodically. New hires or overtime caused by accepting a contract are very much future incremental costs and clearly relevant."}], "workingNote": "Wage relevant when:\n  - Workers HIRED for the decision -> full wage relevant\n  - OVERTIME paid because of the decision -> overtime premium relevant\n  - REDUNDANCY paid as a consequence -> redundancy cost relevant\nWage NOT relevant when:\n  - Workers fully employed on fixed wages, paid same either way (use OPPORTUNITY COST of displaced work instead)\n  - Spare capacity, no extra wages incurred", "explanation": "This is the abstract version of the labour-relevance rule. The general principle of relevance is FUTURE + INCREMENTAL + CASH FLOW. A wage that the firm will pay anyway, regardless of the decision, satisfies ‘future cash flow’ but fails ‘incremental’ — and so is irrelevant. Hiring, overtime and redundancy ARE incremental and so are relevant.", "examinerNote": "Wages are relevant only when the DECISION causes them to change. Otherwise the relevant labour cost is the opportunity cost (contribution forgone) or zero."}, {"qId": "RC20", "topic": "Depreciation relevance", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "mcq", "questionText": "For a decision on whether to accept a one-off special order using existing factory machinery, which of the following costs is RELEVANT?", "options": [{"letter": "A", "text": "Depreciation charge of the machinery for the order period", "correct": false, "why": "Depreciation is the systematic write-down of a past purchase — it represents a sunk cost being spread over the asset’s life. It is not a future incremental cash flow and is therefore not relevant."}, {"letter": "B", "text": "Net book value of the machinery", "correct": false, "why": "Net book value is a balance-sheet figure: original cost less accumulated depreciation. It is wholly past, sunk and irrelevant to a future decision."}, {"letter": "C", "text": "Annual depreciation as a proportion of original asset cost", "correct": false, "why": "This is a calculation of a sunk cost in a different form. Reformatting depreciation does not turn it into a relevant cash flow."}, {"letter": "D", "text": "Additional electricity, maintenance and consumables caused by the order", "correct": true, "why": "Correct. These are future cash flows incurred ONLY IF the order is accepted — the textbook definition of incremental, relevant cost. They satisfy all three relevance tests (future, incremental, cash flow)."}], "workingNote": "Machinery itself is already owned (cost is sunk).\n  Depreciation: non-cash, allocates past spend -> NOT relevant\n  NBV: past cost less depreciation -> NOT relevant\n  Depreciation %: rephrased sunk cost -> NOT relevant\n  Incremental electricity, maintenance, consumables: future + caused by decision + cash flow -> RELEVANT", "explanation": "Depreciation in any form is a sunk-cost re-statement — it converts a past cash outflow into a periodic charge against profit. None of those periodic charges represent future cash spend. The only machinery-related cost relevant to the decision is what the machinery causes the firm to spend EXTRA: power, maintenance time, consumables. These are real future cash outflows that wouldn’t happen without the order.", "examinerNote": "Depreciation and NBV: never relevant. Only INCREMENTAL running costs caused by the decision are."}, {"qId": "RC21", "topic": "Absorbed fixed overhead", "difficulty": "hard", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "A company absorbs fixed factory overhead at $4 per direct labour hour for cost-accounting purposes. A special one-off contract would require 200 labour hours. Total factory fixed overheads would NOT change as a result of accepting the contract. What is the relevant fixed-overhead cost of the contract?", "options": [{"letter": "A", "text": "$800 (200 hours × $4 absorption rate)", "correct": false, "why": "This applies the absorption rate as if it were a cash outflow. The rate exists for product costing — it spreads existing fixed overheads across products — but the total fixed overhead does not change with the decision. Multiplying by hours does not create a new cash cost."}, {"letter": "B", "text": "Zero, because total fixed overhead would be unchanged", "correct": true, "why": "Correct. The question states explicitly that total fixed overheads are unaffected. The absorption rate is a costing convention that distributes fixed overheads to products; it does not represent incremental cash outflow. With no incremental change, the relevant cost is $0."}, {"letter": "C", "text": "$400, being half the absorbed amount", "correct": false, "why": "There is no basis in relevant costing for halving an absorbed amount. Either the fixed overhead changes (relevant) or it doesn’t (irrelevant) — there is no in-between."}, {"letter": "D", "text": "$800, because the contract uses 200 hours of capacity", "correct": false, "why": "Using capacity does not by itself create a cost. The total cost of capacity (the fixed overhead) is paid regardless. Only if the contract caused additional fixed costs to be incurred would those incremental fixed costs be relevant."}], "workingNote": "Absorption rate $4/hour is a costing tool, NOT a cash outflow.\nTotal fixed overheads unchanged whether or not the contract is accepted.\nIncremental fixed cost = $0.\nRelevant fixed-overhead cost = $0.", "explanation": "Absorbed fixed overhead is one of the most-tested traps in relevant costing. The absorption rate exists so that internal cost accounts attribute a share of factory overheads to each product. The total overhead, however, is unchanged by any individual product or contract — it is fixed by definition. Applying the rate to a special-order calculation drags a non-incremental cost into the analysis and gives the wrong decision.", "examinerNote": "Absorbed/allocated fixed overhead: NEVER relevant unless TOTAL fixed cost actually changes because of the decision."}, {"qId": "RC22", "topic": "Apportioned head office cost", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "mcq", "questionText": "When deciding whether to launch a new product, an apportioned share of head office salaries that would not change because of the decision is:", "options": [{"letter": "A", "text": "Relevant if the apportionment is large", "correct": false, "why": "Relevance does not depend on size. A large apportionment of an unchanged cost is still an unchanged cost — the head office will be paid the same either way."}, {"letter": "B", "text": "Relevant because it is still a real cost the firm pays", "correct": false, "why": "The firm pays the head office cost regardless of whether the new product is launched. ‘A real cost the firm pays’ does not mean it changes because of the decision."}, {"letter": "C", "text": "Irrelevant, because head office cost is incurred regardless of the decision", "correct": true, "why": "Correct. Apportionment merely allocates an unchanged total cost across the firm’s departments or products. The total head office cost stays the same whether the new product is launched or not, so it is not incremental and not relevant."}, {"letter": "D", "text": "Half-relevant because part of head office work supports the new product", "correct": false, "why": "Either a cost changes because of the decision (relevant) or it doesn’t (irrelevant). There is no ‘half-relevant’ category. If a portion of head office cost would actually change incrementally (e.g., extra hires), that portion alone would be relevant."}], "workingNote": "Apportioned head office cost = allocated share of an unchanged total.\nWithout the new product: head office cost = X.\nWith the new product:    head office cost = X (apportioned across more units, but total unchanged).\nIncremental cash flow = 0 -> NOT relevant.", "explanation": "Head office apportionments are the management-accounting cousin of factory overhead absorption — both spread an unchanged total over departments or products. The total spend does not respond to a decision about a new product, so the apportioned amount is not relevant. Only any genuinely incremental head office cost (a new hire, extra office space, increased systems cost) would qualify.", "examinerNote": "Apportioned / allocated unchanged costs: NEVER relevant. Look only for INCREMENTAL changes in central costs."}, {"qId": "RC23", "topic": "Special-order minimum price", "difficulty": "hard", "marks": 2, "timeIdeal": 200, "type": "number", "questionText": "S Co is preparing a price quotation for a one-off special contract. The contract requires:\n\n  - 200 kg of material, regularly used in production. Currently in stock at a book value of $5/kg; current replacement cost $7/kg.\n  - 50 hours of skilled labour. Skilled workers are fully employed and would be diverted from Product M. Product M generates $12 contribution per labour hour (after wages). Skilled wages are paid the same regardless of which work is done.\n  - Other variable costs (incremental): $800.\n  - Allocated fixed overhead absorbed at $1.20 per labour hour. Total fixed costs unchanged.\n\nWhat is the MINIMUM price S Co should quote to break even on a relevant-cost basis? (Enter the amount in $.)", "numericAnswer": 2800, "tolerance": 0, "workingNote": "Material (regularly used) — relevant cost = replacement cost × quantity:\n  200 kg × $7 = $1,400\nLabour (fully employed, diverted) — relevant cost = contribution forgone:\n  50 hrs × $12 = $600\n  (Wages are committed, NOT added.)\nOther variable costs (incremental): $800\nAllocated fixed overhead: $0 (total fixed cost unchanged)\n--------------------------------\nMinimum price = $1,400 + $600 + $800 + $0 = $2,800", "explanation": "Special-order minimum-price questions stack every relevant-cost rule into one calculation. Apply each rule to the corresponding input: regularly-used material -> replacement cost; fully-employed labour diverted -> contribution forgone (no wages added on top); other variable costs -> as incurred; allocated fixed overhead -> ignore unless total changes. The minimum price is the sum of all relevant costs — the floor below which the firm would lose money by accepting the order.", "examinerNote": "Stack the rules: material (regular use -> replacement), labour (fully employed -> contribution forgone, wages OUT), incremental VC (IN), allocated fixed OH (OUT). Sum = minimum price."}, {"qId": "RC24", "topic": "Special-order minimum price (mixed sources)", "difficulty": "hard", "marks": 2, "timeIdeal": 210, "type": "number", "questionText": "V Co receives a one-off order. The requirements are:\n\n  - 100 kg of material X. The company has 80 kg in stock at a book value of $3/kg. Material X is no longer used in production; if not used on this order, the stock would be sold for $2/kg. Current purchase price is $6/kg.\n  - 30 labour hours, to be hired specifically for the order at $15 per hour.\n  - Other variable costs (incremental): $400.\n\nWhat is the MINIMUM acceptable price for the order? (Enter the amount in $.)", "numericAnswer": 1130, "tolerance": 0, "workingNote": "Material (NOT regularly used, mixed source):\n  80 kg from stock: opportunity cost = 80 × $2 = $160 (scrap revenue forgone)\n  20 kg to be purchased: 20 × $6 = $120\n  Material relevant cost = $160 + $120 = $280\nLabour (hired specifically): 30 × $15 = $450\nOther variable costs (incremental): $400\n----------------------------------------\nMinimum price = $280 + $450 + $400 = $1,130", "explanation": "The material here is the mirror image of RC23’s material: NOT regularly used, with the in-stock portion valued at scrap and only the additional portion at purchase price. The labour, by contrast, is hired — so its full wage cost is relevant. Adding incremental variable costs gives the minimum price the firm needs to recoup the cost of accepting the order. Below $1,130 the firm would be poorer for accepting the order.", "examinerNote": "Two different material rules apply to one order (stock at scrap, extra at purchase). Hired labour adds the full wage. Stack and sum."}, {"qId": "RC25", "topic": "Make-or-buy with allocated overheads", "difficulty": "hard", "marks": 2, "timeIdeal": 180, "type": "mcq", "questionText": "P Co currently makes component J in-house. To make 1,000 units of J, the following costs are incurred per period:\n\n  Direct materials                            $8,000\n  Direct labour (piece-rate, only paid if made) $5,000\n  Variable overhead                           $2,000\n  Allocated fixed overhead                    $4,000  (would not change either way)\n  Apportioned share of factory rent           $3,000  (would not change either way)\n  Total cost in management accounts          $22,000\n\nAn external supplier offers to supply 1,000 units of J for $16,500. Should P Co make J in-house or buy it externally?", "options": [{"letter": "A", "text": "Buy externally — saves $5,500 per period", "correct": false, "why": "This compares the external price ($16,500) to the full cost in management accounts ($22,000) and includes $7,000 of allocated fixed/apportioned costs that would NOT change. Those costs are paid either way, so they should be excluded from the comparison."}, {"letter": "B", "text": "Make in-house — saves $1,500 per period", "correct": true, "why": "Correct. Relevant cost of making = $8,000 + $5,000 + $2,000 = $15,000 (only the costs that change with the decision). External buy-in price = $16,500. Making is cheaper by $16,500 − $15,000 = $1,500. The allocated fixed overhead and rent are unchanged either way and so are irrelevant."}, {"letter": "C", "text": "Make in-house — saves $5,000 per period", "correct": false, "why": "This uses an inconsistent figure for the saving. The correct relevant comparison is $15,000 (make) vs $16,500 (buy), a difference of $1,500. $5,000 is the direct-labour figure alone and doesn’t correspond to a meaningful difference between the two options."}, {"letter": "D", "text": "Indifferent — costs are essentially equal", "correct": false, "why": "There is a meaningful $1,500 cost difference between making and buying. Whether to consider that material depends on context, but it isn’t zero."}], "workingNote": "Identify the relevant costs of MAKING (those that would be SAVED if buying instead):\n  Direct materials      $8,000  -> saved if not made -> RELEVANT\n  Direct labour         $5,000  -> saved if not made (piece rate) -> RELEVANT\n  Variable overhead     $2,000  -> saved if not made -> RELEVANT\n  Allocated fixed OH    $4,000  -> UNCHANGED either way -> not relevant\n  Apportioned rent      $3,000  -> UNCHANGED either way -> not relevant\nRelevant cost of making = $8,000 + $5,000 + $2,000 = $15,000\nExternal price          = $16,500\nMake saves: $16,500 − $15,000 = $1,500\nDecision: MAKE in-house.", "explanation": "Make-or-buy comparisons must use only the costs that change with the decision. The allocated fixed overhead and apportioned rent appear large but are paid in full whether or not J is made in-house. Including them creates a phantom cost saving from buying ($22,000 vs $16,500), pushing the company toward a worse decision. Stripping out the unchanged costs reveals that making J actually saves $1,500 per period.", "examinerNote": "In make-or-buy, compare ONLY the costs that change. Allocated/apportioned UNCHANGED costs are paid either way and must be excluded."}, {"qId": "RC26", "topic": "Shutdown decision", "difficulty": "hard", "marks": 2, "timeIdeal": 210, "type": "number", "questionText": "K Co's stationery division shows the following annual results in management reports:\n\n  Sales revenue                       $200,000\n  Variable costs                      $(150,000)\n  Allocated head office costs         $(80,000)\n  Reported loss                       $(30,000)\n\nIf the stationery division were shut down, the allocated head office costs would simply be reallocated to other divisions (head office spending unchanged), and one-off staff redundancy costs of $40,000 would be incurred. What is the REDUCTION in K Co's total annual profit in year 1 if the division is shut down? (Enter the figure as a positive number, in $.)", "numericAnswer": 90000, "tolerance": 0, "workingNote": "Effect of shutdown on K Co’s cash flows in year 1:\n  Contribution lost (revenue − VC):\n    $200,000 − $150,000 = $50,000 lost\n  Head office cost saving:\n    Allocation reshuffles to other divisions, total head office spending unchanged\n    -> $0 saved\n  Redundancy payment:\n    One-off cost of $40,000\n----------------------------------------\nTotal reduction in profit from shutdown = $50,000 + $40,000 − $0 = $90,000", "explanation": "The reported $30,000 loss is misleading because $80,000 of it is an apportionment of unchanged head office cost. The relevant question is: what cash flows would actually change if the division closed? Contribution of $50,000 disappears, redundancy of $40,000 has to be paid, and the head office spending stays exactly where it is. Year 1 is therefore $90,000 worse, not $30,000 better. The right call is to KEEP the division, despite the reported loss.", "examinerNote": "Shutdown decision: focus on the change in TOTAL FIRM cash flows. Reallocated apportionments don’t represent real savings. The reported divisional loss can be massively misleading."}, {"qId": "RC27", "topic": "Rework vs scrap — incremental gain", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "number", "questionText": "D Co holds obsolete materials originally costing $40,000. The materials have a scrap value of $10,000 if sold as-is. Alternatively, they could be reworked at an extra cost of $6,000 and then sold for $20,000. What is the INCREMENTAL profit (in $) of reworking compared to selling as scrap? (Enter as a positive number if reworking is more profitable.)", "numericAnswer": 4000, "tolerance": 0, "workingNote": "Original cost $40,000 = SUNK -> ignore.\nScrap option net cash flow:           $10,000\nRework option net cash flow:           $20,000 − $6,000 = $14,000\nIncremental gain from reworking:       $14,000 − $10,000 = $4,000\nDecision: REWORK (better by $4,000).", "explanation": "Incremental comparison: rework brings in $20,000 of revenue and costs $6,000 to do, netting $14,000. Selling as scrap brings $10,000 outright. Rework is therefore $4,000 better. The huge $40,000 original cost feels important but is sunk — paid long ago and unchanged whichever option is chosen.", "examinerNote": "Incremental gain = NET cash of preferred option − NET cash of the alternative. Sunk historic cost is excluded from both sides."}, {"qId": "RC28", "topic": "Continue or cancel — sunk costs", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "mcq", "questionText": "A research project has so far incurred $80,000 of development costs. To complete the project would require a further $50,000 in development. If completed, the project would generate revenues of $90,000. If cancelled now, the project earns nothing. What is the correct decision?", "options": [{"letter": "A", "text": "Cancel — the project will lose $40,000 overall ($80,000 + $50,000 − $90,000)", "correct": false, "why": "This includes the $80,000 already spent in the decision. Whether the company continues or cancels, the $80,000 is gone. The question is which future action makes the firm better off TODAY. Cancelling means walking away from $40,000 of net future cash."}, {"letter": "B", "text": "Continue — expected net gain of $40,000 ($90,000 − $50,000)", "correct": true, "why": "Correct. The $80,000 is sunk and ignored. Going forward, continuing brings in $90,000 of revenue against $50,000 of future cost, a net inflow of $40,000. Cancelling brings $0. Continuing is therefore $40,000 better."}, {"letter": "C", "text": "Continue — net gain $90,000", "correct": false, "why": "This counts the revenue without subtracting the $50,000 of future development cost. The future cost is incremental and must be deducted from the future revenue to find the net gain from continuing."}, {"letter": "D", "text": "Indifferent — the options are equivalent", "correct": false, "why": "Continuing generates net future cash of $40,000; cancelling generates $0. There is a clear $40,000 difference between the two options."}], "workingNote": "Sunk: $80,000 already spent -> IGNORE.\nGoing forward, two options:\n  Continue: Revenue $90,000 − future cost $50,000 = +$40,000 net\n  Cancel:   $0\nDifference: $40,000 better to continue.\nDecision: CONTINUE.", "explanation": "This is a classic sunk-cost trap. The intuitive (wrong) framing says the project has lost money overall and should be killed. The right framing asks: from where I stand NOW, does continuing add cash compared with not continuing? Yes — by $40,000. The $80,000 already spent is irretrievable whichever way the decision goes; bringing it into the analysis only confuses things.", "examinerNote": "Always re-frame from today forward. Sunk historic spend never enters the decision. Continue if NET FUTURE cash flow > 0."}, {"qId": "RC29", "topic": "Sunk cost and depreciation", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "truefalse2", "questionText": "State whether each of the following statements is true or false.", "statements": [{"text": "Sunk costs should never be included in decision-making analysis.", "answer": true}, {"text": "Depreciation is a relevant cost when deciding whether to use existing machinery on a new contract.", "answer": false}], "workingNote": "Statement 1: Sunk costs are past, unrecoverable, and unchanged by any future decision. They fail the future + incremental test. They are NEVER relevant. -> TRUE.\nStatement 2: Depreciation systematically allocates a past machinery purchase to periods. It is non-cash and reflects sunk cost. It is NEVER a relevant cost for a use decision. -> FALSE.", "explanation": "Sunk-cost exclusion is the fundamental principle of decision-relevant costing — once a cost is paid, it cannot be undone, so it cannot inform the choice of what to do next. Depreciation is a sunk-cost concept dressed up as a current expense; recognising this distinction is essential. The real cost of using machinery on a contract is the opportunity cost of any forgone sale and any incremental running costs.", "examinerNote": "Sunk = never relevant. Depreciation = sunk. Don’t be fooled by depreciation appearing as a current expense in the management accounts."}, {"qId": "RC30", "topic": "Opportunity cost and fixed costs", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "truefalse2", "questionText": "State whether each of the following statements is true or false.", "statements": [{"text": "If an asset's net book value is $5,000 and its current sale value is $2,000, the relevant cost of using the asset on a new project (assuming it would otherwise be sold now) is $2,000.", "answer": true}, {"text": "Fixed costs are ALWAYS irrelevant in short-term decision-making.", "answer": false}], "workingNote": "Statement 1: NBV $5,000 is sunk -> ignored. Sale value $2,000 is the opportunity cost forgone by using the asset (it would otherwise be sold). Relevant cost = $2,000. -> TRUE.\nStatement 2: Fixed costs are usually irrelevant (committed, allocated, unchanged). BUT fixed costs that would actually change because of the decision — e.g. a step in supervision cost, a new lease specifically for this project — ARE relevant. So 'always irrelevant' is too strong. -> FALSE.", "explanation": "The first statement captures the opportunity-cost rule for assets: ignore the book value, use the cash value forgone by not selling. The second corrects a common over-simplification: fixed costs are usually irrelevant, but the qualifier matters. Any fixed cost that genuinely changes because of the decision (a new fixed contract, an additional supervisor, an extra lease) is relevant. The general principle remains: relevant cost is FUTURE INCREMENTAL CASH FLOW, regardless of whether the underlying cost is labelled variable or fixed.", "examinerNote": "Fixed costs are USUALLY irrelevant but not always. A fixed cost that CHANGES because of the decision IS relevant. ‘Always’ is the wrong word."}];
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============================================================
+   APP LOGIC — Firebase real-time + localStorage backup
+   ============================================================ */
+let fbApp = null, fbDB = null, fbOK = false;
+let CURRENT_USER = null;
+let attempt = null;        // current attempt state
+let timerInt = null, paused = false, calcOn = false;
+let reviewFilter = 'wrong';
+
+/* ---------- Firebase init ---------- */
+function initFirebase() {
+  try {
+    fbApp = firebase.initializeApp(firebaseConfig);
+    fbDB = firebase.database();
+    // Connection state listener
+    fbDB.ref('.info/connected').on('value', (snap) => {
+      fbOK = snap.val() === true;
+      paintConn();
+    });
+  } catch (e) {
+    console.error('Firebase init failed', e);
+    fbOK = false;
+    paintConn();
+  }
+}
+function paintConn() {
+  const on = fbOK;
+  [['conn-dot','conn-text'],['w-conn-dot','w-conn-text']].forEach(([d,t])=>{
+    const dot = document.getElementById(d), txt = document.getElementById(t);
+    if (!dot) return;
+    dot.className = 'status-dot ' + (on ? 'dot-on' : 'dot-off');
+    if (t === 'conn-text') txt.textContent = on ? 'Online — connected' : 'Offline — work saved on device';
+    else txt.textContent = on ? 'Online — your work syncs automatically' : 'Offline — saved on device, will sync when online';
+  });
+}
+
+/* ---------- localStorage helpers ---------- */
+function lsKey(user) { return TEST.storageKey + '_' + user; }
+function lsLoad(user) {
+  try { return JSON.parse(localStorage.getItem(lsKey(user)) || '{"attempts":[]}'); }
+  catch { return { attempts: [] }; }
+}
+function lsSave(user, data) {
+  try { localStorage.setItem(lsKey(user), JSON.stringify(data)); }
+  catch (e) { console.error('localStorage save failed', e); }
+}
+
+/* ---------- toast ---------- */
+function toast(msg, ms) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), ms || 2600);
+}
+
+/* ---------- screen nav ---------- */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ---------- LOGIN ---------- */
+function doLogin() {
+  const name = document.getElementById('login-name').value;
+  const code = document.getElementById('login-code').value.trim();
+  const err = document.getElementById('login-err');
+  if (!name) { err.textContent = 'Please select your name.'; err.style.display='block'; return; }
+  if (CODES[name] !== code) { err.textContent = 'Incorrect access code.'; err.style.display='block'; return; }
+  err.style.display = 'none';
+  CURRENT_USER = name;
+  // Presence: mark active (not in test yet)
+  setPresence('dashboard', null);
+  renderWelcome();
+  show('welcome');
+}
+function logout() {
+  clearPresence();
+  CURRENT_USER = null;
+  document.getElementById('login-code').value = '';
+  show('login');
+}
+
+/* ---------- PRESENCE (Recommendation 1: Active Now) ---------- */
+let presenceRef = null;
+function setPresence(state, qInfo) {
+  if (!fbDB || !CURRENT_USER) return;
+  try {
+    presenceRef = fbDB.ref('presence/' + CURRENT_USER);
+    presenceRef.set({
+      user: CURRENT_USER, state: state, chapter: TEST.chapterName,
+      q: qInfo, ts: Date.now()
+    });
+    presenceRef.onDisconnect().remove();
+  } catch (e) { console.error('presence err', e); }
+}
+function clearPresence() {
+  if (presenceRef) { try { presenceRef.remove(); } catch(e){} presenceRef = null; }
+}
+
+/* ---------- WELCOME render ---------- */
+function renderWelcome() {
+  document.getElementById('w-name').textContent = CURRENT_USER;
+  const data = lsLoad(CURRENT_USER);
+  const atts = data.attempts || [];
+  document.getElementById('w-attempts').textContent = atts.length;
+  const list = document.getElementById('w-attempts-list');
+  if (atts.length === 0) {
+    list.innerHTML = '<p class="sub">No attempts yet. Start your first practice below.</p>';
+  } else {
+    let h = '<table><thead><tr><th>#</th><th>Date</th><th>Score</th><th>Pace</th><th>Result</th></tr></thead><tbody>';
+    atts.slice().reverse().forEach((a,i)=>{
+      const n = atts.length - i;
+      const pass = a.scorePct >= TEST.passMark;
+      h += `<tr><td>${n}</td><td>${a.dateStr}</td>
+        <td><strong>${a.scorePct}%</strong></td>
+        <td>${a.pacePct}%</td>
+        <td><span class="pill ${pass?'pill-green':'pill-red'}">${pass?'Pass':'Below 70%'}</span></td></tr>`;
+    });
+    h += '</tbody></table>';
+    list.innerHTML = h;
+  }
+  document.getElementById('w-eval-card').style.display =
+    atts.length >= TEST.targetAttempts ? 'block' : 'none';
+}
+
+/* ---------- START TEST ---------- */
+function pickQuestions() {
+  // Shuffle pool, take perAttempt, keeping difficulty mix
+  const pool = ACCRUALS_POOL.slice();
+  for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  return pool.slice(0, TEST.perAttempt);
+}
+function startTest() {
+  const qs = pickQuestions();
+  attempt = {
+    attemptId: 'att_' + CURRENT_USER + '_' + Date.now(),
+    user: CURRENT_USER,
+    startTs: Date.now(),
+    idx: 0,
+    questions: qs.map(q => ({
+      ...q, userAnswer: null, guessed: false, confused: false,
+      tfAnswers: q.type==='truefalse2' ? [null,null] : null,
+      timeSpent: 0, _enter: Date.now()
+    })),
+    remaining: TEST.durationSec,
+    pausesUsed: 0
+  };
+  reviewFilter = 'wrong';
+  show('test');
+  setPresence('in_test', { n: 1, total: TEST.perAttempt });
+  renderQ();
+  startTimer();
+}
+
+/* ---------- TIMER ---------- */
+function startTimer() {
+  clearInterval(timerInt);
+  timerInt = setInterval(()=>{
+    if (paused) return;
+    attempt.remaining--;
+    paintTimer();
+    if (attempt.remaining <= 0) { clearInterval(timerInt); submitTest(true); }
+  }, 1000);
+  paintTimer();
+}
+function paintTimer() {
+  const m = Math.floor(attempt.remaining/60), s = attempt.remaining%60;
+  const el = document.getElementById('t-timer');
+  el.textContent = `${m}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer' + (attempt.remaining <= 120 ? ' warn' : '');
+}
+let pauseSecondsLeft = 120;
+function togglePause() {
+  if (!paused) {
+    if (pauseSecondsLeft <= 0) { toast('No pause time left'); return; }
+    paused = true;
+    document.getElementById('pause-btn').textContent = '▶ Resume';
+    const pi = setInterval(()=>{
+      if (!paused) { clearInterval(pi); return; }
+      pauseSecondsLeft--;
+      if (pauseSecondsLeft <= 0) { paused=false; document.getElementById('pause-btn').textContent='⏸ Pause'; clearInterval(pi); toast('Pause time up — test resumed'); }
+    },1000);
+    toast('Paused — max 2 min total');
+  } else {
+    paused = false;
+    document.getElementById('pause-btn').textContent = '⏸ Pause';
+  }
+}
+
+/* ---------- RENDER QUESTION ---------- */
+function renderQ() {
+  const i = attempt.idx;
+  const q = attempt.questions[i];
+  q._enter = Date.now();
+  document.getElementById('t-qnum').textContent = `Q${i+1} / ${attempt.questions.length}`;
+  document.getElementById('t-progress').style.width = ((i+1)/attempt.questions.length*100)+'%';
+
+  // nav grid
+  const nav = document.getElementById('t-nav');
+  nav.innerHTML = '';
+  attempt.questions.forEach((qq,k)=>{
+    const c = document.createElement('div');
+    c.className = 'nav-cell';
+    if (k === i) c.classList.add('current');
+    else if (isAnswered(qq)) c.classList.add('answered');
+    if (qq.confused) c.classList.add('flagged');
+    c.textContent = k+1;
+    c.onclick = ()=>{ saveTime(); attempt.idx=k; renderQ(); };
+    nav.appendChild(c);
+  });
+
+  let html = '';
+  if (q.scenario) html += `<div class="scenario">${q.scenario}</div>`;
+  html += `<div class="qtext">${q.questionText}</div>`;
+
+  if (q.type === 'mcq') {
+    q.options.forEach(o=>{
+      const sel = q.userAnswer === o.letter ? ' sel' : '';
+      html += `<div class="opt${sel}" onclick="pickMCQ('${o.letter}')">
+        <span class="opt-letter">${o.letter}</span>${o.text}</div>`;
+    });
+  } else if (q.type === 'number') {
+    html += `<div class="field" style="max-width:260px;">
+      <label>Your answer (number only)</label>
+      <input type="number" id="num-input" value="${q.userAnswer ?? ''}"
+        oninput="pickNum(this.value)" placeholder="e.g. 1813" step="any"></div>`;
+  } else if (q.type === 'truefalse2') {
+    q.statements.forEach((st,si)=>{
+      const a = q.tfAnswers[si];
+      html += `<div class="tf-row">
+        <div class="stmt">${st.text}</div>
+        <button class="tf-btn ${a===true?'sel-t':''}" onclick="pickTF(${si},true)">True</button>
+        <button class="tf-btn ${a===false?'sel-f':''}" onclick="pickTF(${si},false)">False</button>
+      </div>`;
+    });
+  }
+
+  html += `<div class="guess-box">
+    <input type="checkbox" id="guess-cb" ${q.guessed?'checked':''} onchange="toggleGuess()">
+    <label for="guess-cb">I'm guessing this answer (helps your teacher see where to focus)</label></div>`;
+  html += `<div class="confuse-box">
+    <input type="checkbox" id="confuse-cb" ${q.confused?'checked':''} onchange="toggleConfuse()">
+    <label for="confuse-cb">⚑ Mark as confusing (for my own revision)</label></div>`;
+
+  document.getElementById('t-question').innerHTML = html;
+
+  document.getElementById('t-prev').style.visibility = i===0 ? 'hidden' : 'visible';
+  const last = i === attempt.questions.length-1;
+  document.getElementById('t-next').style.display = last ? 'none' : 'inline-block';
+  document.getElementById('t-submit').style.display = last ? 'inline-block' : 'none';
+
+  setPresence('in_test', { n: i+1, total: attempt.questions.length });
+}
+function isAnswered(q) {
+  if (q.type==='mcq') return q.userAnswer!=null;
+  if (q.type==='number') return q.userAnswer!=null && q.userAnswer!=='';
+  if (q.type==='truefalse2') return q.tfAnswers[0]!=null && q.tfAnswers[1]!=null;
+  return false;
+}
+function pickMCQ(l){ attempt.questions[attempt.idx].userAnswer=l; renderQ(); }
+function pickNum(v){ attempt.questions[attempt.idx].userAnswer = v===''?null:v; updateNav(); }
+function pickTF(si,v){ attempt.questions[attempt.idx].tfAnswers[si]=v; renderQ(); }
+function toggleGuess(){ attempt.questions[attempt.idx].guessed = document.getElementById('guess-cb').checked; }
+function toggleConfuse(){ attempt.questions[attempt.idx].confused = document.getElementById('confuse-cb').checked; updateNav(); }
+function updateNav(){
+  const cells = document.querySelectorAll('#t-nav .nav-cell');
+  attempt.questions.forEach((qq,k)=>{
+    cells[k].className = 'nav-cell';
+    if (k===attempt.idx) cells[k].classList.add('current');
+    else if (isAnswered(qq)) cells[k].classList.add('answered');
+    if (qq.confused) cells[k].classList.add('flagged');
+  });
+}
+function saveTime(){
+  const q = attempt.questions[attempt.idx];
+  q.timeSpent += Math.round((Date.now()-q._enter)/1000);
+}
+function nextQ(){ saveTime(); if (attempt.idx<attempt.questions.length-1){attempt.idx++;renderQ();} }
+function prevQ(){ saveTime(); if (attempt.idx>0){attempt.idx--;renderQ();} }
+
+/* ---------- SUBMIT ---------- */
+function confirmSubmit(){
+  const unans = attempt.questions.filter(q=>!isAnswered(q)).length;
+  let msg = 'Submit your test?';
+  if (unans>0) msg = `You have ${unans} unanswered question(s). Submit anyway?`;
+  if (confirm(msg)) submitTest(false);
+}
+function submitTest(auto){
+  clearInterval(timerInt);
+  saveTime();
+  const qs = attempt.questions;
+  let correct=0;
+  qs.forEach(q=>{
+    let ok=false;
+    if (q.type==='mcq') {
+      const c = q.options.find(o=>o.correct);
+      ok = q.userAnswer === c.letter;
+      q._correctAnswer = c.letter;
+    } else if (q.type==='number') {
+      const ua = parseFloat(q.userAnswer);
+      ok = !isNaN(ua) && Math.abs(ua - q.numericAnswer) <= (q.tolerance||0);
+      q._correctAnswer = String(q.numericAnswer);
+    } else if (q.type==='truefalse2') {
+      ok = q.tfAnswers[0]===q.statements[0].answer && q.tfAnswers[1]===q.statements[1].answer;
+      q._correctAnswer = q.statements.map(s=>s.answer?'T':'F').join('/');
+    }
+    q._isCorrect = ok;
+    if (ok) correct++;
+  });
+  const total = qs.length;
+  const scorePct = Math.round(correct/total*100);
+  const timeUsed = TEST.durationSec - attempt.remaining;
+  const idealTime = qs.reduce((s,q)=>s+(q.timeIdeal||120),0);
+  const pacePct = Math.min(100, Math.round(idealTime / Math.max(timeUsed,1) * 100));
+  const guessedCount = qs.filter(q=>q.guessed).length;
+  const luckyRight = qs.filter(q=>q.guessed && q._isCorrect).length;
+
+  const now = new Date();
+  const rec = {
+    attemptId: attempt.attemptId,
+    attemptNumber: (lsLoad(CURRENT_USER).attempts||[]).length + 1,
+    schemaVersion: 1,
+    student: CURRENT_USER,
+    subject: TEST.subject,
+    chapter: { id: TEST.chapterId, name: TEST.chapterName },
+    testType: TEST.testType,
+    testCode: TEST.storageKey,
+    dateStr: now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    submittedAt: now.toISOString(),
+    submittedTs: Date.now(),
+    autoSubmitted: auto,
+    scorePct, correct, wrong: total-correct, total,
+    timeUsedSec: timeUsed, pacePct,
+    guessedCount, luckyRight,
+    questions: qs.map((q,qi)=>({
+      qId:q.qId, displayIdx:qi+1, type:q.type, topic:q.topic,
+      difficulty:q.difficulty, marks:q.marks, timeIdeal:q.timeIdeal,
+      questionText:q.questionText, scenario:q.scenario||null,
+      options:q.options||null, statements:q.statements||null,
+      explanation:q.explanation, examinerNote:q.examinerNote, workingNote:q.workingNote||null,
+      userAnswer: q.type==='truefalse2' ? q.tfAnswers : q.userAnswer,
+      correctAnswer:q._correctAnswer, correct:q._isCorrect,
+      timeSpent:q.timeSpent, guessed:q.guessed, confused:q.confused
+    }))
+  };
+
+  // 1. localStorage backup (device) — ALWAYS, every attempt
+  const data = lsLoad(CURRENT_USER);
+  data.attempts = data.attempts || [];
+  data.attempts.push({
+    attemptId: rec.attemptId, dateStr: rec.dateStr, scorePct, pacePct,
+    correct, wrong: total-correct, total, full: rec
+  });
+  lsSave(CURRENT_USER, data);
+
+  // 2. Firebase sync (real-time) — EVERY attempt
+  syncToFirebase(rec);
+
+  // 3. show results
+  attempt._result = rec;
+  renderResults(rec);
+  show('results');
+  setPresence('dashboard', null);
+}
+
+function buildDashboardSnapshot(rec) {
+  // Map flat test record → dashboard schema-v1 snapshot.
+  const qd = (rec.questions || []).map(q => {
+    let ua = q.userAnswer;
+    if (q.type === 'truefalse2' && Array.isArray(ua)) {
+      ua = ua.map(v => v === true ? 'T' : v === false ? 'F' : '-').join('/');
+    }
+    return {
+      qId: q.qId, topic: q.topic || 'general',
+      difficulty: q.difficulty || 'medium',
+      correct: q.correct === true,
+      earned: q.correct === true ? (q.marks || 2) : 0,
+      marks: q.marks || 2,
+      timeSpent: q.timeSpent || 0,
+      timeIdeal: q.timeIdeal || 120,
+      userAnswer: ua == null ? null : ua,
+      correctAnswer: q.correctAnswer,
+      guessed: q.guessed === true,
+      confused: q.confused === true
+    };
+  });
+  // topicScores: aggregate earned/total/count per topic
+  const topicScores = {};
+  qd.forEach(q => {
+    const t = q.topic || 'general';
+    if (!topicScores[t]) topicScores[t] = { earned: 0, total: 0, count: 0 };
+    topicScores[t].earned += q.earned;
+    topicScores[t].total  += q.marks;
+    topicScores[t].count  += 1;
+  });
+  const totalMarks = qd.reduce((s, q) => s + q.marks, 0);
+  const totalScore = qd.reduce((s, q) => s + q.earned, 0);
+  const now = new Date(rec.submittedAt || Date.now());
+  const attemptObj = {
+    attemptId: rec.attemptId,
+    attemptNumber: rec.attemptNumber || 1,
+    date: rec.dateStr || now.toLocaleDateString('en-GB'),
+    time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+    submittedAt: rec.submittedTs || now.getTime(),
+    totalScore: totalScore,
+    totalMarks: totalMarks,
+    percent: rec.scorePct,
+    timeUsed: rec.timeUsedSec || 0,
+    passed: rec.scorePct >= (TEST.passMark || 70),
+    topicScores: topicScores,
+    perQuestionDetail: qd,
+    inProgress: false,
+    metadata: {
+      pacePct: rec.pacePct, guessedCount: rec.guessedCount,
+      luckyRight: rec.luckyRight, autoSubmitted: rec.autoSubmitted === true,
+      testCode: rec.testCode
+    }
+  };
+  return {
+    schemaVersion: 1,
+    student: rec.student,
+    subject: rec.subject,
+    chapter: rec.chapter,            // { id, name }
+    testType: rec.testType || 'chapter_test',
+    exportedAt: now.toISOString(),
+    attempts: [attemptObj]
+  };
+}
+
+function syncToFirebase(rec) {
+  const dot = document.getElementById('r-sync-dot');
+  const txt = document.getElementById('r-sync-text');
+  dot.className = 'status-dot dot-sync';
+  txt.textContent = 'Syncing your result to teacher dashboard…';
+  if (!fbDB) {
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Will sync when Firebase is available.';
+    return;
+  }
+  try {
+    const snapshot = buildDashboardSnapshot(rec);
+    // Dashboard listens at snapshots/{Student}/{pushKey}
+    const ref = fbDB.ref('snapshots/' + rec.student).push();
+    ref.set(snapshot).then(()=>{
+      dot.className='status-dot dot-on';
+      txt.textContent='✓ Synced — your teacher can see this result now.';
+    }).catch(e=>{
+      console.error(e);
+      dot.className='status-dot dot-off';
+      txt.textContent='Saved on device. Sync failed — will retry when online.';
+      queueRetry(rec);
+    });
+  } catch(e){
+    console.error(e);
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Sync will retry when online.';
+    queueRetry(rec);
+  }
+}
+function queueRetry(rec){
+  // store in a retry queue in localStorage
+  try {
+    const q = JSON.parse(localStorage.getItem('sync_retry')||'[]');
+    q.push(rec); localStorage.setItem('sync_retry', JSON.stringify(q));
+  } catch(e){}
+}
+function flushRetry(){
+  if (!fbDB || !fbOK) return;
+  let q;
+  try { q = JSON.parse(localStorage.getItem('sync_retry')||'[]'); } catch { return; }
+  if (!q.length) return;
+  const rec = q.shift();
+  try {
+    const snapshot = buildDashboardSnapshot(rec);
+    fbDB.ref('snapshots/'+rec.student).push().set(snapshot).then(()=>{
+      localStorage.setItem('sync_retry', JSON.stringify(q));
+      flushRetry();
+    }).catch(()=>{});
+  } catch(e){ console.error(e); }
+}
+setInterval(flushRetry, 15000);
+
+/* ---------- RESULTS render ---------- */
+function renderResults(rec){
+  document.getElementById('r-subtitle').textContent =
+    `${rec.chapter.name} · ${rec.dateStr}` + (rec.autoSubmitted?' · auto-submitted (time up)':'');
+  document.getElementById('r-score').textContent = rec.scorePct+'%';
+  document.getElementById('r-correct').textContent = rec.correct;
+  document.getElementById('r-wrong').textContent = rec.wrong;
+  document.getElementById('r-guessed').textContent = rec.guessedCount +
+    (rec.guessedCount? ` (${rec.luckyRight}✓)` : '');
+  const m=Math.floor(rec.timeUsedSec/60), s=rec.timeUsedSec%60;
+  document.getElementById('r-time').textContent = `${m}:${String(s).padStart(2,'0')}`;
+  document.getElementById('r-pace').textContent = rec.pacePct+'%';
+
+  const pass = rec.scorePct >= TEST.passMark;
+  document.getElementById('r-verdict').innerHTML =
+    `<div class="banner" style="border-color:${pass?'var(--green)':'var(--red)'};
+      background:${pass?'#e8f5e9':'#ffebee'};">
+      <strong>${pass?'✓ Above pass mark (70%)':'Below pass mark (70%) — keep practising'}</strong><br>
+      <span style="font-size:14px;">${pass
+        ? 'Strong work. Aim to repeat this consistency across all 6 attempts.'
+        : 'Review the wrong answers below carefully. The explanations show exactly where to improve.'}</span>
+    </div>`;
+  renderReview(rec);
+}
+function toggleReviewFilter(){
+  reviewFilter = reviewFilter==='wrong' ? 'all' : 'wrong';
+  document.getElementById('rev-toggle').textContent =
+    'Show: ' + (reviewFilter==='wrong'?'Wrong only':'All questions');
+  renderReview(attempt._result);
+}
+function renderReview(rec){
+  const box = document.getElementById('r-review');
+  let qs = rec.questions;
+  if (reviewFilter==='wrong') qs = qs.filter(q=>!q.correct);
+  if (!qs.length){ box.innerHTML='<p class="sub">No questions to show with this filter.</p>'; return; }
+  let h='';
+  qs.forEach(q=>{
+    h+=`<div class="review-q ${q.correct?'correct':'wrong'}">
+      <div class="row" style="margin-bottom:8px;">
+        <span class="pill ${q.correct?'pill-green':'pill-red'}">${q.correct?'Correct':'Wrong'}</span>
+        <span class="pill pill-grey">${q.topic}</span>
+        ${q.guessed?'<span class="pill pill-amber">Guessed</span>':''}
+        ${q.confused?'<span class="pill pill-blue">⚑ Confusing</span>':''}
+      </div>
+      ${q.scenario?`<div class="scenario">${q.scenario}</div>`:''}
+      <div style="font-weight:500;margin-bottom:10px;">Q${q.displayIdx}. ${q.questionText}</div>`;
+    if (q.type==='mcq'){
+      q.options.forEach(o=>{
+        let cls='ans-neutral';
+        if (o.correct) cls='ans-correct';
+        else if (o.letter===q.userAnswer) cls='ans-wrong';
+        h+=`<div class="ans-line ${cls}"><strong>${o.letter}.</strong> ${o.text}
+          ${o.correct?' ✓':''}${(o.letter===q.userAnswer&&!o.correct)?' ← your answer':''}
+          <div style="font-size:12.5px;margin-top:4px;opacity:.85;">${o.why}</div></div>`;
+      });
+    } else if (q.type==='number'){
+      h+=`<div class="ans-line ${q.correct?'ans-correct':'ans-wrong'}">
+        Your answer: <strong>${q.userAnswer ?? '(blank)'}</strong>
+        ${q.correct?' ✓':` — correct answer: <strong>${q.correctAnswer}</strong>`}</div>`;
+    } else if (q.type==='truefalse2'){
+      q.statements.forEach((st,si)=>{
+        const ua = q.userAnswer[si];
+        const ok = ua === st.answer;
+        h+=`<div class="ans-line ${ok?'ans-correct':'ans-wrong'}">
+          "${st.text}" — you: <strong>${ua===null?'(blank)':(ua?'True':'False')}</strong>,
+          correct: <strong>${st.answer?'True':'False'}</strong> ${ok?'✓':'✗'}</div>`;
+      });
+    }
+    if (q.workingNote){
+      h+=`<div class="working"><strong>Working:</strong><pre>${q.workingNote}</pre></div>`;
+    }
+    h+=`<div class="explain"><strong>Explanation:</strong> ${q.explanation}</div>
+      <div class="examiner"><strong>Examiner note:</strong> ${q.examinerNote}</div></div>`;
+  });
+  box.innerHTML=h;
+}
+function goWelcome(){ renderWelcome(); show('welcome'); setPresence('dashboard',null); }
+
+/* ---------- EVALUATION REPORT ---------- */
+function showEvaluation(){
+  const data = lsLoad(CURRENT_USER);
+  const atts = (data.attempts||[]).map(a=>a.full).filter(Boolean);
+  if (atts.length < TEST.targetAttempts){ toast('Need 6 attempts first'); return; }
+  const recent = atts.slice(-3);
+  const overallAvg = Math.round(atts.reduce((s,a)=>s+a.scorePct,0)/atts.length);
+  const recentAvg = Math.round(recent.reduce((s,a)=>s+a.scorePct,0)/recent.length);
+  const trend = recentAvg - Math.round(atts.slice(0,3).reduce((s,a)=>s+a.scorePct,0)/Math.min(3,atts.length));
+  // topic mastery
+  const topics = {};
+  atts.forEach(a=>a.questions.forEach(q=>{
+    topics[q.topic]=topics[q.topic]||{c:0,t:0};
+    topics[q.topic].t++; if(q.correct)topics[q.topic].c++;
+  }));
+  const tArr = Object.entries(topics).map(([k,v])=>({topic:k,pct:Math.round(v.c/v.t*100),n:v.t}))
+    .sort((a,b)=>a.pct-b.pct);
+  const ready = recentAvg>=TEST.passMark && trend>=0;
+  document.getElementById('ev-sub').textContent =
+    `${CURRENT_USER} · ${atts.length} attempts · ${TEST.chapterName}`;
+  let h = `<div class="banner" style="border-color:${ready?'var(--green)':'var(--accent)'};
+    background:${ready?'#e8f5e9':'#fff8e1'};">
+    <h3 style="margin-bottom:6px;">${ready?'✓ You look exam-ready for this chapter':'Almost there — keep practising'}</h3>
+    <span style="font-size:14px;">Recent average ${recentAvg}% · overall ${overallAvg}% ·
+    trend ${trend>=0?'+':''}${trend}%</span></div>`;
+  h += `<div class="stat-grid">
+    <div class="stat"><div class="stat-val">${overallAvg}%</div><div class="stat-lbl">Overall Avg</div></div>
+    <div class="stat"><div class="stat-val">${recentAvg}%</div><div class="stat-lbl">Recent Avg</div></div>
+    <div class="stat"><div class="stat-val">${trend>=0?'+':''}${trend}%</div><div class="stat-lbl">Trend</div></div>
+    <div class="stat"><div class="stat-val">${atts.length}</div><div class="stat-lbl">Attempts</div></div></div>`;
+  h += `<h3 style="margin-top:18px;">Topic Mastery</h3>`;
+  tArr.forEach(t=>{
+    const col = t.pct>=80?'var(--green)':t.pct>=70?'var(--primary-light)':t.pct>=50?'var(--accent)':'var(--red)';
+    h+=`<div style="margin:10px 0;">
+      <div class="row" style="font-size:13.5px;margin-bottom:2px;">
+        <span>${t.topic}</span><div class="spacer"></div>
+        <span style="font-weight:600;color:${col};">${t.pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${t.pct}%;background:${col};"></div></div>
+    </div>`;
+  });
+  const weak = tArr.filter(t=>t.pct<70).slice(0,3);
+  if (weak.length){
+    h+=`<div class="banner" style="margin-top:18px;"><strong>Focus next on:</strong> `+
+      weak.map(w=>`${w.topic} (${w.pct}%)`).join(', ')+`</div>`;
+  }
+  document.getElementById('ev-body').innerHTML = h;
+  show('eval');
+}
+
+/* ---------- CALCULATOR ---------- */
+let calcExpr='';
+function toggleCalc(){
+  calcOn=!calcOn;
+  document.getElementById('calc').classList.toggle('show',calcOn);
+  document.getElementById('calc-toggle').style.display = calcOn?'none':'block';
+}
+function calcN(n){ calcExpr+=n; paintCalc(); }
+function calcOp(o){ calcExpr+=o; paintCalc(); }
+function calcC(){ calcExpr=''; paintCalc(); }
+function calcDel(){ calcExpr=calcExpr.slice(0,-1); paintCalc(); }
+function calcEq(){
+  try{
+    let e=calcExpr.replace(/%/g,'/100');
+    const r=Function('"use strict";return ('+e+')')();
+    calcExpr=String(Math.round(r*10000)/10000);
+  }catch{ calcExpr='Error'; }
+  paintCalc();
+}
+function paintCalc(){
+  document.getElementById('calc-disp').textContent =
+    (calcExpr||'0').replace(/\*/g,'×').replace(/\//g,'÷');
+}
+
+/* ---------- INIT ---------- */
+window.addEventListener('load', ()=>{
+  initFirebase();
+  setTimeout(paintConn, 800);
+});
+window.addEventListener('beforeunload', clearPresence);
+
+</script>
+</body>
+</html>
