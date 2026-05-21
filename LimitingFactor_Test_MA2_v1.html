@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limiting Factor Analysis — MA2 Practice Test</title>
+<style>
+  :root {
+    --primary: #003d6b; --primary-light: #1976d2; --accent: #d4a017;
+    --green: #2e7d32; --red: #c62828; --bg: #f4f6f9; --card: #ffffff;
+    --text: #1a2332; --muted: #667085; --border: #e3e8ef;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .card { background: var(--card); border-radius: 14px; padding: 24px;
+    box-shadow: 0 1px 3px rgba(16,24,40,.08); margin-bottom: 16px; }
+  h1 { font-size: 24px; color: var(--primary); margin-bottom: 4px; }
+  h2 { font-size: 19px; color: var(--primary); margin-bottom: 12px; }
+  h3 { font-size: 16px; color: var(--primary); margin-bottom: 8px; }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .btn { background: var(--primary); color: #fff; border: none; padding: 12px 22px;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all .15s; }
+  .btn:hover { background: #00528f; transform: translateY(-1px); }
+  .btn:disabled { background: #b8c4d4; cursor: not-allowed; transform: none; }
+  .btn-ghost { background: transparent; color: var(--primary);
+    border: 1.5px solid var(--border); }
+  .btn-ghost:hover { background: #f0f4f9; }
+  .btn-accent { background: var(--accent); }
+  .btn-accent:hover { background: #b8890f; }
+  .btn-sm { padding: 8px 14px; font-size: 13px; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; }
+  .pill-green { background: #e8f5e9; color: var(--green); }
+  .pill-red { background: #ffebee; color: var(--red); }
+  .pill-blue { background: #e3f2fd; color: var(--primary-light); }
+  .pill-amber { background: #fff8e1; color: #a87810; }
+  .pill-grey { background: #eef1f5; color: var(--muted); }
+  input[type=text], input[type=number], select {
+    padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 9px;
+    font-size: 15px; width: 100%; font-family: inherit; background: #fff; }
+  input:focus, select:focus { outline: none; border-color: var(--primary-light); }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600;
+    color: var(--muted); margin-bottom: 6px; }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+  .status-dot { display: inline-block; width: 9px; height: 9px;
+    border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+  .dot-on { background: var(--green); box-shadow: 0 0 0 3px rgba(46,125,50,.15); }
+  .dot-off { background: var(--red); }
+  .dot-sync { background: var(--accent); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  .sync-bar { font-size: 13px; color: var(--muted); padding: 9px 14px;
+    background: #f0f4f9; border-radius: 8px; margin-bottom: 14px;
+    display: flex; align-items: center; }
+  .qhead { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .timer { font-size: 18px; font-weight: 700; color: var(--primary);
+    font-variant-numeric: tabular-nums; }
+  .timer.warn { color: var(--red); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 3px;
+    overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--primary-light);
+    transition: width .3s; }
+  .scenario { background: #f0f4f9; border-left: 4px solid var(--primary-light);
+    padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 14px;
+    font-size: 14.5px; }
+  .qtext { font-size: 16.5px; font-weight: 500; margin-bottom: 18px; }
+  .opt { display: block; padding: 14px 16px; border: 1.5px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: all .12s;
+    font-size: 15px; }
+  .opt:hover { border-color: var(--primary-light); background: #f8fafc; }
+  .opt.sel { border-color: var(--primary-light); background: #e8f1fb;
+    box-shadow: 0 0 0 1px var(--primary-light); }
+  .opt-letter { font-weight: 700; color: var(--primary); margin-right: 8px; }
+  .tf-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 10px;
+    flex-wrap: wrap; }
+  .tf-row .stmt { flex: 1; font-size: 15px; min-width: 200px; }
+  .tf-btn { padding: 8px 18px; border: 1.5px solid var(--border);
+    border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600;
+    font-size: 14px; }
+  .tf-btn.sel-t { background: var(--green); color: #fff; border-color: var(--green); }
+  .tf-btn.sel-f { background: var(--red); color: #fff; border-color: var(--red); }
+  .guess-box { display: flex; align-items: center; gap: 8px; margin-top: 16px;
+    padding: 12px 14px; background: #fff8e1; border-radius: 8px; font-size: 14px; }
+  .guess-box input, .confuse-box input { width: 18px; height: 18px; cursor: pointer; }
+  .confuse-box { display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    padding: 10px 14px; background: #f3e5f5; border-radius: 8px; font-size: 14px; }
+  .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px,1fr));
+    gap: 8px; margin-bottom: 16px; }
+  .nav-cell { aspect-ratio: 1; border: 1.5px solid var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 14px; font-weight: 600; background: #fff; position: relative; }
+  .nav-cell.answered { background: #e8f1fb; border-color: var(--primary-light);
+    color: var(--primary); }
+  .nav-cell.current { background: var(--primary); color: #fff;
+    border-color: var(--primary); }
+  .nav-cell.flagged::after { content: '•'; color: var(--accent);
+    position: absolute; top: -2px; right: 4px; font-size: 18px; }
+  .calc { position: fixed; bottom: 20px; right: 20px; width: 220px;
+    background: var(--card); border-radius: 14px; box-shadow: 0 8px 24px rgba(16,24,40,.18);
+    padding: 14px; z-index: 100; display: none; }
+  .calc.show { display: block; }
+  .calc-disp { background: #1a2332; color: #fff; padding: 12px; border-radius: 8px;
+    text-align: right; font-size: 20px; margin-bottom: 10px; font-variant-numeric: tabular-nums;
+    min-height: 44px; word-break: break-all; }
+  .calc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+  .calc-btn { padding: 12px 0; border: none; border-radius: 7px; background: #eef1f5;
+    cursor: pointer; font-size: 15px; font-weight: 600; }
+  .calc-btn:hover { background: #dde3ec; }
+  .calc-btn.op { background: var(--primary-light); color: #fff; }
+  .calc-btn.eq { background: var(--green); color: #fff; }
+  .calc-toggle { position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px;
+    border-radius: 50%; background: var(--primary); color: #fff; border: none;
+    font-size: 22px; cursor: pointer; z-index: 99; box-shadow: 0 4px 14px rgba(0,61,107,.3); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+    gap: 12px; margin-bottom: 20px; }
+  .stat { background: #f8fafc; border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-val { font-size: 26px; font-weight: 700; color: var(--primary); }
+  .stat-lbl { font-size: 12px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .04em; margin-top: 4px; }
+  .review-q { border: 1.5px solid var(--border); border-radius: 12px; padding: 18px;
+    margin-bottom: 14px; }
+  .review-q.correct { border-left: 4px solid var(--green); }
+  .review-q.wrong { border-left: 4px solid var(--red); }
+  .ans-line { padding: 8px 12px; border-radius: 7px; margin: 6px 0; font-size: 14px; }
+  .ans-correct { background: #e8f5e9; color: #1b5e20; }
+  .ans-wrong { background: #ffebee; color: #b71c1c; }
+  .ans-neutral { background: #f0f4f9; }
+  .working { background: #f4f7fb; border:1px dashed #9bb0c9; border-radius: 8px;
+    padding: 12px 14px; margin-top:10px; font-size:13.5px; }
+  .working pre { font-family: 'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+    white-space: pre-wrap; margin:6px 0 0; line-height:1.55; color:#1a2840; }
+  .explain { background: #fff8e1; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 10px; }
+  .examiner { background: #e3f2fd; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 8px; }
+  .banner { background: #fff8e1; border: 1.5px solid var(--accent);
+    border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 14px; z-index: 200; box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    opacity: 0; transition: opacity .3s; pointer-events: none; max-width: 90%; }
+  .toast.show { opacity: 1; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px; color: var(--muted); font-size: 12px;
+    text-transform: uppercase; border-bottom: 2px solid var(--border); }
+  td { padding: 10px; border-bottom: 1px solid var(--border); }
+  .bar-track { height: 10px; background: var(--border); border-radius: 5px;
+    overflow: hidden; margin: 4px 0; }
+  .bar-fill { height: 100%; border-radius: 5px; }
+  @media (max-width: 600px) {
+    .wrap { padding: 10px; } .card { padding: 16px; }
+    .calc { width: calc(100% - 40px); }
+  }
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div class="screen active" id="screen-login">
+  <div class="wrap">
+    <div class="card" style="margin-top:40px;text-align:center;">
+      <h1>MA2 — Limiting Factor Analysis</h1>
+      <p class="sub">Practice Test &middot; Chapter 19 &middot; 15 questions &middot; 30 minutes</p>
+      <div style="max-width:320px;margin:24px auto 0;">
+        <div class="field" style="text-align:left;">
+          <label>Your Name</label>
+          <select id="login-name">
+            <option value="">— Select —</option>
+            <option value="Zara">Zara</option>
+            <option value="Amna">Amna</option>
+          </select>
+        </div>
+        <div class="field" style="text-align:left;">
+          <label>Access Code</label>
+          <input type="text" id="login-code" placeholder="Enter your code" autocomplete="off">
+        </div>
+        <button class="btn" style="width:100%;margin-top:8px;" onclick="doLogin()">Start</button>
+        <p id="login-err" style="color:var(--red);font-size:13px;margin-top:10px;display:none;"></p>
+      </div>
+      <div class="sync-bar" style="margin-top:24px;justify-content:center;">
+        <span class="status-dot" id="conn-dot"></span>
+        <span id="conn-text">Connecting…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen" id="screen-welcome">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h1>Welcome back, <span id="w-name"></span> 👋</h1>
+          <p class="sub" style="margin-bottom:0;">Limiting Factor Analysis — Practice</p>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="logout()">Switch User</button>
+      </div>
+      <div class="sync-bar" style="margin-top:16px;">
+        <span class="status-dot" id="w-conn-dot"></span>
+        <span id="w-conn-text">Online — your work syncs automatically</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2 style="margin-bottom:2px;">Your Progress</h2>
+          <p class="sub" style="margin-bottom:0;">Target: 6 attempts &middot; pass mark 70%</p>
+        </div>
+        <div class="spacer"></div>
+        <div style="text-align:right;">
+          <div class="stat-val" id="w-attempts">0</div>
+          <div class="stat-lbl">Attempts</div>
+        </div>
+      </div>
+      <div style="margin-top:18px;" id="w-attempts-list">
+        <p class="sub">No attempts yet. Start your first practice below.</p>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" style="font-size:17px;padding:14px 32px;" onclick="startTest()">
+        Start New Attempt →
+      </button>
+      <p class="sub" style="margin:14px 0 0;">15 questions &middot; 30 minutes &middot; calculator allowed</p>
+    </div>
+    <div class="card" id="w-eval-card" style="display:none;">
+      <h2>📊 Your Evaluation Report</h2>
+      <p class="sub">Available after 6 attempts — see how exam-ready you are.</p>
+      <button class="btn btn-accent" onclick="showEvaluation()">View Evaluation Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div class="screen" id="screen-test">
+  <div class="wrap">
+    <div class="card">
+      <div class="qhead">
+        <div>
+          <strong>Limiting Factor Analysis</strong>
+          <span class="pill pill-blue" id="t-qnum">Q1 / 15</span>
+        </div>
+        <div class="row">
+          <button class="btn-ghost btn btn-sm" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
+          <span class="timer" id="t-timer">30:00</span>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="t-progress" style="width:0%"></div></div>
+      <div class="nav-grid" id="t-nav"></div>
+      <div id="t-question"></div>
+      <div class="row" style="margin-top:24px;">
+        <button class="btn-ghost btn" id="t-prev" onclick="prevQ()">← Previous</button>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" id="t-next" onclick="nextQ()">Next →</button>
+        <button class="btn btn-accent" id="t-submit" onclick="confirmSubmit()" style="display:none;">Submit Test</button>
+      </div>
+    </div>
+  </div>
+  <button class="calc-toggle" id="calc-toggle" onclick="toggleCalc()" title="Calculator">🖩</button>
+  <div class="calc" id="calc">
+    <div class="calc-disp" id="calc-disp">0</div>
+    <div class="calc-grid">
+      <button class="calc-btn" onclick="calcC()">C</button>
+      <button class="calc-btn" onclick="calcDel()">⌫</button>
+      <button class="calc-btn op" onclick="calcOp('%')">%</button>
+      <button class="calc-btn op" onclick="calcOp('/')">÷</button>
+      <button class="calc-btn" onclick="calcN('7')">7</button>
+      <button class="calc-btn" onclick="calcN('8')">8</button>
+      <button class="calc-btn" onclick="calcN('9')">9</button>
+      <button class="calc-btn op" onclick="calcOp('*')">×</button>
+      <button class="calc-btn" onclick="calcN('4')">4</button>
+      <button class="calc-btn" onclick="calcN('5')">5</button>
+      <button class="calc-btn" onclick="calcN('6')">6</button>
+      <button class="calc-btn op" onclick="calcOp('-')">−</button>
+      <button class="calc-btn" onclick="calcN('1')">1</button>
+      <button class="calc-btn" onclick="calcN('2')">2</button>
+      <button class="calc-btn" onclick="calcN('3')">3</button>
+      <button class="calc-btn op" onclick="calcOp('+')">+</button>
+      <button class="calc-btn" onclick="calcN('0')">0</button>
+      <button class="calc-btn" onclick="calcN('.')">.</button>
+      <button class="calc-btn eq" onclick="calcEq()" style="grid-column:span 2;">=</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="wrap">
+    <div class="card">
+      <h1>Test Complete 🎯</h1>
+      <p class="sub" id="r-subtitle"></p>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-val" id="r-score">0%</div><div class="stat-lbl">Score</div></div>
+        <div class="stat"><div class="stat-val" id="r-correct">0</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat"><div class="stat-val" id="r-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+        <div class="stat"><div class="stat-val" id="r-guessed">0</div><div class="stat-lbl">Guessed</div></div>
+        <div class="stat"><div class="stat-val" id="r-time">0:00</div><div class="stat-lbl">Time</div></div>
+        <div class="stat"><div class="stat-val" id="r-pace">0%</div><div class="stat-lbl">Pace</div></div>
+      </div>
+      <div id="r-verdict"></div>
+      <div class="sync-bar" id="r-sync">
+        <span class="status-dot" id="r-sync-dot"></span>
+        <span id="r-sync-text">Syncing your result…</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:14px;">
+        <h2 style="margin-bottom:0;">Question Review</h2>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn btn-sm" id="rev-toggle" onclick="toggleReviewFilter()">Show: Wrong only</button>
+      </div>
+      <div id="r-review"></div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" onclick="goWelcome()">Back to Dashboard</button>
+      <button class="btn btn-ghost" onclick="startTest()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- EVALUATION -->
+<div class="screen" id="screen-eval">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <h1 style="margin-bottom:0;">📊 Evaluation Report</h1>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="goWelcome()">← Back</button>
+      </div>
+      <p class="sub" id="ev-sub" style="margin-top:8px;"></p>
+      <div id="ev-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCnHslK3-rMqmJuHr__h7ZUpdo4SwYCXrg",
+  authDomain: "sisters-acc.firebaseapp.com",
+  databaseURL: "https://sisters-acc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "sisters-acc",
+  storageBucket: "sisters-acc.firebasestorage.app",
+  messagingSenderId: "600306409423",
+  appId: "1:600306409423:web:eca6e7316ba9ab7a62fcba"
+};
+const CODES = { "Zara": "8976", "Amna": "2349" };
+const TEST = {
+  subject: "MA2",
+  chapterId: "MA2_19",
+  chapterName: "Limiting Factor Analysis",
+  testType: "chapter_test",
+  storageKey: "lf_ma2_v1",
+  perAttempt: 15,
+  durationSec: 1800,
+  pauseSec: 120,
+  maxPauses: 2
+};
+const ACCRUALS_POOL = [{"qId": "LF01", "topic": "Identifying the limiting factor", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Glenfield Co manufactures one product with maximum sales demand of 8,000 units next period. Each unit requires 3 kg of direct material and 2 direct labour hours. In the next period the company has 22,000 kg of material and 15,000 labour hours available. Which of the following correctly identifies the limiting factor?", "options": [{"letter": "A", "text": "Direct material is the limiting factor — maximum output 7,333 units", "correct": true, "why": "Correct. Material caps output at 22,000 ÷ 3 = 7,333 units; labour would allow 15,000 ÷ 2 = 7,500 units. The tighter of the two binds, so material is the limiting factor."}, {"letter": "B", "text": "Direct labour is the limiting factor — maximum output 7,500 units", "correct": false, "why": "Labour permits up to 7,500 units, but material runs out first at 7,333. The limiting factor is the resource that constrains output to the lowest level, not the one with the smaller absolute shortfall."}, {"letter": "C", "text": "Both resources are simultaneously limiting", "correct": false, "why": "At any production level either one resource binds or neither does. Here, at 7,333 units output, material is fully used (21,999 kg) but only 14,666 of the 15,000 labour hours are used — labour still has slack."}, {"letter": "D", "text": "There is no limiting factor — full demand of 8,000 units can be met", "correct": false, "why": "Full demand of 8,000 units would need 24,000 kg of material — 2,000 kg more than available. The full 8,000 units cannot be produced, so a limiting factor exists."}], "workingNote": "Max units constrained by each resource:\n  Material: 22,000 kg ÷ 3 kg/unit = 7,333 units\n  Labour: 15,000 hrs ÷ 2 hrs/unit = 7,500 units\nLowest output = material (7,333).\nDemand at 8,000 > 7,333, so the firm is constrained.\nLimiting factor = direct material.", "explanation": "To find the limiting factor when one product uses several resources, calculate the maximum number of units each resource could on its own support. The resource giving the SMALLEST maximum output is the binding constraint. Comparing shortages in absolute units is misleading because the resources are measured in different units (kg vs hours). At 7,333 units, material is fully consumed (and demand of 8,000 cannot be met); labour still has 334 spare hours.", "examinerNote": "Always convert each resource into the maximum units it would support. The lowest figure wins — never compare shortages in different units of measurement."}, {"qId": "LF02", "topic": "Identifying the limiting factor", "difficulty": "medium", "marks": 2, "timeIdeal": 130, "type": "mcq", "questionText": "Pendle Manufacturing produces two products. Forecast demand is 4,000 units of P1 and 3,000 units of P2. Resource usage per unit and totals available are:\n\n               P1     P2     Available\nMaterial (kg)   3      2     20,000 kg\nLabour (hrs)    2      4     22,000 hrs\nMachine (hrs)   1      3     12,000 hrs\n\nWhich resource is the limiting factor for next period?", "options": [{"letter": "A", "text": "Direct material", "correct": false, "why": "Material required at full demand = 4,000×3 + 3,000×2 = 18,000 kg, which is below the 20,000 kg available. Material is not the constraint."}, {"letter": "B", "text": "Direct labour", "correct": false, "why": "Labour required at full demand = 4,000×2 + 3,000×4 = 20,000 hrs, which is below the 22,000 hrs available. Labour is not the constraint."}, {"letter": "C", "text": "Machine hours", "correct": true, "why": "Correct. Machine hours required at full demand = 4,000×1 + 3,000×3 = 13,000 hrs, but only 12,000 are available — a shortfall of 1,000 hrs. Of the three resources only machine hours is insufficient."}, {"letter": "D", "text": "There is no limiting factor", "correct": false, "why": "Machine hours required (13,000) exceed availability (12,000) by 1,000 hours, so full demand cannot be met. A limiting factor does exist."}], "workingNote": "Required at full demand vs available:\n  Material: (4,000×3)+(3,000×2) = 18,000 kg vs 20,000  -> slack 2,000\n  Labour:   (4,000×2)+(3,000×4) = 20,000 hrs vs 22,000 -> slack 2,000\n  Machine:  (4,000×1)+(3,000×3) = 13,000 hrs vs 12,000 -> SHORT 1,000\nLimiting factor = Machine hours.", "explanation": "With more than one product, compute the TOTAL resource needed to meet full demand of every product, then compare to availability. Any resource where total required exceeds total available is a binding constraint. Here only machine hours fall short, by 1,000 hours.", "examinerNote": "For multi-product problems, always sum the resource requirement across the entire demanded mix before comparing to availability. Test every resource — don't stop at the first one that looks tight."}, {"qId": "LF03", "topic": "Resource deficiency", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "number", "questionText": "Aysgarth Co makes three products on the same machines. The machines provide 40,000 hours next period. Machine hours per unit are: A = 4, B = 5, C = 6. Maximum demand (units) is A = 3,000, B = 2,500, C = 4,000. What is the shortfall (deficiency) in machine hours required to satisfy full demand? (Enter the number of hours.)", "numericAnswer": 8500, "tolerance": 0, "workingNote": "Machine hours required at full demand:\n  A: 3,000 × 4 = 12,000\n  B: 2,500 × 5 = 12,500\n  C: 4,000 × 6 = 24,000\n  Total required           = 48,500 hrs\nAvailable                  = 40,000 hrs\nDeficiency = 48,500 − 40,000 = 8,500 hrs", "explanation": "The deficiency is the gap between what full demand needs and what the resource provides. Sum the resource required per product (units × resource per unit), total across products, then subtract availability. Any positive figure tells you how many extra resource units would be needed to meet every product’s demand.", "examinerNote": "Deficiency = Total required across ALL products − Total available. Don’t stop at one product’s figure."}, {"qId": "LF04", "topic": "Demand as the limiting factor", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "Brimham Co manufactures a single product. Forecast demand is 6,000 units next period. Each unit uses 2 kg of material and 1 labour hour. In the next period 15,000 kg of material and 8,000 labour hours will be available. What is the limiting factor and the optimal production volume?", "options": [{"letter": "A", "text": "Material is the limiting factor; produce 7,500 units", "correct": false, "why": "Material would support up to 7,500 units, but demand is only 6,000 units. Producing 7,500 units would create unsold inventory worth nothing. Demand caps production below the material limit."}, {"letter": "B", "text": "Labour is the limiting factor; produce 8,000 units", "correct": false, "why": "Labour would support up to 8,000 units, but again demand is only 6,000. Resources that exceed what demand can absorb are not binding constraints."}, {"letter": "C", "text": "There is no limiting factor; sales demand is the limit, so produce 6,000 units", "correct": true, "why": "Correct. Material needed for 6,000 units = 12,000 kg (3,000 spare) and labour needed = 6,000 hrs (2,000 spare). Both resources have slack at full demand. Production is constrained only by sales demand: 6,000 units."}, {"letter": "D", "text": "Both material and labour are limiting; produce 7,500 units", "correct": false, "why": "Neither resource is short of meeting demand. Producing 7,500 units is impossible — it ignores the 6,000-unit demand cap."}], "workingNote": "Resources needed at full demand of 6,000 units:\n  Material: 6,000 × 2 = 12,000 kg (available 15,000 -> 3,000 spare)\n  Labour:   6,000 × 1 = 6,000 hrs (available 8,000 -> 2,000 spare)\nBoth resources have slack. No resource is binding.\nLimit = sales demand of 6,000 units.", "explanation": "A limiting factor only exists when at least one resource is insufficient to meet full demand. When all resources have slack, the constraint is sales demand itself — producing more than can be sold creates worthless inventory. Always verify that a resource genuinely binds before treating it as the limiting factor.", "examinerNote": "Slack on every resource = demand is the limit, not a resource. Don't invent a resource constraint that isn't there."}, {"qId": "LF05", "topic": "Ranking by contribution per limiting factor", "difficulty": "medium", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Tarn Co makes three products. Direct materials are the limiting factor for the period at $4/kg. Per-unit data:\n\n               X       Y       Z\nSelling price  $60     $50     $80\nMaterial (kg)   5       3       8\nOther VC       $15     $18     $20\n\nIn what order should the products be produced to maximise total contribution?", "options": [{"letter": "A", "text": "Z, X, Y", "correct": false, "why": "This ranks by contribution per UNIT (Z $28, X $25, Y $20). When materials are scarce, the correct ranking uses contribution per kg, not per unit — and on that basis Z is actually the worst, not the best."}, {"letter": "B", "text": "Y, X, Z", "correct": true, "why": "Correct. Contribution per unit / per kg: X $25/5 = $5.00; Y $20/3 = $6.67; Z $28/8 = $3.50. Highest contribution per kg = Y, then X, then Z. This is the order that earns the most contribution from each scarce kg."}, {"letter": "C", "text": "Z, Y, X", "correct": false, "why": "This puts Z first because it has the highest selling price ($80), but selling price is not the basis. Z generates the LOWEST contribution per kg ($3.50), so it should be ranked last."}, {"letter": "D", "text": "X, Y, Z", "correct": false, "why": "X has neither the highest contribution per unit nor per kg. On a per-kg basis Y ($6.67) ranks above X ($5.00). The correct lead product is Y."}], "workingNote": "Contribution per unit = SP − material cost − other VC:\n  X: 60 − (5×4) − 15 = 60 − 20 − 15 = $25\n  Y: 50 − (3×4) − 18 = 50 − 12 − 18 = $20\n  Z: 80 − (8×4) − 20 = 80 − 32 − 20 = $28\nContribution per kg (scarce resource):\n  X: 25 ÷ 5 = $5.00\n  Y: 20 ÷ 3 = $6.67\n  Z: 28 ÷ 8 = $3.50\nRanking by contribution per kg: Y > X > Z.", "explanation": "When a resource is scarce, every product must earn as much contribution as possible from each unit of that resource. Therefore products are ranked by contribution per limiting factor (here, per kg of material), NOT by contribution per unit. A product with high contribution per unit but high material usage can rank LOWER than a product with lower unit contribution but better material efficiency — as Z shows here.", "examinerNote": "Always divide contribution per unit by the units of limiting factor consumed. The product with the highest contribution per scarce resource unit comes first, regardless of how the per-unit numbers look."}, {"qId": "LF06", "topic": "Contribution vs profit per limiting factor", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "mcq", "questionText": "Hawes Co produces four products and labour is the limiting factor. Per-unit data has already been tabulated below:\n\n                     W      X      Y      Z\nContribution per unit $30   $24    $40    $22\nNet profit per unit   $10   $12    $14    $11\nLabour hrs per unit    2     2      4    2.5\nContribution / hr     $15.00 $12.00 $10.00 $8.80\nNet profit / hr       $5.00  $6.00  $3.50  $4.40\n\nIn what order should the products be made to maximise total profit?", "options": [{"letter": "A", "text": "X, W, Z, Y", "correct": false, "why": "This ranks by NET PROFIT per labour hour. Net profit per unit absorbs fixed costs which are sunk and irrelevant to short-run decisions. Maximising profit per hour overstates the true marginal benefit of each product and misallocates labour."}, {"letter": "B", "text": "Y, W, X, Z", "correct": false, "why": "This appears to rank by contribution per unit (Y $40 highest). Contribution per unit ignores how much of the scarce labour each unit consumes. Y’s 4 hours per unit pushes its contribution per hour down to $10 — third best, not first."}, {"letter": "C", "text": "W, X, Y, Z", "correct": true, "why": "Correct. Rank by contribution per labour hour: W $15.00, X $12.00, Y $10.00, Z $8.80. Maximising contribution per unit of limiting factor maximises total contribution and (because fixed costs are unchanged) maximises profit."}, {"letter": "D", "text": "W, Y, X, Z", "correct": false, "why": "This swaps Y and X. Comparing X ($12/hr) with Y ($10/hr) shows X earns more contribution per scarce hour, so X is ranked above Y, not the other way round."}], "workingNote": "With fixed costs unchanged, maximising contribution maximises profit.\nRank by contribution per labour hour:\n  W: $15.00 (1st)\n  X: $12.00 (2nd)\n  Y: $10.00 (3rd)\n  Z: $8.80  (4th)\nProfit-per-hour ranking is X, W, Z, Y — a different sequence — because it bundles a sunk fixed-cost allocation into the metric.", "explanation": "The single biggest trap in limiting-factor questions is using NET PROFIT per limiting factor instead of CONTRIBUTION per limiting factor. Net profit deducts a fixed-cost allocation that does not change with the production mix. The correct decision rule maximises total contribution; fixed costs are sunk in the short run, so they should not influence the ranking.", "examinerNote": "When both contribution/LF and profit/LF are given, the temptation is to use the latter. Don't. Fixed costs are sunk — rank only on contribution per limiting factor."}, {"qId": "LF07", "topic": "Optimal plan — total contribution", "difficulty": "hard", "marks": 2, "timeIdeal": 170, "type": "number", "questionText": "Ribblesdale Co has only 6,000 kg of a scarce direct material available next period. The three products it manufactures all use this material. Per-unit data:\n\n           A       B       C\nContribution per unit  $20  $18  $25\nMaterial (kg/unit)      2    3    4\nMaximum demand (units) 1,000 800 600\n\nWhat is the maximum total contribution the company can earn next period? (Enter the amount in $.)", "numericAnswer": 44600, "tolerance": 0, "workingNote": "Contribution per kg:\n  A: 20 ÷ 2 = $10.00 (rank 1)\n  B: 18 ÷ 3 = $6.00  (rank 3)\n  C: 25 ÷ 4 = $6.25  (rank 2)\nProduction plan (apply LF until demand met or kg run out):\n  A: 1,000 units × 2 kg = 2,000 kg. Cont = 1,000 × $20 = $20,000\n  C: 600 units × 4 kg = 2,400 kg. Cont = 600 × $25 = $15,000\n  Cumulative kg used: 4,400. Remaining = 1,600 kg.\n  B: 1,600 ÷ 3 = 533⅓ units. Cont = 533⅓ × $18 = $9,600\nTotal contribution = $20,000 + $15,000 + $9,600 = $44,600", "explanation": "Three steps: (1) rank by contribution per kg; (2) allocate kg in rank order, respecting each product's maximum demand; (3) the LAST-ranked product produced absorbs whatever resource is left, which may be a partial quantity. Notice that ranking by contribution per kg places C ($6.25) above B ($6.00) even though B has the higher contribution per unit — because B consumes less material per unit of contribution earned.", "examinerNote": "Allocate to the highest contribution per LF first, cap at max demand, repeat. The marginal product (last in rank to receive resource) usually ends in a partial number of units — fractional output is allowed in MA2 unless the question forbids it."}, {"qId": "LF08", "topic": "Per-unit vs per-LF contribution trap", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Wensleydale Co makes three products which all use the same scarce material. Contribution per unit and material per unit are:\n\n           Product A   Product B   Product C\nContribution  $40       $20         $30\nMaterial (kg)  8         3           2\n\nIf the company wishes to maximise contribution from the limited material, which product should it produce FIRST?", "options": [{"letter": "A", "text": "Product A, because it has the highest contribution per unit", "correct": false, "why": "Product A earns $40 per unit but consumes 8 kg — only $5 of contribution per kg. The scarce resource is material, so contribution per kg drives the decision, not contribution per unit."}, {"letter": "B", "text": "Product B, because it uses the least material per unit", "correct": false, "why": "B uses 3 kg per unit, which is less than A (8 kg) but more than C (2 kg). Using less material per unit doesn't automatically mean higher contribution per kg — C is leaner and also earns more contribution per kg."}, {"letter": "C", "text": "Product C, because it has the highest contribution per kg of material", "correct": true, "why": "Correct. Contribution per kg: A $40÷8 = $5; B $20÷3 = $6.67; C $30÷2 = $15. C delivers three times the contribution per scarce kg as A and more than twice that of B. C is produced first."}, {"letter": "D", "text": "The answer is the same whether ranked by contribution per unit or per kg", "correct": false, "why": "The two rankings are very different here. Per unit: A > C > B. Per kg: C > B > A. The rankings can and often do diverge — ranking by per unit when a resource is scarce is the classic error this question tests."}], "workingNote": "Contribution per kg = Contribution per unit ÷ kg per unit:\n  A: 40 ÷ 8 = $5.00\n  B: 20 ÷ 3 = $6.67\n  C: 30 ÷ 2 = $15.00\nA has the highest per-unit contribution but the lowest per-kg contribution.\nRanking by the relevant metric (per kg): C, B, A.", "explanation": "This question isolates the most common limiting-factor mistake. A naive ranking by contribution per unit puts Product A first — but A swallows 8 kg of scarce material for only $40 of contribution, giving the worst contribution per kg. Product C delivers $15 of contribution from every kg of material, which is the metric that matters when material is the binding constraint.", "examinerNote": "Contribution per unit is irrelevant for ranking when a resource is scarce — only contribution per unit of the scarce resource matters. A product with a high per-unit number can be the WORST per LF, as A is here."}, {"qId": "LF09", "topic": "Make-or-buy with one limiting factor", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "mcq", "questionText": "Skipton Co requires both products Y and Z to meet customer demand. They can be made in-house or purchased externally. Labour hours are scarce. Per-unit data:\n\n                          Y       Z\nExternal purchase price  $50     $80\nIn-house variable cost   $35     $60\nLabour hours per unit     5       8\n\nWith labour as the binding constraint, what is the best strategy?", "options": [{"letter": "A", "text": "Make both Y and Z in-house", "correct": false, "why": "Making both is only optimal if labour is sufficient for full demand of both. Where labour is scarce, the firm must choose which to make in-house and which to buy externally based on saving per scarce labour hour."}, {"letter": "B", "text": "Buy both Y and Z externally", "correct": false, "why": "Buying both wastes the available labour and forgoes both the $15 and $20 per-unit savings from making in-house. Whichever product has the higher saving per labour hour should be made in-house first."}, {"letter": "C", "text": "Make Y in-house and buy Z externally", "correct": true, "why": "Correct. Saving from making in-house: Y = $50 − $35 = $15 (÷5 hrs = $3.00/hr); Z = $80 − $60 = $20 (÷8 hrs = $2.50/hr). Y delivers more saving per scarce labour hour, so Y is made and Z is bought."}, {"letter": "D", "text": "Make Z in-house and buy Y externally", "correct": false, "why": "This decision is driven by the higher absolute saving per unit ($20 for Z vs $15 for Y), but Z consumes 8 hours per unit. Per scarce hour, making Z saves only $2.50 against $3.00 for Y. The scarce resource is hours, so saving per hour decides."}], "workingNote": "Saving from in-house production = External price − In-house variable cost\n  Y: $50 − $35 = $15/unit, over 5 hrs -> $3.00/hr\n  Z: $80 − $60 = $20/unit, over 8 hrs -> $2.50/hr\nHigher saving per scarce hour (Y, at $3.00) is made in-house. Lower (Z, at $2.50) is bought externally.", "explanation": "Make-or-buy under a limiting factor is the mirror image of product ranking. The 'gain' from making in-house is the price avoided minus the variable cost incurred — the saving per unit. This must then be expressed PER unit of limiting factor (here, per labour hour). The product offering more saving per scarce hour is made; the product offering less is bought, freeing its labour for higher-yielding use. Z’s larger absolute saving is misleading because each unit consumes more of the scarce resource.", "examinerNote": "Make-or-buy under an LF: compute saving per UNIT OF LIMITING FACTOR. Higher savings per LF = make. Lower = buy. Absolute saving per unit can rank the wrong way."}, {"qId": "LF10", "topic": "Optimal plan — marginal product units", "difficulty": "hard", "marks": 2, "timeIdeal": 170, "type": "number", "questionText": "Ingleton Co manufactures four products. All use the same scarce labour. There are 17,000 labour hours available next period. Per-unit data:\n\n          W       X       Y       Z\nContribution  $12    $20    $18    $25\nLabour (hrs)   1     2      3      5\nMax demand   6,000 4,000  3,000  2,000\n\nFor the production plan that maximises contribution, how many units of product Y will be produced? (Enter the number of units.)", "numericAnswer": 1000, "tolerance": 0, "workingNote": "Contribution per labour hour:\n  W: 12 ÷ 1 = $12.00 (rank 1)\n  X: 20 ÷ 2 = $10.00 (rank 2)\n  Y: 18 ÷ 3 = $6.00  (rank 3)\n  Z: 25 ÷ 5 = $5.00  (rank 4)\nAllocate 17,000 hours in rank order:\n  W: 6,000 × 1 = 6,000 hrs. Cumulative 6,000.\n  X: 4,000 × 2 = 8,000 hrs. Cumulative 14,000.\n  Y: 17,000 − 14,000 = 3,000 hrs remaining → 3,000 ÷ 3 = 1,000 units of Y.\n  Z: 0 units (no hours left).", "explanation": "Allocate hours in descending contribution-per-hour order, fully meeting max demand of each ranked product until hours run out. Here W and X are produced at full demand, exhausting 14,000 of 17,000 hours; the remaining 3,000 hours go to Y at 3 hours each, giving 1,000 units. There are no hours left for Z, so Z is not produced. Y is the marginal product — the one whose output is set by what’s left, not by its own demand.", "examinerNote": "The marginal product’s output = (remaining LF after higher-ranked products fully met) ÷ (LF per unit of marginal product). Anything ranked below the marginal product gets zero."}, {"qId": "LF11", "topic": "Most / least profitable use of material", "difficulty": "medium", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Buttertubs Co manufactures three products. Direct materials cost $4 per kg and are in short supply. Per-unit data:\n\n                A       B       C\nSelling price  $50     $75     $90\nMaterial (kg)   5       7.5     10\nOther VC       $10     $12     $20\n\nWhich product is the MOST profitable use of materials, and which is the LEAST profitable?", "options": [{"letter": "A", "text": "Most profitable: C; least profitable: A", "correct": false, "why": "C has the highest selling price and the highest contribution per unit, but it also uses the most material (10 kg). Per kg of material it earns only $3, the lowest of the three — so C is actually the LEAST profitable use of material."}, {"letter": "B", "text": "Most profitable: B; least profitable: C", "correct": true, "why": "Correct. Contribution per kg of material: A $20÷5 = $4.00; B $33÷7.5 = $4.40; C $30÷10 = $3.00. B yields the highest contribution per scarce kg; C yields the lowest."}, {"letter": "C", "text": "Most profitable: B; least profitable: A", "correct": false, "why": "B is correctly identified as most profitable, but A is not the worst. A earns $4.00 per kg, while C earns only $3.00 per kg. C, not A, is the least profitable use of materials."}, {"letter": "D", "text": "Most profitable: A; least profitable: B", "correct": false, "why": "A has the lowest selling price ($50) but is mid-ranked per kg ($4.00). B is the best, not the worst. Selling price tells you nothing about scarce-resource efficiency."}], "workingNote": "Contribution per unit:\n  A: 50 − (5×4) − 10 = $20\n  B: 75 − (7.5×4) − 12 = $33\n  C: 90 − (10×4) − 20 = $30\nContribution per kg:\n  A: 20 ÷ 5 = $4.00\n  B: 33 ÷ 7.5 = $4.40\n  C: 30 ÷ 10 = $3.00\nMost: B. Least: C.", "explanation": "“Most profitable use” of a scarce resource always means highest contribution per unit of that resource. Comparing per unit or per selling price would have given the opposite answer here (C has the highest per-unit figures). The pricing structure of these three products is deliberately set so that the product earning the most contribution per UNIT earns the LEAST per kg of material.", "examinerNote": "“Most profitable use” of a scarce resource = highest contribution PER UNIT OF THAT RESOURCE. “Most profitable per unit” is a different ranking entirely."}, {"qId": "LF12", "topic": "Working back from the optimal plan", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "number", "questionText": "Wharfedale Co uses limiting factor analysis. Materials are scarce. The optimal production plan has been determined:\n\n             Product I   Product II   Product III\nMaterial (kg/unit)  4         3           1.5\nMax demand (units) 2,000    3,000        4,000\nOptimal plan       2,000    1,500        4,000\n\nGiven this plan, how many kg of material were available for use? (Enter the number of kg.)", "numericAnswer": 18500, "tolerance": 0, "workingNote": "From the plan, II was produced partially (1,500 of max 3,000), so II is the marginal product (the one resource ran out on). I and III were produced at max demand.\nMaterial consumed:\n  I:   2,000 × 4    = 8,000 kg\n  III: 4,000 × 1.5 = 6,000 kg\n  II:  1,500 × 3    = 4,500 kg\nTotal kg available = 8,000 + 6,000 + 4,500 = 18,500 kg", "explanation": "When a plan shows one product produced below its maximum demand while others are produced at maximum, the partial product is the marginal one — resource ran out during its production. Total resource available therefore exactly equals total resource consumed across all products. Note that the implied RANKING of contribution per kg is I and III (full) ranked above II (partial), even though II’s production volume number is smallest.", "examinerNote": "Total LF available = total LF consumed across every product in the optimal plan. The partial product reveals where the LF ran out."}, {"qId": "LF13", "topic": "Optimal plan total contribution", "difficulty": "medium", "marks": 2, "timeIdeal": 160, "type": "number", "questionText": "Bowland Co has 12,000 kg of scarce material available next period and produces three products. Per-unit data:\n\n           P       Q       R\nContribution $30    $20    $24\nMaterial(kg)  3      5      4\nMax demand 2,000  1,500  1,000\n\nWhat is the maximum total contribution next period? (Enter the amount in $.)", "numericAnswer": 92000, "tolerance": 0, "workingNote": "Contribution per kg:\n  P: 30 ÷ 3 = $10.00 (rank 1)\n  Q: 20 ÷ 5 = $4.00  (rank 3)\n  R: 24 ÷ 4 = $6.00  (rank 2)\nAllocation (12,000 kg in rank order):\n  P: 2,000 × 3 = 6,000 kg used. Cont = 2,000 × $30 = $60,000.\n  R: 1,000 × 4 = 4,000 kg used. Cont = 1,000 × $24 = $24,000. Cumul kg 10,000.\n  Q: (12,000 − 10,000) ÷ 5 = 400 units. Cont = 400 × $20 = $8,000.\nTotal contribution = $60,000 + $24,000 + $8,000 = $92,000", "explanation": "Standard limiting-factor procedure: rank by contribution/kg, allocate kg in that order respecting maximum demand, and take the marginal product as the residual. Total contribution sums the contribution earned at each step. Here P and R hit their max demand and absorb 10,000 kg; Q absorbs the remaining 2,000 kg, producing 400 units.", "examinerNote": "For an optimal-plan total: rank, allocate respecting max demand, then sum (units × contribution per unit) across all produced products. Don’t forget the partial product’s contribution — it is real and counted."}, {"qId": "LF14", "topic": "4-product allocation total contribution", "difficulty": "hard", "marks": 2, "timeIdeal": 180, "type": "number", "questionText": "Malham Co makes four products with the following data, and 20,000 labour hours available next period:\n\n           A       B       C       D\nContribution $15    $25    $30    $40\nLabour(hrs)   1      2     2.5     4\nMax demand 5,000  4,000  3,000  2,000\n\nWhat is the maximum total contribution Malham can earn? (Enter the amount in $.)", "numericAnswer": 259000, "tolerance": 0, "workingNote": "Contribution per labour hour:\n  A: 15 ÷ 1   = $15.00 (rank 1)\n  B: 25 ÷ 2   = $12.50 (rank 2)\n  C: 30 ÷ 2.5 = $12.00 (rank 3)\n  D: 40 ÷ 4   = $10.00 (rank 4)\nAllocate 20,000 hrs:\n  A: 5,000 × 1   = 5,000 hrs.  Cont = $75,000.\n  B: 4,000 × 2   = 8,000 hrs.  Cont = $100,000. Cumul 13,000.\n  C: (20,000 − 13,000) ÷ 2.5 = 2,800 units. Cont = 2,800 × $30 = $84,000.\n  D: 0 units (no hours left).\nTotal = $75,000 + $100,000 + $84,000 = $259,000", "explanation": "Four products is no different from three — the procedure is the same. Hours flow first to the highest contribution-per-hour product (A), then B, then C as the marginal product, and there are no hours left for D. C is produced below its 3,000 demand cap because the resource ran out at 2,800 units. D is produced at zero because it is ranked last and no resource reaches it.", "examinerNote": "With more products the procedure is unchanged — just rank and allocate methodically. Products below the marginal product simply receive nothing."}, {"qId": "LF15", "topic": "Identifying the marginal product", "difficulty": "medium", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Settle Co produces three products and direct material is scarce, with 10,000 kg available next period. Per-unit data:\n\n           F       G       H\nContribution $30    $42    $20\nMaterial(kg)  5      6      4\nMax demand   800    600  1,000\n\nIn the optimal production plan, which product will be produced at LESS than its maximum demand?", "options": [{"letter": "A", "text": "Product F", "correct": false, "why": "Per kg: F = $6.00, G = $7.00, H = $5.00. F is ranked 2nd. After G consumes 3,600 kg, there are 6,400 kg remaining, enough to make F’s full 800 units (4,000 kg). F is produced at max demand."}, {"letter": "B", "text": "Product G", "correct": false, "why": "G has the highest contribution per kg ($7.00) and is produced first. It uses 3,600 kg, well within the 10,000 kg total. G is produced at its full demand of 600 units."}, {"letter": "C", "text": "Product H", "correct": true, "why": "Correct. Ranking by contribution per kg gives G, F, H. G uses 3,600 kg, F uses 4,000 kg — 7,600 in total. H gets the remaining 2,400 kg, making 2,400 ÷ 4 = 600 units (vs max demand of 1,000). H is the marginal product."}, {"letter": "D", "text": "All three are produced at maximum demand", "correct": false, "why": "Total kg needed at full demand = (800×5) + (600×6) + (1,000×4) = 11,600 kg, exceeding the 10,000 kg available. Not every product can be produced at maximum."}], "workingNote": "Contribution per kg:\n  F: 30 ÷ 5 = $6.00 (rank 2)\n  G: 42 ÷ 6 = $7.00 (rank 1)\n  H: 20 ÷ 4 = $5.00 (rank 3)\nAllocation in rank order:\n  G: 600 × 6 = 3,600 kg (full demand)\n  F: 800 × 5 = 4,000 kg (full demand). Cumulative 7,600.\n  H: (10,000 − 7,600) ÷ 4 = 2,400 ÷ 4 = 600 units — below max demand of 1,000.\nMarginal product = H.", "explanation": "The 'marginal' product is the lowest-ranked product that still receives some resource. It is always the one that ends up partial — not at zero, but not at maximum demand either. Here, G and F absorb 7,600 kg and exit at their max demand; H takes the remaining 2,400 kg, producing 600 units short of its 1,000-unit demand cap.", "examinerNote": "Highest-ranked products produce at max demand. The marginal product takes whatever resource is left and is the one produced BELOW its max. The lowest-ranked products may receive nothing."}, {"qId": "LF16", "topic": "Two-product optimal contribution", "difficulty": "medium", "marks": 2, "timeIdeal": 140, "type": "number", "questionText": "Reeth Co has 5,000 scarce labour hours available next period and makes two products:\n\n           X       Y\nContribution $40    $30\nLabour(hrs)   4      2\nMax demand 1,000   800\n\nWhat is the maximum total contribution? (Enter the amount in $.)", "numericAnswer": 58000, "tolerance": 0, "workingNote": "Contribution per labour hour:\n  X: 40 ÷ 4 = $10.00 (rank 2)\n  Y: 30 ÷ 2 = $15.00 (rank 1)\nAllocate 5,000 hrs:\n  Y: 800 × 2 = 1,600 hrs. Cont = 800 × $30 = $24,000.\n  X: (5,000 − 1,600) ÷ 4 = 3,400 ÷ 4 = 850 units. Cont = 850 × $40 = $34,000.\nTotal contribution = $24,000 + $34,000 = $58,000", "explanation": "Although X has the higher contribution per unit ($40 vs $30), Y is produced first because each Y unit consumes only 2 hours, giving $15 of contribution per hour against $10 for X. Producing 800 units of Y at full demand uses 1,600 hours, leaving 3,400 hours for X — enough for 850 of the 1,000-unit demand for X. Total contribution $58,000 is the best achievable.", "examinerNote": "Higher unit contribution does not entitle a product to first place — highest contribution PER SCARCE HOUR does. Don't be misled by the per-unit number."}, {"qId": "LF17", "topic": "Optimal plan respecting demand cap", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "mcq", "questionText": "Castleton Co has 12,000 scarce labour hours available and makes two products:\n\n           M       N\nContribution $20    $15\nLabour(hrs)   2      3\nMax demand 3,000  4,000\n\nWhat is the maximum total contribution the company can earn next period?", "options": [{"letter": "A", "text": "$60,000", "correct": false, "why": "This produces only M at full demand (3,000 × $20 = $60,000) and ignores the 6,000 hours left over after M’s demand is met. Those leftover hours can produce 2,000 units of N, adding $30,000 — they should not be wasted."}, {"letter": "B", "text": "$90,000", "correct": true, "why": "Correct. M ranks first (contribution per hour: M $10 vs N $5). Produce M to full demand (3,000 units, 6,000 hrs, $60,000 contribution). Remaining 6,000 hrs go to N: 6,000 ÷ 3 = 2,000 units, $30,000 contribution. Total $90,000."}, {"letter": "C", "text": "$120,000", "correct": false, "why": "This puts all 12,000 hours into M (12,000 ÷ 2 = 6,000 units of M, contribution $120,000) but ignores that M’s demand caps at 3,000 units. Producing 6,000 units when only 3,000 can be sold creates unsold output. The classic 'top-rank gets everything' trap."}, {"letter": "D", "text": "$150,000", "correct": false, "why": "This adds the spurious $120,000 from over-producing M to a separate $30,000 from N — effectively double-counting the hours. With only 12,000 hours total, both calculations cannot happen simultaneously."}], "workingNote": "Contribution per labour hour:\n  M: 20 ÷ 2 = $10.00 (rank 1)\n  N: 15 ÷ 3 = $5.00  (rank 2)\nM produced at demand cap: 3,000 × 2 = 6,000 hrs used. Cont = $60,000.\nN with remaining 6,000 hrs: 6,000 ÷ 3 = 2,000 units. Cont = $30,000.\nTotal contribution = $60,000 + $30,000 = $90,000", "explanation": "The highest-ranked product is produced UP TO its maximum demand — not until all resource is consumed. Sales cannot exceed demand; any extra units produced beyond demand sit unsold and earn no contribution. After M’s demand is fully met, the remaining hours should still be used — on the next-ranked product N — because each N unit still adds positive contribution.", "examinerNote": "Top-rank-gets-everything is wrong. Top-rank gets up to its max demand, then the next rank picks up the remaining LF. Don’t over-allocate and don’t leave hours unused if any product has positive contribution per LF."}, {"qId": "LF18", "topic": "Working back — total LF available", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "Eden Valley Co produces two products and material is the limiting factor. Each X unit uses 3 kg; each Y unit uses 2.5 kg. The optimal plan is to produce 1,500 units of X (at maximum demand) and 2,800 units of Y (out of a possible 4,000). How many kg of material were available?", "options": [{"letter": "A", "text": "11,500 kg", "correct": true, "why": "Correct. Material used = (1,500 × 3) + (2,800 × 2.5) = 4,500 + 7,000 = 11,500 kg. Since Y was produced below its maximum demand, material ran out during Y — so total material available exactly equals total material consumed."}, {"letter": "B", "text": "14,500 kg", "correct": false, "why": "This assumes Y is also at full demand (4,000 units), but the plan clearly produces only 2,800 of Y — the marginal product. Material isn’t left over once the optimal plan is set."}, {"letter": "C", "text": "4,500 kg", "correct": false, "why": "This counts only X’s material consumption and ignores Y. Y consumed 7,000 kg as well, even though it was the partial product."}, {"letter": "D", "text": "7,000 kg", "correct": false, "why": "This counts only Y’s material consumption and ignores X. X used 4,500 kg in full."}], "workingNote": "Material used by each product in the optimal plan:\n  X (full demand): 1,500 × 3 = 4,500 kg\n  Y (marginal):    2,800 × 2.5 = 7,000 kg\nTotal material available = total consumed = 4,500 + 7,000 = 11,500 kg", "explanation": "When one product is at maximum demand and another is partial, the partial product is the marginal one — material runs out exactly during its production. Therefore total available = total consumed in the plan: simply sum each product’s usage. This kind of question reverses the usual direction, asking you to deduce the constraint from the plan rather than the plan from the constraint.", "examinerNote": "Total LF available = sum of (units produced × LF per unit) across all products in the optimal plan. The partial product is the resource exhaustion point."}, {"qId": "LF19", "topic": "Optimal contribution — mixed information", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "number", "questionText": "Coverdale Co has 4,000 scarce labour hours available. It produces two products with the following data:\n\n               J       K\nContribution  $20    $36\nLabour(hrs)    2      4\nMax demand 1,000    800\n\nWhat is the maximum total contribution earned? (Enter the amount in $.)", "numericAnswer": 38000, "tolerance": 0, "workingNote": "Contribution per labour hour:\n  J: 20 ÷ 2 = $10.00 (rank 1)\n  K: 36 ÷ 4 = $9.00  (rank 2)\nProduce J at full demand: 1,000 × 2 = 2,000 hrs. Cont = $20,000.\nRemaining 2,000 hrs to K: 2,000 ÷ 4 = 500 units (of max demand 800). Cont = 500 × $36 = $18,000.\nTotal contribution = $20,000 + $18,000 = $38,000", "explanation": "K’s much higher contribution per unit ($36 vs $20) tempts students to start with K — but each K unit takes twice as much labour as J. The per-hour figures (J $10, K $9) put J ahead, narrowly. Producing J to full demand earns $20,000; the remaining 2,000 hours give K 500 units short of its 800-unit cap, adding $18,000.", "examinerNote": "Per-hour contributions can be very close — even a small difference still dictates the ranking. Don’t second-guess based on the per-unit gap."}, {"qId": "LF20", "topic": "Inferring product ranking from optimal plan", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "mcq", "questionText": "Dentdale Co manufactures three products L, M and N, all using the same scarce resource. After optimisation, the plan is to produce 600 units of N (full demand), 800 units of L (out of a maximum demand of 1,000) and zero units of M. What is the implied ranking of the three products by contribution per limiting factor (highest first)?", "options": [{"letter": "A", "text": "L, N, M", "correct": false, "why": "L is shown produced below its maximum demand, so resource ran out during L — L cannot be ranked first. A product ranked first would always be produced at its maximum demand (if any resource at all is allocated)."}, {"letter": "B", "text": "N, L, M", "correct": true, "why": "Correct. N is at full demand, so it must be the top-ranked product. L is the partial (marginal) product, so it is ranked second. M is at zero — ranked last — because the resource ran out before reaching it."}, {"letter": "C", "text": "M, N, L", "correct": false, "why": "M is produced at zero, meaning no resource reached it — so M is ranked LAST, not first. The order is the reverse of what this option suggests at the top."}, {"letter": "D", "text": "N, M, L", "correct": false, "why": "N is correctly placed first, but M cannot rank above L when L received resource and M did not. The product that gets nothing must be the lowest-ranked."}], "workingNote": "Three-tier pattern in any optimal plan:\n  Top-ranked products  -> produced at max demand\n  Marginal product     -> produced at less than max demand (where resource exhausts)\n  Lower-ranked products -> produced at zero\nApplying to the plan:\n  N (600 of 600, full)    -> ranked highest\n  L (800 of 1,000, partial) -> ranked next (marginal)\n  M (0)                   -> ranked last\nImplied ranking: N, L, M.", "explanation": "Optimal-plan output has a signature structure: top-ranked products at maximum demand, exactly one marginal product partially produced, and any lower-ranked products at zero. Reversing the question — inferring the ranking from the plan — just runs this logic backwards. Any product at max demand outranks the partial product; any product at zero is ranked below it.", "examinerNote": "The product at full demand is highest-ranked; the partial product is the marginal (next); the zero product is lowest. Reading the plan backwards reveals the ranking."}, {"qId": "LF21", "topic": "Make-or-buy under labour constraint", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "mcq", "questionText": "Littondale Co needs three products P, Q and R for sale. It can either make them in-house using scarce labour, or purchase them externally. Per-unit data:\n\n                     P       Q       R\nExternal price       $30    $50    $40\nIn-house VC          $20    $30    $25\nLabour hrs (in-house) 4      5      3\n\nIf the company prioritises in-house production to maximise total savings, which product should be made FIRST (i.e., produced in-house in preference to the others)?", "options": [{"letter": "A", "text": "Product P", "correct": false, "why": "Saving per unit P = $30 − $20 = $10, divided by 4 hours = $2.50/hr. That is the LOWEST saving per labour hour of the three, so P should be the LAST to be made in-house, not the first."}, {"letter": "B", "text": "Product Q", "correct": false, "why": "Q’s saving per unit ($20) is the highest, which tempts this answer — but each Q unit consumes 5 labour hours. Per hour, Q saves $4.00 vs R’s $5.00. R offers more saving per scarce hour, so R is made first."}, {"letter": "C", "text": "Product R", "correct": true, "why": "Correct. Saving per labour hour: P = $10÷4 = $2.50; Q = $20÷5 = $4.00; R = $15÷3 = $5.00. R saves the most per scarce labour hour, so it is the product most worth making in-house."}, {"letter": "D", "text": "All three save the same amount per hour", "correct": false, "why": "The three saving rates are $2.50, $4.00 and $5.00 per hour — quite different. The ranking by saving per labour hour is R > Q > P."}], "workingNote": "Saving from making in-house = External price − In-house VC.\n  P: 30 − 20 = $10, over 4 hrs -> $2.50/hr\n  Q: 50 − 30 = $20, over 5 hrs -> $4.00/hr\n  R: 40 − 25 = $15, over 3 hrs -> $5.00/hr\nRanking for making in-house: R (1st), Q (2nd), P (3rd).\nIf hours are scarce, P is the first product to be bought externally.", "explanation": "The decision rule for make-or-buy with a scarce internal resource is the mirror of product ranking. Treat the per-unit saving from in-house production as the ‘contribution’, then express it per unit of limiting factor (per labour hour). The product with the highest saving per scarce hour is the most worthwhile to make in-house. R offers $5 saving for every hour of labour devoted to it — twice the rate of P.", "examinerNote": "Make-or-buy mirrors product ranking: make in-house the product that saves the MOST per unit of limiting factor; buy externally the one that saves the LEAST per LF."}, {"qId": "LF22", "topic": "Make-or-buy minimum total cost", "difficulty": "hard", "marks": 2, "timeIdeal": 200, "type": "number", "questionText": "Swaledale Co must supply 500 units of A, 600 units of B and 400 units of C to fulfil contracted demand. Each can be made in-house (limited to 6,000 labour hours) or purchased externally. Per-unit data:\n\n                     A       B       C\nLabour hrs/unit       5       8       4\nIn-house variable cost $30    $50    $25\nExternal buy price    $40     $70    $30\n\nWhat is the MINIMUM total cost to supply all 1,500 units required? (Enter the amount in $.)", "numericAnswer": 59600, "tolerance": 0, "workingNote": "Step 1 — Saving from making in-house = External − In-house VC:\n  A: 40 − 30 = $10/unit, over 5 hrs -> $2.00/hr\n  B: 70 − 50 = $20/unit, over 8 hrs -> $2.50/hr\n  C: 30 − 25 = $5/unit, over 4 hrs -> $1.25/hr\nRank for in-house production (highest saving/hr): B, A, C.\nStep 2 — Allocate 6,000 hrs in rank order:\n  B (full demand): 600 × 8 = 4,800 hrs used. Buy 0 of B.\n  A: 6,000 − 4,800 = 1,200 hrs remaining → 1,200 ÷ 5 = 240 units made.\n     Buy 500 − 240 = 260 units of A externally.\n  C: 0 hrs remaining → buy all 400 units of C.\nStep 3 — Total cost:\n  Make B 600 × $50 = $30,000\n  Make A 240 × $30 = $7,200\n  Buy A  260 × $40 = $10,400\n  Buy C  400 × $30 = $12,000\nTotal = $59,600", "explanation": "Three steps. (1) Rank products by saving per scarce labour hour from making in-house — the same logic as ranking products by contribution per LF. (2) Allocate hours in rank order: B (full), A (marginal), C (zero). (3) Sum all variable costs: in-house variable cost for made units, external purchase price for bought units. The minimum total cost is $59,600. Fixed costs are excluded — they are unchanged and so irrelevant to the decision.", "examinerNote": "Make-or-buy with all demand to satisfy: rank by saving per LF, fill hours top-down, BUY the shortfall externally. Sum in-house VC for made units plus buy price for bought units."}, {"qId": "LF23", "topic": "Make-or-buy decision criterion", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "A company has limited labour hours, and can either make products in-house or buy them externally. When deciding which products to BUY externally rather than make, which criterion should the company use?", "options": [{"letter": "A", "text": "Buy externally the product with the HIGHEST external purchase price", "correct": false, "why": "A high external price actually argues for MAKING in-house — the saving from making would be larger. The relevant comparison is per-LF saving, not absolute external price."}, {"letter": "B", "text": "Buy externally the product with the LOWEST saving per unit of limiting factor", "correct": true, "why": "Correct. With scarce labour, every hour devoted to making in-house should generate as much saving as possible. The product where each scarce hour saves the LEAST is the one to buy externally — those hours are better spent on higher-saving products."}, {"letter": "C", "text": "Buy externally the product with the LOWEST in-house variable cost", "correct": false, "why": "A low in-house variable cost actually makes a product MORE attractive to make, not less. Saving per LF (not in-house cost in isolation) is the correct lens."}, {"letter": "D", "text": "Buy externally the product with the HIGHEST labour hours per unit", "correct": false, "why": "Hours per unit alone is misleading. A product with many labour hours might still earn a large saving per hour. The full ratio (saving per hour) is what counts — not either side of it in isolation."}], "workingNote": "Rule: Buy the product offering the LOWEST saving per unit of limiting factor.\nEquivalently: Make in-house the product with the highest saving per LF.\nSaving per LF = (External price − In-house VC) ÷ LF per unit.", "explanation": "Make-or-buy under a single limiting factor is the mirror of product ranking. The 'gain' from making instead of buying is the per-unit saving (external price minus in-house variable cost). When labour is the limiting factor, that saving must be expressed per hour to be comparable across products. Buying externally is correct for the product where each scarce hour saves the least; the freed hours are then redirected to the product that saves more per hour.", "examinerNote": "“Buy externally the one whose saving per LF is lowest.” That single rule answers every make-or-buy question with a single binding constraint."}, {"qId": "LF24", "topic": "Special order with opportunity cost", "difficulty": "hard", "marks": 2, "timeIdeal": 180, "type": "number", "questionText": "Buckden Co operates at full capacity, with skilled labour as the binding constraint. A customer offers a one-off special order. The order would require 200 hours of skilled labour (at the normal wage rate of $8 per hour) and $5,000 of direct materials and other variable costs. To accept the order, Buckden would have to displace existing production that currently contributes $12 per labour hour. What is the MINIMUM price Buckden should accept for this special order? (Enter the amount in $.)", "numericAnswer": 9000, "tolerance": 0, "workingNote": "Variable cost of fulfilling the order:\n  Materials and other VC: $5,000\n  Labour cost: 200 hrs × $8/hr = $1,600\n  Subtotal variable cost = $6,600\nOpportunity cost (contribution forgone from displaced existing production):\n  200 hrs × $12 contribution/hr = $2,400\nMinimum acceptable price = Variable cost + Opportunity cost\n                         = $6,600 + $2,400 = $9,000", "explanation": "When a company has spare capacity, the minimum price for a special order is its variable cost. When the company is at full capacity with a limiting factor, every scarce hour devoted to the new order must be diverted from existing production — forgoing the contribution that production was earning. That forgone contribution is an opportunity cost which must be covered IN ADDITION to the order’s own variable cost. The minimum price therefore = variable cost of the order + (LF hours required × contribution per LF currently earned).", "examinerNote": "At full capacity, min price = own VC + opportunity cost (LF needed × contribution per LF currently earned). Spare capacity → just VC. Don't omit the opportunity-cost layer when the LF binds."}, {"qId": "LF25", "topic": "Shadow price of the limiting factor", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Kettlewell Co operates at full capacity with labour as the binding constraint. In its current optimal plan, product P (the highest-ranked) is produced at maximum demand and earns $14 contribution per labour hour. Product Q (the next-ranked) is produced partially and earns $11 contribution per labour hour. If one additional labour hour became available, by how much would total contribution increase?", "options": [{"letter": "A", "text": "$14", "correct": false, "why": "P has the highest contribution per hour, but P is already at maximum demand — no more P can be sold. An extra hour cannot create extra contribution at P’s rate; it must be used elsewhere."}, {"letter": "B", "text": "$11", "correct": true, "why": "Correct. An extra hour goes to the next-best product currently constrained by the LF — here Q, the partially produced product. Q’s contribution per labour hour is $11, so total contribution rises by $11. This is the 'shadow price' of the limiting factor."}, {"letter": "C", "text": "$25", "correct": false, "why": "Adding $14 and $11 makes no economic sense. Only one additional hour is available, and it is used once — by the marginal product. There is no doubling-up."}, {"letter": "D", "text": "$3", "correct": false, "why": "Subtracting $11 from $14 gives no meaningful figure here. The shadow price is the rate the extra resource actually earns when allocated, not the difference between two rates."}], "workingNote": "P (top-ranked, $14/hr) is already at max demand — extra hours cannot be used on P.\nQ (marginal product, $11/hr) absorbs the next hour.\nShadow price of one extra labour hour = $11 = the contribution per LF of the marginal product.", "explanation": "The shadow price of a limiting factor is the additional contribution that ONE MORE UNIT of that resource would generate. It equals the contribution per LF of the marginal product — the product that absorbed the resource last in the optimal plan. The top-ranked product’s rate (here $14) is not relevant because that product is already at its maximum demand: extra hours cannot be sold as more P. They go to the next product on the ranking that still has slack demand, which is the marginal product Q at $11/hr. This is precisely how shadow prices work in linear programming.", "examinerNote": "Shadow price of an LF = contribution per LF of the MARGINAL product, not the top-ranked product. The top-ranked product is at max demand and can’t use more resource."}, {"qId": "LF26", "topic": "Limiting factor concepts", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "truefalse2", "questionText": "State whether each of the following statements about limiting factor analysis is true or false.", "statements": [{"text": "Fixed costs are irrelevant when ranking products by contribution per limiting factor.", "answer": true}, {"text": "The optimal production plan will always produce every product at its maximum demand.", "answer": false}], "workingNote": "Statement 1: Fixed costs do not change with the production mix in the short run — they are sunk for decision purposes. Ranking is based on contribution (not profit) per LF. → TRUE\nStatement 2: When resource is scarce, the optimal plan often produces top-ranked products at max demand and a marginal product partially — with lower-ranked products possibly at zero. Not every product reaches max demand. → FALSE", "explanation": "Statement 1 is the fundamental reason limiting-factor analysis uses contribution, not profit: fixed costs do not respond to the production mix in the short run, so including them in the per-LF ranking metric corrupts the decision. Statement 2 describes a misconception: if every product could be produced at max demand, by definition no resource would be scarce — there would be no limiting factor in the first place. The whole point of the analysis is to determine which product(s) are produced BELOW maximum demand.", "examinerNote": "Sunk fixed costs irrelevant; not every product reaches max demand. Two of the most-tested principles in the topic."}, {"qId": "LF27", "topic": "Limiting factor — ranking rule", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "truefalse2", "questionText": "State whether each of the following is true.", "statements": [{"text": "When labour is the only limiting factor, products should be ranked by contribution per unit.", "answer": false}, {"text": "In an optimal production plan, the product with the LOWEST contribution per limiting factor should be produced LAST (or not at all if resource is exhausted earlier).", "answer": true}], "workingNote": "Statement 1: Ranking by contribution per UNIT ignores how much labour each unit consumes. The correct ranking is per labour hour. → FALSE\nStatement 2: The lowest contribution per LF generates the smallest return on each unit of the scarce resource, so it earns its place last (or zero). → TRUE", "explanation": "The first statement captures the most common ranking mistake in limiting-factor questions. When labour (or any single resource) is the constraint, the metric must be contribution PER UNIT OF THE LIMITING FACTOR, not contribution per unit of output. The second statement is the natural consequence of the ranking rule: rank from highest to lowest contribution per LF, allocate in that order — so the lowest comes last.", "examinerNote": "Ranking rule: per UNIT OF LIMITING FACTOR, not per unit of output. Lowest per-LF = last."}, {"qId": "LF28", "topic": "Demand vs resource limit", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "A company sells one product. Forecast sales demand for the next period is 10,000 units. With the resources available (labour and materials), the company could physically produce up to 12,000 units. What is the limiting factor for the next period?", "options": [{"letter": "A", "text": "Direct labour", "correct": false, "why": "Labour would allow up to 12,000 units, which is more than the 10,000 units that can be sold. A resource is only a limiting factor when it is insufficient to meet demand."}, {"letter": "B", "text": "Direct material", "correct": false, "why": "Materials would also support up to 12,000 units of output — above the 10,000 unit demand. A resource with slack cannot be limiting."}, {"letter": "C", "text": "Sales demand", "correct": true, "why": "Correct. When forecast demand is below productive capacity, there is no resource constraint — the firm could make more but cannot sell more. Sales demand itself is the binding limit at 10,000 units."}, {"letter": "D", "text": "There is no limit — the company should produce 12,000 units", "correct": false, "why": "Producing 12,000 units when only 10,000 can be sold creates 2,000 units of unsold output, tying up cash and warehouse space and earning no contribution. The relevant limit is 10,000 — the demand."}], "workingNote": "Productive capacity: 12,000 units.\nDemand: 10,000 units.\nResources have slack at 10,000 units of output — neither labour nor material binds.\nBinding limit = sales demand = 10,000 units.", "explanation": "A 'limiting factor' in MA2 is the constraint that prevents the firm from earning more contribution. When every resource has capacity above what the market will absorb, no resource is binding — demand itself is the limit. Producing beyond demand is value-destroying. This question tests whether you know to look at the demand side, not just the resource side, when identifying the binding constraint.", "examinerNote": "If forecast demand < productive capacity on every resource, sales demand is the limit. There is no resource LF in this case."}, {"qId": "LF29", "topic": "Two binding resources — feasibility", "difficulty": "hard", "marks": 2, "timeIdeal": 200, "type": "mcq", "questionText": "Aire Co manufactures two products, X and Y. Each X requires 4 labour hours and 2 kg of material; each Y requires 2 labour hours and 3 kg of material. The company has 1,200 labour hours and 900 kg of material available. Which of the following production mixes is feasible AND fully uses BOTH labour and material?", "options": [{"letter": "A", "text": "300 units of X and 0 units of Y", "correct": false, "why": "This uses all 1,200 labour hours (300 × 4) but only 600 kg of material (300 × 2). 300 kg of material is unused, so material is not fully utilised."}, {"letter": "B", "text": "0 units of X and 300 units of Y", "correct": false, "why": "This uses all 900 kg of material (300 × 3) but only 600 labour hours (300 × 2). 600 labour hours are unused, so labour is not fully utilised."}, {"letter": "C", "text": "225 units of X and 150 units of Y", "correct": true, "why": "Correct. Labour: (225×4) + (150×2) = 900 + 300 = 1,200 hrs (fully used). Material: (225×2) + (150×3) = 450 + 450 = 900 kg (fully used). This is the unique mix that exhausts both resources simultaneously."}, {"letter": "D", "text": "200 units of X and 300 units of Y", "correct": false, "why": "Labour: (200×4) + (300×2) = 800 + 600 = 1,400 hrs — 200 hours above the 1,200 available. The plan is infeasible: there isn't enough labour to make this mix."}], "workingNote": "Find (X, Y) that uses ALL 1,200 hrs AND ALL 900 kg.\n  Labour:   4X + 2Y = 1,200\n  Material: 2X + 3Y = 900\nFrom the labour equation: Y = 600 − 2X.\nSubstitute into the material equation:\n  2X + 3(600 − 2X) = 900\n  2X + 1,800 − 6X = 900\n  −4X = −900 -> X = 225, Y = 600 − 450 = 150.\nCheck: Labour = (225×4) + (150×2) = 1,200 ✓\n       Material = (225×2) + (150×3) = 900 ✓", "explanation": "When two resources can both bind, the optimal mix often sits at the intersection of the two constraints — the point where both are fully used. Geometrically this is the corner of the feasible region where two constraint lines meet. Solving the two equations simultaneously gives the unique (X, Y) pair that uses all of both resources. Corner solutions where only one constraint binds (options A and B) leave the other resource with slack; infeasible mixes (option D) need more of a resource than is available.", "examinerNote": "Two binding constraints → solve them simultaneously to find the intersection point. Corner points using only one constraint leave the other slack."}, {"qId": "LF30", "topic": "Labour step cost (overtime)", "difficulty": "hard", "marks": 2, "timeIdeal": 200, "type": "number", "questionText": "Hubberholme Co produces one product. Forecast demand is 1,000 units next period. Each unit requires 2 hours of labour and $20 of direct materials. The selling price is $60. Up to 1,800 hours of labour are available at the standard rate of $10 per hour. Above 1,800 hours, any additional hours must be worked at an overtime rate of $15 per hour, with no upper limit. What is the maximum total contribution the company can earn next period? (Enter the amount in $.)", "numericAnswer": 19000, "tolerance": 0, "workingNote": "Hours required for full demand = 1,000 × 2 = 2,000.\nStandard-rate hours available = 1,800 → supports 1,800 ÷ 2 = 900 units.\nRemaining 100 units must use overtime: 100 × 2 = 200 overtime hours.\nContribution per unit at each rate:\n  Standard rate: 60 − 20 − (2 × 10) = $20\n  Overtime rate: 60 − 20 − (2 × 15) = $10\nBoth positive → produce all 1,000 units.\nTotal contribution:\n  900 × $20 = $18,000\n  100 × $10 = $1,000\nTotal       = $19,000", "explanation": "A step in the labour cost rate (overtime) does not change the limiting-factor procedure — it just changes the contribution rate above the step. Compute contribution per unit at each rate. As long as the overtime-rate contribution is positive, every unit beyond the standard-hour capacity still adds positive contribution and should be produced (up to demand). Here both rates give positive contribution ($20 and $10), so full demand is profitable. Total contribution sums the two layers.", "examinerNote": "Step costs (e.g., overtime) require splitting production into layers and computing contribution at each layer. Produce any layer with positive contribution; stop only when contribution turns negative."}];
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============================================================
+   APP LOGIC — Firebase real-time + localStorage backup
+   ============================================================ */
+let fbApp = null, fbDB = null, fbOK = false;
+let CURRENT_USER = null;
+let attempt = null;        // current attempt state
+let timerInt = null, paused = false, calcOn = false;
+let reviewFilter = 'wrong';
+
+/* ---------- Firebase init ---------- */
+function initFirebase() {
+  try {
+    fbApp = firebase.initializeApp(firebaseConfig);
+    fbDB = firebase.database();
+    // Connection state listener
+    fbDB.ref('.info/connected').on('value', (snap) => {
+      fbOK = snap.val() === true;
+      paintConn();
+    });
+  } catch (e) {
+    console.error('Firebase init failed', e);
+    fbOK = false;
+    paintConn();
+  }
+}
+function paintConn() {
+  const on = fbOK;
+  [['conn-dot','conn-text'],['w-conn-dot','w-conn-text']].forEach(([d,t])=>{
+    const dot = document.getElementById(d), txt = document.getElementById(t);
+    if (!dot) return;
+    dot.className = 'status-dot ' + (on ? 'dot-on' : 'dot-off');
+    if (t === 'conn-text') txt.textContent = on ? 'Online — connected' : 'Offline — work saved on device';
+    else txt.textContent = on ? 'Online — your work syncs automatically' : 'Offline — saved on device, will sync when online';
+  });
+}
+
+/* ---------- localStorage helpers ---------- */
+function lsKey(user) { return TEST.storageKey + '_' + user; }
+function lsLoad(user) {
+  try { return JSON.parse(localStorage.getItem(lsKey(user)) || '{"attempts":[]}'); }
+  catch { return { attempts: [] }; }
+}
+function lsSave(user, data) {
+  try { localStorage.setItem(lsKey(user), JSON.stringify(data)); }
+  catch (e) { console.error('localStorage save failed', e); }
+}
+
+/* ---------- toast ---------- */
+function toast(msg, ms) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), ms || 2600);
+}
+
+/* ---------- screen nav ---------- */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ---------- LOGIN ---------- */
+function doLogin() {
+  const name = document.getElementById('login-name').value;
+  const code = document.getElementById('login-code').value.trim();
+  const err = document.getElementById('login-err');
+  if (!name) { err.textContent = 'Please select your name.'; err.style.display='block'; return; }
+  if (CODES[name] !== code) { err.textContent = 'Incorrect access code.'; err.style.display='block'; return; }
+  err.style.display = 'none';
+  CURRENT_USER = name;
+  // Presence: mark active (not in test yet)
+  setPresence('dashboard', null);
+  renderWelcome();
+  show('welcome');
+}
+function logout() {
+  clearPresence();
+  CURRENT_USER = null;
+  document.getElementById('login-code').value = '';
+  show('login');
+}
+
+/* ---------- PRESENCE (Recommendation 1: Active Now) ---------- */
+let presenceRef = null;
+function setPresence(state, qInfo) {
+  if (!fbDB || !CURRENT_USER) return;
+  try {
+    presenceRef = fbDB.ref('presence/' + CURRENT_USER);
+    presenceRef.set({
+      user: CURRENT_USER, state: state, chapter: TEST.chapterName,
+      q: qInfo, ts: Date.now()
+    });
+    presenceRef.onDisconnect().remove();
+  } catch (e) { console.error('presence err', e); }
+}
+function clearPresence() {
+  if (presenceRef) { try { presenceRef.remove(); } catch(e){} presenceRef = null; }
+}
+
+/* ---------- WELCOME render ---------- */
+function renderWelcome() {
+  document.getElementById('w-name').textContent = CURRENT_USER;
+  const data = lsLoad(CURRENT_USER);
+  const atts = data.attempts || [];
+  document.getElementById('w-attempts').textContent = atts.length;
+  const list = document.getElementById('w-attempts-list');
+  if (atts.length === 0) {
+    list.innerHTML = '<p class="sub">No attempts yet. Start your first practice below.</p>';
+  } else {
+    let h = '<table><thead><tr><th>#</th><th>Date</th><th>Score</th><th>Pace</th><th>Result</th></tr></thead><tbody>';
+    atts.slice().reverse().forEach((a,i)=>{
+      const n = atts.length - i;
+      const pass = a.scorePct >= TEST.passMark;
+      h += `<tr><td>${n}</td><td>${a.dateStr}</td>
+        <td><strong>${a.scorePct}%</strong></td>
+        <td>${a.pacePct}%</td>
+        <td><span class="pill ${pass?'pill-green':'pill-red'}">${pass?'Pass':'Below 70%'}</span></td></tr>`;
+    });
+    h += '</tbody></table>';
+    list.innerHTML = h;
+  }
+  document.getElementById('w-eval-card').style.display =
+    atts.length >= TEST.targetAttempts ? 'block' : 'none';
+}
+
+/* ---------- START TEST ---------- */
+function pickQuestions() {
+  // Shuffle pool, take perAttempt, keeping difficulty mix
+  const pool = ACCRUALS_POOL.slice();
+  for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  return pool.slice(0, TEST.perAttempt);
+}
+function startTest() {
+  const qs = pickQuestions();
+  attempt = {
+    attemptId: 'att_' + CURRENT_USER + '_' + Date.now(),
+    user: CURRENT_USER,
+    startTs: Date.now(),
+    idx: 0,
+    questions: qs.map(q => ({
+      ...q, userAnswer: null, guessed: false, confused: false,
+      tfAnswers: q.type==='truefalse2' ? [null,null] : null,
+      timeSpent: 0, _enter: Date.now()
+    })),
+    remaining: TEST.durationSec,
+    pausesUsed: 0
+  };
+  reviewFilter = 'wrong';
+  show('test');
+  setPresence('in_test', { n: 1, total: TEST.perAttempt });
+  renderQ();
+  startTimer();
+}
+
+/* ---------- TIMER ---------- */
+function startTimer() {
+  clearInterval(timerInt);
+  timerInt = setInterval(()=>{
+    if (paused) return;
+    attempt.remaining--;
+    paintTimer();
+    if (attempt.remaining <= 0) { clearInterval(timerInt); submitTest(true); }
+  }, 1000);
+  paintTimer();
+}
+function paintTimer() {
+  const m = Math.floor(attempt.remaining/60), s = attempt.remaining%60;
+  const el = document.getElementById('t-timer');
+  el.textContent = `${m}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer' + (attempt.remaining <= 120 ? ' warn' : '');
+}
+let pauseSecondsLeft = 120;
+function togglePause() {
+  if (!paused) {
+    if (pauseSecondsLeft <= 0) { toast('No pause time left'); return; }
+    paused = true;
+    document.getElementById('pause-btn').textContent = '▶ Resume';
+    const pi = setInterval(()=>{
+      if (!paused) { clearInterval(pi); return; }
+      pauseSecondsLeft--;
+      if (pauseSecondsLeft <= 0) { paused=false; document.getElementById('pause-btn').textContent='⏸ Pause'; clearInterval(pi); toast('Pause time up — test resumed'); }
+    },1000);
+    toast('Paused — max 2 min total');
+  } else {
+    paused = false;
+    document.getElementById('pause-btn').textContent = '⏸ Pause';
+  }
+}
+
+/* ---------- RENDER QUESTION ---------- */
+function renderQ() {
+  const i = attempt.idx;
+  const q = attempt.questions[i];
+  q._enter = Date.now();
+  document.getElementById('t-qnum').textContent = `Q${i+1} / ${attempt.questions.length}`;
+  document.getElementById('t-progress').style.width = ((i+1)/attempt.questions.length*100)+'%';
+
+  // nav grid
+  const nav = document.getElementById('t-nav');
+  nav.innerHTML = '';
+  attempt.questions.forEach((qq,k)=>{
+    const c = document.createElement('div');
+    c.className = 'nav-cell';
+    if (k === i) c.classList.add('current');
+    else if (isAnswered(qq)) c.classList.add('answered');
+    if (qq.confused) c.classList.add('flagged');
+    c.textContent = k+1;
+    c.onclick = ()=>{ saveTime(); attempt.idx=k; renderQ(); };
+    nav.appendChild(c);
+  });
+
+  let html = '';
+  if (q.scenario) html += `<div class="scenario">${q.scenario}</div>`;
+  html += `<div class="qtext">${q.questionText}</div>`;
+
+  if (q.type === 'mcq') {
+    q.options.forEach(o=>{
+      const sel = q.userAnswer === o.letter ? ' sel' : '';
+      html += `<div class="opt${sel}" onclick="pickMCQ('${o.letter}')">
+        <span class="opt-letter">${o.letter}</span>${o.text}</div>`;
+    });
+  } else if (q.type === 'number') {
+    html += `<div class="field" style="max-width:260px;">
+      <label>Your answer (number only)</label>
+      <input type="number" id="num-input" value="${q.userAnswer ?? ''}"
+        oninput="pickNum(this.value)" placeholder="e.g. 1813" step="any"></div>`;
+  } else if (q.type === 'truefalse2') {
+    q.statements.forEach((st,si)=>{
+      const a = q.tfAnswers[si];
+      html += `<div class="tf-row">
+        <div class="stmt">${st.text}</div>
+        <button class="tf-btn ${a===true?'sel-t':''}" onclick="pickTF(${si},true)">True</button>
+        <button class="tf-btn ${a===false?'sel-f':''}" onclick="pickTF(${si},false)">False</button>
+      </div>`;
+    });
+  }
+
+  html += `<div class="guess-box">
+    <input type="checkbox" id="guess-cb" ${q.guessed?'checked':''} onchange="toggleGuess()">
+    <label for="guess-cb">I'm guessing this answer (helps your teacher see where to focus)</label></div>`;
+  html += `<div class="confuse-box">
+    <input type="checkbox" id="confuse-cb" ${q.confused?'checked':''} onchange="toggleConfuse()">
+    <label for="confuse-cb">⚑ Mark as confusing (for my own revision)</label></div>`;
+
+  document.getElementById('t-question').innerHTML = html;
+
+  document.getElementById('t-prev').style.visibility = i===0 ? 'hidden' : 'visible';
+  const last = i === attempt.questions.length-1;
+  document.getElementById('t-next').style.display = last ? 'none' : 'inline-block';
+  document.getElementById('t-submit').style.display = last ? 'inline-block' : 'none';
+
+  setPresence('in_test', { n: i+1, total: attempt.questions.length });
+}
+function isAnswered(q) {
+  if (q.type==='mcq') return q.userAnswer!=null;
+  if (q.type==='number') return q.userAnswer!=null && q.userAnswer!=='';
+  if (q.type==='truefalse2') return q.tfAnswers[0]!=null && q.tfAnswers[1]!=null;
+  return false;
+}
+function pickMCQ(l){ attempt.questions[attempt.idx].userAnswer=l; renderQ(); }
+function pickNum(v){ attempt.questions[attempt.idx].userAnswer = v===''?null:v; updateNav(); }
+function pickTF(si,v){ attempt.questions[attempt.idx].tfAnswers[si]=v; renderQ(); }
+function toggleGuess(){ attempt.questions[attempt.idx].guessed = document.getElementById('guess-cb').checked; }
+function toggleConfuse(){ attempt.questions[attempt.idx].confused = document.getElementById('confuse-cb').checked; updateNav(); }
+function updateNav(){
+  const cells = document.querySelectorAll('#t-nav .nav-cell');
+  attempt.questions.forEach((qq,k)=>{
+    cells[k].className = 'nav-cell';
+    if (k===attempt.idx) cells[k].classList.add('current');
+    else if (isAnswered(qq)) cells[k].classList.add('answered');
+    if (qq.confused) cells[k].classList.add('flagged');
+  });
+}
+function saveTime(){
+  const q = attempt.questions[attempt.idx];
+  q.timeSpent += Math.round((Date.now()-q._enter)/1000);
+}
+function nextQ(){ saveTime(); if (attempt.idx<attempt.questions.length-1){attempt.idx++;renderQ();} }
+function prevQ(){ saveTime(); if (attempt.idx>0){attempt.idx--;renderQ();} }
+
+/* ---------- SUBMIT ---------- */
+function confirmSubmit(){
+  const unans = attempt.questions.filter(q=>!isAnswered(q)).length;
+  let msg = 'Submit your test?';
+  if (unans>0) msg = `You have ${unans} unanswered question(s). Submit anyway?`;
+  if (confirm(msg)) submitTest(false);
+}
+function submitTest(auto){
+  clearInterval(timerInt);
+  saveTime();
+  const qs = attempt.questions;
+  let correct=0;
+  qs.forEach(q=>{
+    let ok=false;
+    if (q.type==='mcq') {
+      const c = q.options.find(o=>o.correct);
+      ok = q.userAnswer === c.letter;
+      q._correctAnswer = c.letter;
+    } else if (q.type==='number') {
+      const ua = parseFloat(q.userAnswer);
+      ok = !isNaN(ua) && Math.abs(ua - q.numericAnswer) <= (q.tolerance||0);
+      q._correctAnswer = String(q.numericAnswer);
+    } else if (q.type==='truefalse2') {
+      ok = q.tfAnswers[0]===q.statements[0].answer && q.tfAnswers[1]===q.statements[1].answer;
+      q._correctAnswer = q.statements.map(s=>s.answer?'T':'F').join('/');
+    }
+    q._isCorrect = ok;
+    if (ok) correct++;
+  });
+  const total = qs.length;
+  const scorePct = Math.round(correct/total*100);
+  const timeUsed = TEST.durationSec - attempt.remaining;
+  const idealTime = qs.reduce((s,q)=>s+(q.timeIdeal||120),0);
+  const pacePct = Math.min(100, Math.round(idealTime / Math.max(timeUsed,1) * 100));
+  const guessedCount = qs.filter(q=>q.guessed).length;
+  const luckyRight = qs.filter(q=>q.guessed && q._isCorrect).length;
+
+  const now = new Date();
+  const rec = {
+    attemptId: attempt.attemptId,
+    attemptNumber: (lsLoad(CURRENT_USER).attempts||[]).length + 1,
+    schemaVersion: 1,
+    student: CURRENT_USER,
+    subject: TEST.subject,
+    chapter: { id: TEST.chapterId, name: TEST.chapterName },
+    testType: TEST.testType,
+    testCode: TEST.storageKey,
+    dateStr: now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    submittedAt: now.toISOString(),
+    submittedTs: Date.now(),
+    autoSubmitted: auto,
+    scorePct, correct, wrong: total-correct, total,
+    timeUsedSec: timeUsed, pacePct,
+    guessedCount, luckyRight,
+    questions: qs.map((q,qi)=>({
+      qId:q.qId, displayIdx:qi+1, type:q.type, topic:q.topic,
+      difficulty:q.difficulty, marks:q.marks, timeIdeal:q.timeIdeal,
+      questionText:q.questionText, scenario:q.scenario||null,
+      options:q.options||null, statements:q.statements||null,
+      explanation:q.explanation, examinerNote:q.examinerNote, workingNote:q.workingNote||null,
+      userAnswer: q.type==='truefalse2' ? q.tfAnswers : q.userAnswer,
+      correctAnswer:q._correctAnswer, correct:q._isCorrect,
+      timeSpent:q.timeSpent, guessed:q.guessed, confused:q.confused
+    }))
+  };
+
+  // 1. localStorage backup (device) — ALWAYS, every attempt
+  const data = lsLoad(CURRENT_USER);
+  data.attempts = data.attempts || [];
+  data.attempts.push({
+    attemptId: rec.attemptId, dateStr: rec.dateStr, scorePct, pacePct,
+    correct, wrong: total-correct, total, full: rec
+  });
+  lsSave(CURRENT_USER, data);
+
+  // 2. Firebase sync (real-time) — EVERY attempt
+  syncToFirebase(rec);
+
+  // 3. show results
+  attempt._result = rec;
+  renderResults(rec);
+  show('results');
+  setPresence('dashboard', null);
+}
+
+function buildDashboardSnapshot(rec) {
+  // Map flat test record → dashboard schema-v1 snapshot.
+  const qd = (rec.questions || []).map(q => {
+    let ua = q.userAnswer;
+    if (q.type === 'truefalse2' && Array.isArray(ua)) {
+      ua = ua.map(v => v === true ? 'T' : v === false ? 'F' : '-').join('/');
+    }
+    return {
+      qId: q.qId, topic: q.topic || 'general',
+      difficulty: q.difficulty || 'medium',
+      correct: q.correct === true,
+      earned: q.correct === true ? (q.marks || 2) : 0,
+      marks: q.marks || 2,
+      timeSpent: q.timeSpent || 0,
+      timeIdeal: q.timeIdeal || 120,
+      userAnswer: ua == null ? null : ua,
+      correctAnswer: q.correctAnswer,
+      guessed: q.guessed === true,
+      confused: q.confused === true
+    };
+  });
+  // topicScores: aggregate earned/total/count per topic
+  const topicScores = {};
+  qd.forEach(q => {
+    const t = q.topic || 'general';
+    if (!topicScores[t]) topicScores[t] = { earned: 0, total: 0, count: 0 };
+    topicScores[t].earned += q.earned;
+    topicScores[t].total  += q.marks;
+    topicScores[t].count  += 1;
+  });
+  const totalMarks = qd.reduce((s, q) => s + q.marks, 0);
+  const totalScore = qd.reduce((s, q) => s + q.earned, 0);
+  const now = new Date(rec.submittedAt || Date.now());
+  const attemptObj = {
+    attemptId: rec.attemptId,
+    attemptNumber: rec.attemptNumber || 1,
+    date: rec.dateStr || now.toLocaleDateString('en-GB'),
+    time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+    submittedAt: rec.submittedTs || now.getTime(),
+    totalScore: totalScore,
+    totalMarks: totalMarks,
+    percent: rec.scorePct,
+    timeUsed: rec.timeUsedSec || 0,
+    passed: rec.scorePct >= (TEST.passMark || 70),
+    topicScores: topicScores,
+    perQuestionDetail: qd,
+    inProgress: false,
+    metadata: {
+      pacePct: rec.pacePct, guessedCount: rec.guessedCount,
+      luckyRight: rec.luckyRight, autoSubmitted: rec.autoSubmitted === true,
+      testCode: rec.testCode
+    }
+  };
+  return {
+    schemaVersion: 1,
+    student: rec.student,
+    subject: rec.subject,
+    chapter: rec.chapter,            // { id, name }
+    testType: rec.testType || 'chapter_test',
+    exportedAt: now.toISOString(),
+    attempts: [attemptObj]
+  };
+}
+
+function syncToFirebase(rec) {
+  const dot = document.getElementById('r-sync-dot');
+  const txt = document.getElementById('r-sync-text');
+  dot.className = 'status-dot dot-sync';
+  txt.textContent = 'Syncing your result to teacher dashboard…';
+  if (!fbDB) {
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Will sync when Firebase is available.';
+    return;
+  }
+  try {
+    const snapshot = buildDashboardSnapshot(rec);
+    // Dashboard listens at snapshots/{Student}/{pushKey}
+    const ref = fbDB.ref('snapshots/' + rec.student).push();
+    ref.set(snapshot).then(()=>{
+      dot.className='status-dot dot-on';
+      txt.textContent='✓ Synced — your teacher can see this result now.';
+    }).catch(e=>{
+      console.error(e);
+      dot.className='status-dot dot-off';
+      txt.textContent='Saved on device. Sync failed — will retry when online.';
+      queueRetry(rec);
+    });
+  } catch(e){
+    console.error(e);
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Sync will retry when online.';
+    queueRetry(rec);
+  }
+}
+function queueRetry(rec){
+  // store in a retry queue in localStorage
+  try {
+    const q = JSON.parse(localStorage.getItem('sync_retry')||'[]');
+    q.push(rec); localStorage.setItem('sync_retry', JSON.stringify(q));
+  } catch(e){}
+}
+function flushRetry(){
+  if (!fbDB || !fbOK) return;
+  let q;
+  try { q = JSON.parse(localStorage.getItem('sync_retry')||'[]'); } catch { return; }
+  if (!q.length) return;
+  const rec = q.shift();
+  try {
+    const snapshot = buildDashboardSnapshot(rec);
+    fbDB.ref('snapshots/'+rec.student).push().set(snapshot).then(()=>{
+      localStorage.setItem('sync_retry', JSON.stringify(q));
+      flushRetry();
+    }).catch(()=>{});
+  } catch(e){ console.error(e); }
+}
+setInterval(flushRetry, 15000);
+
+/* ---------- RESULTS render ---------- */
+function renderResults(rec){
+  document.getElementById('r-subtitle').textContent =
+    `${rec.chapter.name} · ${rec.dateStr}` + (rec.autoSubmitted?' · auto-submitted (time up)':'');
+  document.getElementById('r-score').textContent = rec.scorePct+'%';
+  document.getElementById('r-correct').textContent = rec.correct;
+  document.getElementById('r-wrong').textContent = rec.wrong;
+  document.getElementById('r-guessed').textContent = rec.guessedCount +
+    (rec.guessedCount? ` (${rec.luckyRight}✓)` : '');
+  const m=Math.floor(rec.timeUsedSec/60), s=rec.timeUsedSec%60;
+  document.getElementById('r-time').textContent = `${m}:${String(s).padStart(2,'0')}`;
+  document.getElementById('r-pace').textContent = rec.pacePct+'%';
+
+  const pass = rec.scorePct >= TEST.passMark;
+  document.getElementById('r-verdict').innerHTML =
+    `<div class="banner" style="border-color:${pass?'var(--green)':'var(--red)'};
+      background:${pass?'#e8f5e9':'#ffebee'};">
+      <strong>${pass?'✓ Above pass mark (70%)':'Below pass mark (70%) — keep practising'}</strong><br>
+      <span style="font-size:14px;">${pass
+        ? 'Strong work. Aim to repeat this consistency across all 6 attempts.'
+        : 'Review the wrong answers below carefully. The explanations show exactly where to improve.'}</span>
+    </div>`;
+  renderReview(rec);
+}
+function toggleReviewFilter(){
+  reviewFilter = reviewFilter==='wrong' ? 'all' : 'wrong';
+  document.getElementById('rev-toggle').textContent =
+    'Show: ' + (reviewFilter==='wrong'?'Wrong only':'All questions');
+  renderReview(attempt._result);
+}
+function renderReview(rec){
+  const box = document.getElementById('r-review');
+  let qs = rec.questions;
+  if (reviewFilter==='wrong') qs = qs.filter(q=>!q.correct);
+  if (!qs.length){ box.innerHTML='<p class="sub">No questions to show with this filter.</p>'; return; }
+  let h='';
+  qs.forEach(q=>{
+    h+=`<div class="review-q ${q.correct?'correct':'wrong'}">
+      <div class="row" style="margin-bottom:8px;">
+        <span class="pill ${q.correct?'pill-green':'pill-red'}">${q.correct?'Correct':'Wrong'}</span>
+        <span class="pill pill-grey">${q.topic}</span>
+        ${q.guessed?'<span class="pill pill-amber">Guessed</span>':''}
+        ${q.confused?'<span class="pill pill-blue">⚑ Confusing</span>':''}
+      </div>
+      ${q.scenario?`<div class="scenario">${q.scenario}</div>`:''}
+      <div style="font-weight:500;margin-bottom:10px;">Q${q.displayIdx}. ${q.questionText}</div>`;
+    if (q.type==='mcq'){
+      q.options.forEach(o=>{
+        let cls='ans-neutral';
+        if (o.correct) cls='ans-correct';
+        else if (o.letter===q.userAnswer) cls='ans-wrong';
+        h+=`<div class="ans-line ${cls}"><strong>${o.letter}.</strong> ${o.text}
+          ${o.correct?' ✓':''}${(o.letter===q.userAnswer&&!o.correct)?' ← your answer':''}
+          <div style="font-size:12.5px;margin-top:4px;opacity:.85;">${o.why}</div></div>`;
+      });
+    } else if (q.type==='number'){
+      h+=`<div class="ans-line ${q.correct?'ans-correct':'ans-wrong'}">
+        Your answer: <strong>${q.userAnswer ?? '(blank)'}</strong>
+        ${q.correct?' ✓':` — correct answer: <strong>${q.correctAnswer}</strong>`}</div>`;
+    } else if (q.type==='truefalse2'){
+      q.statements.forEach((st,si)=>{
+        const ua = q.userAnswer[si];
+        const ok = ua === st.answer;
+        h+=`<div class="ans-line ${ok?'ans-correct':'ans-wrong'}">
+          "${st.text}" — you: <strong>${ua===null?'(blank)':(ua?'True':'False')}</strong>,
+          correct: <strong>${st.answer?'True':'False'}</strong> ${ok?'✓':'✗'}</div>`;
+      });
+    }
+    if (q.workingNote){
+      h+=`<div class="working"><strong>Working:</strong><pre>${q.workingNote}</pre></div>`;
+    }
+    h+=`<div class="explain"><strong>Explanation:</strong> ${q.explanation}</div>
+      <div class="examiner"><strong>Examiner note:</strong> ${q.examinerNote}</div></div>`;
+  });
+  box.innerHTML=h;
+}
+function goWelcome(){ renderWelcome(); show('welcome'); setPresence('dashboard',null); }
+
+/* ---------- EVALUATION REPORT ---------- */
+function showEvaluation(){
+  const data = lsLoad(CURRENT_USER);
+  const atts = (data.attempts||[]).map(a=>a.full).filter(Boolean);
+  if (atts.length < TEST.targetAttempts){ toast('Need 6 attempts first'); return; }
+  const recent = atts.slice(-3);
+  const overallAvg = Math.round(atts.reduce((s,a)=>s+a.scorePct,0)/atts.length);
+  const recentAvg = Math.round(recent.reduce((s,a)=>s+a.scorePct,0)/recent.length);
+  const trend = recentAvg - Math.round(atts.slice(0,3).reduce((s,a)=>s+a.scorePct,0)/Math.min(3,atts.length));
+  // topic mastery
+  const topics = {};
+  atts.forEach(a=>a.questions.forEach(q=>{
+    topics[q.topic]=topics[q.topic]||{c:0,t:0};
+    topics[q.topic].t++; if(q.correct)topics[q.topic].c++;
+  }));
+  const tArr = Object.entries(topics).map(([k,v])=>({topic:k,pct:Math.round(v.c/v.t*100),n:v.t}))
+    .sort((a,b)=>a.pct-b.pct);
+  const ready = recentAvg>=TEST.passMark && trend>=0;
+  document.getElementById('ev-sub').textContent =
+    `${CURRENT_USER} · ${atts.length} attempts · ${TEST.chapterName}`;
+  let h = `<div class="banner" style="border-color:${ready?'var(--green)':'var(--accent)'};
+    background:${ready?'#e8f5e9':'#fff8e1'};">
+    <h3 style="margin-bottom:6px;">${ready?'✓ You look exam-ready for this chapter':'Almost there — keep practising'}</h3>
+    <span style="font-size:14px;">Recent average ${recentAvg}% · overall ${overallAvg}% ·
+    trend ${trend>=0?'+':''}${trend}%</span></div>`;
+  h += `<div class="stat-grid">
+    <div class="stat"><div class="stat-val">${overallAvg}%</div><div class="stat-lbl">Overall Avg</div></div>
+    <div class="stat"><div class="stat-val">${recentAvg}%</div><div class="stat-lbl">Recent Avg</div></div>
+    <div class="stat"><div class="stat-val">${trend>=0?'+':''}${trend}%</div><div class="stat-lbl">Trend</div></div>
+    <div class="stat"><div class="stat-val">${atts.length}</div><div class="stat-lbl">Attempts</div></div></div>`;
+  h += `<h3 style="margin-top:18px;">Topic Mastery</h3>`;
+  tArr.forEach(t=>{
+    const col = t.pct>=80?'var(--green)':t.pct>=70?'var(--primary-light)':t.pct>=50?'var(--accent)':'var(--red)';
+    h+=`<div style="margin:10px 0;">
+      <div class="row" style="font-size:13.5px;margin-bottom:2px;">
+        <span>${t.topic}</span><div class="spacer"></div>
+        <span style="font-weight:600;color:${col};">${t.pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${t.pct}%;background:${col};"></div></div>
+    </div>`;
+  });
+  const weak = tArr.filter(t=>t.pct<70).slice(0,3);
+  if (weak.length){
+    h+=`<div class="banner" style="margin-top:18px;"><strong>Focus next on:</strong> `+
+      weak.map(w=>`${w.topic} (${w.pct}%)`).join(', ')+`</div>`;
+  }
+  document.getElementById('ev-body').innerHTML = h;
+  show('eval');
+}
+
+/* ---------- CALCULATOR ---------- */
+let calcExpr='';
+function toggleCalc(){
+  calcOn=!calcOn;
+  document.getElementById('calc').classList.toggle('show',calcOn);
+  document.getElementById('calc-toggle').style.display = calcOn?'none':'block';
+}
+function calcN(n){ calcExpr+=n; paintCalc(); }
+function calcOp(o){ calcExpr+=o; paintCalc(); }
+function calcC(){ calcExpr=''; paintCalc(); }
+function calcDel(){ calcExpr=calcExpr.slice(0,-1); paintCalc(); }
+function calcEq(){
+  try{
+    let e=calcExpr.replace(/%/g,'/100');
+    const r=Function('"use strict";return ('+e+')')();
+    calcExpr=String(Math.round(r*10000)/10000);
+  }catch{ calcExpr='Error'; }
+  paintCalc();
+}
+function paintCalc(){
+  document.getElementById('calc-disp').textContent =
+    (calcExpr||'0').replace(/\*/g,'×').replace(/\//g,'÷');
+}
+
+/* ---------- INIT ---------- */
+window.addEventListener('load', ()=>{
+  initFirebase();
+  setTimeout(paintConn, 800);
+});
+window.addEventListener('beforeunload', clearPresence);
+
+</script>
+</body>
+</html>
