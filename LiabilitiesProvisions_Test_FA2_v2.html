@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liabilities and Provisions v2 — FA2 Practice Test</title>
+<style>
+  :root {
+    --primary: #003d6b; --primary-light: #1976d2; --accent: #d4a017;
+    --green: #2e7d32; --red: #c62828; --bg: #f4f6f9; --card: #ffffff;
+    --text: #1a2332; --muted: #667085; --border: #e3e8ef;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .card { background: var(--card); border-radius: 14px; padding: 24px;
+    box-shadow: 0 1px 3px rgba(16,24,40,.08); margin-bottom: 16px; }
+  h1 { font-size: 24px; color: var(--primary); margin-bottom: 4px; }
+  h2 { font-size: 19px; color: var(--primary); margin-bottom: 12px; }
+  h3 { font-size: 16px; color: var(--primary); margin-bottom: 8px; }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .btn { background: var(--primary); color: #fff; border: none; padding: 12px 22px;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all .15s; }
+  .btn:hover { background: #00528f; transform: translateY(-1px); }
+  .btn:disabled { background: #b8c4d4; cursor: not-allowed; transform: none; }
+  .btn-ghost { background: transparent; color: var(--primary);
+    border: 1.5px solid var(--border); }
+  .btn-ghost:hover { background: #f0f4f9; }
+  .btn-accent { background: var(--accent); }
+  .btn-accent:hover { background: #b8890f; }
+  .btn-sm { padding: 8px 14px; font-size: 13px; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; }
+  .pill-green { background: #e8f5e9; color: var(--green); }
+  .pill-red { background: #ffebee; color: var(--red); }
+  .pill-blue { background: #e3f2fd; color: var(--primary-light); }
+  .pill-amber { background: #fff8e1; color: #a87810; }
+  .pill-grey { background: #eef1f5; color: var(--muted); }
+  input[type=text], input[type=number], select {
+    padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 9px;
+    font-size: 15px; width: 100%; font-family: inherit; background: #fff; }
+  input:focus, select:focus { outline: none; border-color: var(--primary-light); }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600;
+    color: var(--muted); margin-bottom: 6px; }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+  .status-dot { display: inline-block; width: 9px; height: 9px;
+    border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+  .dot-on { background: var(--green); box-shadow: 0 0 0 3px rgba(46,125,50,.15); }
+  .dot-off { background: var(--red); }
+  .dot-sync { background: var(--accent); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  .sync-bar { font-size: 13px; color: var(--muted); padding: 9px 14px;
+    background: #f0f4f9; border-radius: 8px; margin-bottom: 14px;
+    display: flex; align-items: center; }
+  .qhead { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .timer { font-size: 18px; font-weight: 700; color: var(--primary);
+    font-variant-numeric: tabular-nums; }
+  .timer.warn { color: var(--red); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 3px;
+    overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--primary-light);
+    transition: width .3s; }
+  .scenario { background: #f0f4f9; border-left: 4px solid var(--primary-light);
+    padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 14px;
+    font-size: 14.5px; }
+  .qtext { font-size: 16.5px; font-weight: 500; margin-bottom: 18px; }
+  .opt { display: block; padding: 14px 16px; border: 1.5px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: all .12s;
+    font-size: 15px; }
+  .opt:hover { border-color: var(--primary-light); background: #f8fafc; }
+  .opt.sel { border-color: var(--primary-light); background: #e8f1fb;
+    box-shadow: 0 0 0 1px var(--primary-light); }
+  .opt-letter { font-weight: 700; color: var(--primary); margin-right: 8px; }
+  .tf-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 10px;
+    flex-wrap: wrap; }
+  .tf-row .stmt { flex: 1; font-size: 15px; min-width: 200px; }
+  .tf-btn { padding: 8px 18px; border: 1.5px solid var(--border);
+    border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600;
+    font-size: 14px; }
+  .tf-btn.sel-t { background: var(--green); color: #fff; border-color: var(--green); }
+  .tf-btn.sel-f { background: var(--red); color: #fff; border-color: var(--red); }
+  .guess-box { display: flex; align-items: center; gap: 8px; margin-top: 16px;
+    padding: 12px 14px; background: #fff8e1; border-radius: 8px; font-size: 14px; }
+  .guess-box input, .confuse-box input { width: 18px; height: 18px; cursor: pointer; }
+  .confuse-box { display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    padding: 10px 14px; background: #f3e5f5; border-radius: 8px; font-size: 14px; }
+  .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px,1fr));
+    gap: 8px; margin-bottom: 16px; }
+  .nav-cell { aspect-ratio: 1; border: 1.5px solid var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 14px; font-weight: 600; background: #fff; position: relative; }
+  .nav-cell.answered { background: #e8f1fb; border-color: var(--primary-light);
+    color: var(--primary); }
+  .nav-cell.current { background: var(--primary); color: #fff;
+    border-color: var(--primary); }
+  .nav-cell.flagged::after { content: '•'; color: var(--accent);
+    position: absolute; top: -2px; right: 4px; font-size: 18px; }
+  .calc { position: fixed; bottom: 20px; right: 20px; width: 220px;
+    background: var(--card); border-radius: 14px; box-shadow: 0 8px 24px rgba(16,24,40,.18);
+    padding: 14px; z-index: 100; display: none; }
+  .calc.show { display: block; }
+  .calc-disp { background: #1a2332; color: #fff; padding: 12px; border-radius: 8px;
+    text-align: right; font-size: 20px; margin-bottom: 10px; font-variant-numeric: tabular-nums;
+    min-height: 44px; word-break: break-all; }
+  .calc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+  .calc-btn { padding: 12px 0; border: none; border-radius: 7px; background: #eef1f5;
+    cursor: pointer; font-size: 15px; font-weight: 600; }
+  .calc-btn:hover { background: #dde3ec; }
+  .calc-btn.op { background: var(--primary-light); color: #fff; }
+  .calc-btn.eq { background: var(--green); color: #fff; }
+  .calc-toggle { position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px;
+    border-radius: 50%; background: var(--primary); color: #fff; border: none;
+    font-size: 22px; cursor: pointer; z-index: 99; box-shadow: 0 4px 14px rgba(0,61,107,.3); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+    gap: 12px; margin-bottom: 20px; }
+  .stat { background: #f8fafc; border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-val { font-size: 26px; font-weight: 700; color: var(--primary); }
+  .stat-lbl { font-size: 12px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .04em; margin-top: 4px; }
+  .review-q { border: 1.5px solid var(--border); border-radius: 12px; padding: 18px;
+    margin-bottom: 14px; }
+  .review-q.correct { border-left: 4px solid var(--green); }
+  .review-q.wrong { border-left: 4px solid var(--red); }
+  .ans-line { padding: 8px 12px; border-radius: 7px; margin: 6px 0; font-size: 14px; }
+  .ans-correct { background: #e8f5e9; color: #1b5e20; }
+  .ans-wrong { background: #ffebee; color: #b71c1c; }
+  .ans-neutral { background: #f0f4f9; }
+  .working { background: #f4f7fb; border:1px dashed #9bb0c9; border-radius: 8px;
+    padding: 12px 14px; margin-top:10px; font-size:13.5px; }
+  .working pre { font-family: 'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+    white-space: pre-wrap; margin:6px 0 0; line-height:1.55; color:#1a2840; }
+  .explain { background: #fff8e1; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 10px; }
+  .examiner { background: #e3f2fd; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 8px; }
+  .banner { background: #fff8e1; border: 1.5px solid var(--accent);
+    border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 14px; z-index: 200; box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    opacity: 0; transition: opacity .3s; pointer-events: none; max-width: 90%; }
+  .toast.show { opacity: 1; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px; color: var(--muted); font-size: 12px;
+    text-transform: uppercase; border-bottom: 2px solid var(--border); }
+  td { padding: 10px; border-bottom: 1px solid var(--border); }
+  .bar-track { height: 10px; background: var(--border); border-radius: 5px;
+    overflow: hidden; margin: 4px 0; }
+  .bar-fill { height: 100%; border-radius: 5px; }
+  @media (max-width: 600px) {
+    .wrap { padding: 10px; } .card { padding: 16px; }
+    .calc { width: calc(100% - 40px); }
+  }
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div class="screen active" id="screen-login">
+  <div class="wrap">
+    <div class="card" style="margin-top:40px;text-align:center;">
+      <h1>FA2 — Liabilities and Provisions</h1>
+      <p class="sub">Practice Test &middot; Chapter 21 &middot; 15 questions &middot; 45 minutes</p>
+      <div style="max-width:320px;margin:24px auto 0;">
+        <div class="field" style="text-align:left;">
+          <label>Your Name</label>
+          <select id="login-name">
+            <option value="">— Select —</option>
+            <option value="Zara">Zara</option>
+            <option value="Amna">Amna</option>
+          </select>
+        </div>
+        <div class="field" style="text-align:left;">
+          <label>Access Code</label>
+          <input type="text" id="login-code" placeholder="Enter your code" autocomplete="off">
+        </div>
+        <button class="btn" style="width:100%;margin-top:8px;" onclick="doLogin()">Start</button>
+        <p id="login-err" style="color:var(--red);font-size:13px;margin-top:10px;display:none;"></p>
+      </div>
+      <div class="sync-bar" style="margin-top:24px;justify-content:center;">
+        <span class="status-dot" id="conn-dot"></span>
+        <span id="conn-text">Connecting…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen" id="screen-welcome">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h1>Welcome back, <span id="w-name"></span> 👋</h1>
+          <p class="sub" style="margin-bottom:0;">Liabilities and Provisions — Practice</p>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="logout()">Switch User</button>
+      </div>
+      <div class="sync-bar" style="margin-top:16px;">
+        <span class="status-dot" id="w-conn-dot"></span>
+        <span id="w-conn-text">Online — your work syncs automatically</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2 style="margin-bottom:2px;">Your Progress</h2>
+          <p class="sub" style="margin-bottom:0;">Target: 6 attempts &middot; pass mark 70%</p>
+        </div>
+        <div class="spacer"></div>
+        <div style="text-align:right;">
+          <div class="stat-val" id="w-attempts">0</div>
+          <div class="stat-lbl">Attempts</div>
+        </div>
+      </div>
+      <div style="margin-top:18px;" id="w-attempts-list">
+        <p class="sub">No attempts yet. Start your first practice below.</p>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" style="font-size:17px;padding:14px 32px;" onclick="startTest()">
+        Start New Attempt →
+      </button>
+      <p class="sub" style="margin:14px 0 0;">15 questions &middot; 45 minutes &middot; calculator allowed &middot; up to 3 pauses</p>
+    </div>
+    <div class="card" id="w-eval-card" style="display:none;">
+      <h2>📊 Your Evaluation Report</h2>
+      <p class="sub">Available after 6 attempts — see how exam-ready you are.</p>
+      <button class="btn btn-accent" onclick="showEvaluation()">View Evaluation Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div class="screen" id="screen-test">
+  <div class="wrap">
+    <div class="card">
+      <div class="qhead">
+        <div>
+          <strong>Liabilities and Provisions</strong>
+          <span class="pill pill-blue" id="t-qnum">Q1 / 15</span>
+        </div>
+        <div class="row">
+          <button class="btn-ghost btn btn-sm" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
+          <span class="timer" id="t-timer">45:00</span>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="t-progress" style="width:0%"></div></div>
+      <div class="nav-grid" id="t-nav"></div>
+      <div id="t-question"></div>
+      <div class="row" style="margin-top:24px;">
+        <button class="btn-ghost btn" id="t-prev" onclick="prevQ()">← Previous</button>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" id="t-next" onclick="nextQ()">Next →</button>
+        <button class="btn btn-accent" id="t-submit" onclick="confirmSubmit()" style="display:none;">Submit Test</button>
+      </div>
+    </div>
+  </div>
+  <button class="calc-toggle" id="calc-toggle" onclick="toggleCalc()" title="Calculator">🖩</button>
+  <div class="calc" id="calc">
+    <div class="calc-disp" id="calc-disp">0</div>
+    <div class="calc-grid">
+      <button class="calc-btn" onclick="calcC()">C</button>
+      <button class="calc-btn" onclick="calcDel()">⌫</button>
+      <button class="calc-btn op" onclick="calcOp('%')">%</button>
+      <button class="calc-btn op" onclick="calcOp('/')">÷</button>
+      <button class="calc-btn" onclick="calcN('7')">7</button>
+      <button class="calc-btn" onclick="calcN('8')">8</button>
+      <button class="calc-btn" onclick="calcN('9')">9</button>
+      <button class="calc-btn op" onclick="calcOp('*')">×</button>
+      <button class="calc-btn" onclick="calcN('4')">4</button>
+      <button class="calc-btn" onclick="calcN('5')">5</button>
+      <button class="calc-btn" onclick="calcN('6')">6</button>
+      <button class="calc-btn op" onclick="calcOp('-')">−</button>
+      <button class="calc-btn" onclick="calcN('1')">1</button>
+      <button class="calc-btn" onclick="calcN('2')">2</button>
+      <button class="calc-btn" onclick="calcN('3')">3</button>
+      <button class="calc-btn op" onclick="calcOp('+')">+</button>
+      <button class="calc-btn" onclick="calcN('0')">0</button>
+      <button class="calc-btn" onclick="calcN('.')">.</button>
+      <button class="calc-btn eq" onclick="calcEq()" style="grid-column:span 2;">=</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="wrap">
+    <div class="card">
+      <h1>Test Complete 🎯</h1>
+      <p class="sub" id="r-subtitle"></p>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-val" id="r-score">0%</div><div class="stat-lbl">Score</div></div>
+        <div class="stat"><div class="stat-val" id="r-correct">0</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat"><div class="stat-val" id="r-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+        <div class="stat"><div class="stat-val" id="r-guessed">0</div><div class="stat-lbl">Guessed</div></div>
+        <div class="stat"><div class="stat-val" id="r-time">0:00</div><div class="stat-lbl">Time</div></div>
+        <div class="stat"><div class="stat-val" id="r-pace">0%</div><div class="stat-lbl">Pace</div></div>
+      </div>
+      <div id="r-verdict"></div>
+      <div class="sync-bar" id="r-sync">
+        <span class="status-dot" id="r-sync-dot"></span>
+        <span id="r-sync-text">Syncing your result…</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:14px;">
+        <h2 style="margin-bottom:0;">Question Review</h2>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn btn-sm" id="rev-toggle" onclick="toggleReviewFilter()">Show: Wrong only</button>
+      </div>
+      <div id="r-review"></div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" onclick="goWelcome()">Back to Dashboard</button>
+      <button class="btn btn-ghost" onclick="startTest()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- EVALUATION -->
+<div class="screen" id="screen-eval">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <h1 style="margin-bottom:0;">📊 Evaluation Report</h1>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="goWelcome()">← Back</button>
+      </div>
+      <p class="sub" id="ev-sub" style="margin-top:8px;"></p>
+      <div id="ev-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCnHslK3-rMqmJuHr__h7ZUpdo4SwYCXrg",
+  authDomain: "sisters-acc.firebaseapp.com",
+  databaseURL: "https://sisters-acc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "sisters-acc",
+  storageBucket: "sisters-acc.firebasestorage.app",
+  messagingSenderId: "600306409423",
+  appId: "1:600306409423:web:eca6e7316ba9ab7a62fcba"
+};
+const CODES = { "Zara": "8976", "Amna": "2349" };
+const TEST = {
+  subject: "FA2",
+  chapterId: "FA2_21",
+  chapterName: "Liabilities and Provisions",
+  testType: "chapter_test",
+  storageKey: "lp_fa2_v2",
+  perAttempt: 15,
+  durationSec: 2700,
+  pauseSec: 300,
+  maxPauses: 3
+};
+const ACCRUALS_POOL = [{"qId": "LP01", "topic": "Liability definition", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "mcq", "questionText": "In accordance with the IASB Conceptual Framework, ALL of the following are essential to the definition of a LIABILITY EXCEPT:", "options": [{"letter": "A", "text": "A present obligation of the entity", "correct": false, "why": "This IS part of the definition. A liability requires an obligation that exists at the reporting date — a present obligation. Without a present obligation, there is no liability."}, {"letter": "B", "text": "The obligation arises from a past event", "correct": false, "why": "This IS part of the definition. The past event is what gives rise to the present obligation. Without a past obligating event, no liability has arisen."}, {"letter": "C", "text": "The settlement is expected to result in an outflow of economic resources", "correct": false, "why": "This IS part of the definition. Without an expected outflow of economic resources, the obligation has no financial impact and would not meet the definition of a liability."}, {"letter": "D", "text": "The amount of the obligation can be measured with absolute certainty", "correct": true, "why": "Correct — absolute certainty is NOT part of the definition. The definition has three elements: present obligation, past event, expected outflow. Reliable measurement is a separate RECOGNITION criterion (under IAS 37 for provisions), not part of the underlying definition. Provisions, by their nature, involve uncertainty over amount or timing yet still meet the definition."}], "workingNote": "IASB Framework definition of a liability — THREE essential elements:\n  1. PRESENT obligation of the entity\n  2. Arising from a PAST event\n  3. Expected to result in an OUTFLOW of economic resources\nAbsolute measurement certainty is NOT part of the definition — it is a separate recognition criterion. Provisions are liabilities of uncertain timing or amount.", "explanation": "This question tests the subtle distinction between liability DEFINITION (three elements) and recognition criteria (which include reliable estimate). A liability can EXIST (meet the definition) without being measurable to the cent — provisions are exactly such liabilities, with uncertain timing or amount, and IAS 37 provides separate rules for when they should be RECOGNISED on the SOFP.", "examinerNote": "Definition = present obligation + past event + outflow. Reliable measurement is RECOGNITION, not definition."}, {"qId": "LP02", "topic": "Classification — current vs non-current", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Identify how each of the following balances should be classified in Acorn Co’s statement of financial position at 31 December 20X5:\n\n  (i) Trade payables — $24,000 due within 30 days\n  (ii) Bank loan — $80,000 total; $20,000 due in next 12 months, $60,000 due in years 2–4\n  (iii) Bank overdraft — $5,000, repayable on demand\n  (iv) Sales tax (VAT) payable — $7,200 due to tax authority in 6 weeks", "options": [{"letter": "A", "text": "All four are current liabilities", "correct": false, "why": "The bank loan has both current and non-current portions. The $60,000 due in years 2–4 is non-current; only the $20,000 due within 12 months is current. Treating the full $80,000 as current overstates current liabilities."}, {"letter": "B", "text": "(i) current, (ii) split current/non-current, (iii) current, (iv) current", "correct": true, "why": "Correct. Trade payables (within 30 days) and sales tax (within 6 weeks) and overdraft (on demand) are all current. The bank loan must be split: $20,000 current + $60,000 non-current. This split presentation is mandated by IAS 1 for any loan with phased repayments."}, {"letter": "C", "text": "(i) current, (ii) non-current, (iii) non-current, (iv) current", "correct": false, "why": "Two errors. The bank loan is partially current (the $20,000 due in 12 months). The overdraft is repayable ON DEMAND — the bank can demand repayment immediately — so it must be current, not non-current."}, {"letter": "D", "text": "All four are non-current liabilities", "correct": false, "why": "All four except a portion of the loan are short-term. Treating them as non-current would mislead users about the company’s short-term liquidity — a fundamental misclassification."}], "workingNote": "Current vs non-current classification at the reporting date:\n  (i)   Trade payables $24,000 — due within 30 days -> CURRENT\n  (ii)  Bank loan $80,000:\n          - $20,000 due in 12 months -> CURRENT (reclassified)\n          - $60,000 due in years 2–4 -> NON-CURRENT\n  (iii) Bank overdraft $5,000 — repayable on demand -> CURRENT\n        (\"on demand\" means immediately repayable; always current)\n  (iv)  Sales tax $7,200 — due in 6 weeks -> CURRENT", "explanation": "Liability classification on the SOFP depends on when the obligation matures: within 12 months of the reporting date is current; later than 12 months is non-current. A phased loan must be split each year as the next instalment moves into the current bracket. Bank overdrafts, even if unlikely to be called, are 'repayable on demand' and always classified as current.", "examinerNote": "Classify each liability by maturity. Phased loans always split. Overdrafts 'on demand' = always current."}, {"qId": "LP03", "topic": "Provision — definition", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "mcq", "questionText": "In accordance with IAS 37, a PROVISION is best described as:", "options": [{"letter": "A", "text": "A liability of uncertain timing or amount", "correct": true, "why": "Correct. This is the IAS 37 definition. Provisions are still liabilities (meeting the basic liability definition) but differ from other liabilities in that the timing of settlement and/or the amount payable carry significant uncertainty. Warranties, restructuring, environmental cleanup obligations — all classic provisions."}, {"letter": "B", "text": "A confirmed amount owed to a known creditor", "correct": false, "why": "This describes a trade payable or an accrual, not a provision. Confirmed amount + known creditor = certain liability, not a provision. Provisions specifically carry uncertainty over timing or amount."}, {"letter": "C", "text": "A potential future expense that may or may not arise", "correct": false, "why": "This more closely describes a contingent liability. A provision must be more than potential — the entity must have a PRESENT obligation arising from a past event. Pure 'might happen' future expense doesn’t qualify."}, {"letter": "D", "text": "An adjustment to a contra-asset such as allowance for receivables", "correct": false, "why": "An allowance for receivables IS sometimes called a 'provision for doubtful debts' colloquially, but in IFRS terminology it’s a contra-asset that reduces receivables — not a true IAS 37 provision. The distinction matters."}], "workingNote": "IAS 37 definition: a PROVISION is a LIABILITY of UNCERTAIN TIMING or AMOUNT.\nKey distinguishing features:\n  - Still meets the liability definition (present obligation + past event + outflow)\n  - DIFFERS from typical liabilities: significant uncertainty over WHEN (timing) or HOW MUCH (amount)\nContrast:\n  - Trade payable: known amount, known timing -> ordinary liability\n  - Accrual: known amount, slightly uncertain timing (e.g., utility bill expected) -> ordinary liability\n  - Provision: uncertain amount and/or timing (e.g., warranty claims) -> PROVISION", "explanation": "The definition of a provision in IAS 37 is concise: 'a liability of uncertain timing or amount'. This is the FA2 Study Hub’s precise wording. Understanding this distinguishes provisions from trade payables (certain) and contingent liabilities (not yet meeting recognition criteria). Many students confuse 'provision' colloquially with 'allowance' — in IFRS, provisions are IAS 37 liabilities; allowances for receivables are contra-assets under IFRS 9.", "examinerNote": "Provision = LIABILITY of UNCERTAIN TIMING or AMOUNT. Don’t confuse with allowance for receivables (contra-asset)."}, {"qId": "LP04", "topic": "Provision vs accrual vs payable", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Bramble Co has the following amounts owed at year-end. Which item should be classified as a PROVISION rather than an accrual or a payable?", "options": [{"letter": "A", "text": "A confirmed invoice from a supplier for goods received — $8,400 payable in 30 days", "correct": false, "why": "This is a trade payable: confirmed amount, agreed creditor, known timing. Not a provision."}, {"letter": "B", "text": "Electricity used in December but the bill has not yet arrived; previous bills suggest approximately $1,800", "correct": false, "why": "This is an accrual: amount and timing both reasonably certain (based on historical bills), just not yet invoiced. Not a provision — the uncertainty is minor."}, {"letter": "C", "text": "Warranty repairs that customers may claim over the next 12 months on this year’s sales — historical data suggests $12,000 will be needed", "correct": true, "why": "Correct. This meets all the hallmarks of a provision: liability of uncertain timing (when individual claims arise) AND uncertain amount (which customers will claim, for how much). It still meets the liability definition (past event = sale; present obligation = warranty terms; outflow probable based on history)."}, {"letter": "D", "text": "Rent for next month — the lease specifies $2,500 monthly, payable on the 1st", "correct": false, "why": "This is a known future amount and timing under a contractual agreement. Not yet a liability at the reporting date (no service consumed for next month yet), and if accrued for any current obligation, it would be an accrual with certainty, not a provision."}], "workingNote": "Distinguishing the three categories:\n  Trade payable: known amount, known/agreed creditor, agreed timing (invoice exists)\n  Accrual:       known/reasonably known amount, expected near-term settlement (bill not yet received)\n  Provision:     SIGNIFICANT uncertainty over timing AND/OR amount\nBramble’s items:\n  (A) Supplier invoice -> trade payable\n  (B) Electricity used, bill imminent -> accrual\n  (C) Warranty claims -> PROVISION (uncertain timing + uncertain individual claims)\n  (D) Next month’s rent -> not a liability yet (no service consumed)", "explanation": "The provision/accrual/payable distinction is critical for FA2. The key test: how UNCERTAIN are the timing and amount? Payables are most certain (invoiced). Accruals are slightly less (expected bill but not received). Provisions are most uncertain (we don’t know which customers will claim, how much, or when). Mislabelling can shift items between IAS 37 (provisions) and basic accruals concept (IAS 1).", "examinerNote": "Uncertainty test: payable < accrual < provision. Greater uncertainty over timing/amount = closer to provision."}, {"qId": "LP05", "topic": "Bank loan split — numeric", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "number", "questionText": "Cedar Co has a 5-year bank loan with a total outstanding balance of $250,000 at year-end. According to the repayment schedule, $35,000 is due within the next 12 months and the remainder in years 2 through 5. What amount should be reported as a NON-CURRENT liability on the statement of financial position? (Enter the amount in $.)", "numericAnswer": 215000, "tolerance": 0, "workingNote": "Phased loan classification under IAS 1:\n  Total loan balance: $250,000\n  Due within 12 months (current portion): $35,000\n  Due after 12 months (non-current portion): $250,000 − $35,000 = $215,000\nPresentation on SOFP:\n  Current liabilities       — bank loan portion         $35,000\n  Non-current liabilities   — bank loan portion         $215,000", "explanation": "The standard split presentation for phased loans is required by IAS 1. Each reporting date, the entity reclassifies the next 12 months’ worth of repayments as current. The non-current portion shrinks each year as repayments approach. Failing to split would either overstate current liabilities (if all classified current) or understate them (if all classified non-current), distorting liquidity ratios.", "examinerNote": "Non-current portion = total − amount due within 12 months. Always split phased loans at the reporting date."}, {"qId": "LP06", "topic": "IAS 37 recognition criteria", "difficulty": "hard", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "Under IAS 37, ALL of the following criteria must be met for a provision to be RECOGNISED EXCEPT:", "options": [{"letter": "A", "text": "There is a present obligation (legal or constructive) as a result of a past event", "correct": false, "why": "This IS one of the three required criteria. Without a present obligation arising from a past event, no provision can be recognised — the obligation must already exist at the reporting date."}, {"letter": "B", "text": "It is probable that an outflow of economic benefits will be required to settle the obligation", "correct": false, "why": "This IS one of the three required criteria. ‘Probable’ means more likely than not (>50%). Below this threshold, the item would be a contingent liability (disclosed) rather than a recognised provision."}, {"letter": "C", "text": "A reliable estimate can be made of the amount of the obligation", "correct": false, "why": "This IS one of the three required criteria. Without reliable measurement, recognition would lack a credible amount. In practice this criterion is rarely the blocker."}, {"letter": "D", "text": "The exact timing of settlement is known", "correct": true, "why": "Correct — this is NOT a recognition criterion. By definition a provision is a 'liability of UNCERTAIN TIMING or amount' — timing uncertainty is the norm. Requiring exact timing would make provisions impossible to recognise."}], "workingNote": "IAS 37 recognition test — three criteria (all required):\n  1. Present obligation (legal or constructive) from a past event\n  2. Probable outflow of economic benefits\n  3. Reliable estimate of the amount\nExact timing of settlement is NOT required — in fact, uncertain timing is a defining feature of provisions.", "explanation": "This question tests whether students confuse the definition of a provision with the recognition test. The definition INCLUDES uncertain timing as a feature; requiring known timing would contradict the definition. The three recognition criteria are about existence and measurability, not precision of when settlement will happen.", "examinerNote": "Three criteria: present obligation, probable outflow, reliable estimate. Timing CERTAINTY is NOT one of them — in fact, provisions have uncertain timing by definition."}, {"qId": "LP07", "topic": "Probable threshold", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "mcq", "questionText": "In the context of IAS 37 recognition of provisions, 'PROBABLE' outflow means:", "options": [{"letter": "A", "text": "There is some possibility of outflow", "correct": false, "why": "‘Some possibility’ is far too vague and weak. Almost any business risk has some possibility — this threshold would over-provision dramatically. ‘Probable’ has a defined meaning in IAS 37."}, {"letter": "B", "text": "More likely than not — greater than 50% probability", "correct": true, "why": "Correct. IAS 37 paragraph 23 defines ‘probable’ as 'more likely than not'. The threshold sits at 50%: above 50% triggers provision recognition, between 'remote' and 50% triggers contingent liability disclosure only."}, {"letter": "C", "text": "Virtually certain — above 95% probability", "correct": false, "why": "This sets the bar far higher than IAS 37 requires. Virtual certainty is the threshold for recognising contingent ASSETS, not provisions. Mixing them up effectively prevents recognition of legitimate provisions."}, {"letter": "D", "text": "A range of 25%–50%", "correct": false, "why": "This range would actually fall in the ‘possible’ band (contingent liability disclosure). ‘Probable’ starts above 50%."}], "workingNote": "IAS 37 probability bands:\n  Remote (very low %, often <5–10%): IGNORE entirely\n  Possible (between remote and probable, ~10–50%): DISCLOSE as contingent liability\n  Probable (>50%): RECOGNISE provision (if estimable)\n  Virtually certain (~100%): for assets, recognise; for liabilities, also recognise\n50% is the threshold between ‘possible’ and ‘probable’.", "explanation": "‘Probable’ has a specific quantitative meaning in IAS 37 — more likely than not — which translates to over 50%. Below 50% (but not remote), the obligation appears in the notes as a contingent liability disclosure. The 50% threshold is the key recognition trigger.", "examinerNote": "‘Probable’ = more likely than not = >50%. Below 50% (but not remote) = contingent liability disclosure."}, {"qId": "LP08", "topic": "Constructive obligation", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Daisy Department Store has, for the last 15 years, refunded customers in full for any product returned within 30 days of purchase, regardless of reason. This practice is widely known and advertised. At year-end, although no formal legal obligation exists to do so, the directors confirm that this practice will continue. What type of obligation, if any, exists?", "options": [{"letter": "A", "text": "No obligation — there is no legal contract requiring refunds", "correct": false, "why": "This ignores constructive obligations under IAS 37. The standard explicitly recognises that consistent past practice combined with valid customer expectations creates an obligation even without legal force — these are constructive obligations."}, {"letter": "B", "text": "A constructive obligation — the 15-year practice has created a valid expectation in customers that returns will be refunded", "correct": true, "why": "Correct. IAS 37 defines a constructive obligation as one arising from an entity’s actions where (1) an established pattern of past practice or published statement has (2) created a valid expectation that the entity will discharge those responsibilities. Both conditions are met: 15-year practice + widespread customer awareness."}, {"letter": "C", "text": "A contingent liability — only disclose in the notes", "correct": false, "why": "A constructive obligation, once established, is treated the same as a legal obligation. If outflow is probable and amount estimable (likely both, given 15 years of historical data), it triggers PROVISION recognition, not just contingent disclosure."}, {"letter": "D", "text": "An accrual rather than a provision", "correct": false, "why": "Refund liabilities have significant uncertainty over which customers will return, what they will return, and the amounts — classic provision territory. Accruals require near-certain amount and timing."}], "workingNote": "IAS 37 constructive obligation test:\n  Condition 1: established pattern of past practice OR published policy\n  Condition 2: creates a valid expectation in those affected\nDaisy Department Store:\n  ✓ 15 years of consistent refund practice (condition 1)\n  ✓ Widely known, advertised, customers expect refunds (condition 2)\n  -> Constructive obligation EXISTS\nTreatment: same as legal obligation. With probable outflow (historical claim data) and reliable estimate (population statistics), recognise as PROVISION.", "explanation": "Constructive obligations are a frequent FA2 exam topic. The defining tests: established practice + valid expectation. Once both are met, the obligation is recognised identically to a legal one. The Sunrise Lighting / Daisy Store / shop refund policy scenarios in your study materials are textbook examples of this concept. A common error is to dismiss any non-legal obligation as 'not real' — IAS 37 explicitly captures these.", "examinerNote": "Constructive obligation: established practice + valid expectation. No legal requirement needed. Treated identically to legal obligation."}, {"qId": "LP09", "topic": "Past event identification", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "During the year, Elm Tools Co sold 4,000 power drills, each with a 2-year manufacturer warranty against defects. By year-end, only 12 warranty claims had been received and processed. The directors are considering the warranty provision. Which statement is correct?", "options": [{"letter": "A", "text": "No provision is needed for the unclaimed warranties — they may never be claimed", "correct": false, "why": "The fact that claims have not yet been received doesn’t mean the obligation doesn’t exist. The OBLIGATION was created at point of sale (the past event). Historical experience tells us a proportion of the 4,000 units WILL claim over the 2 years. The expected cost must be provided for."}, {"letter": "B", "text": "A provision should be recognised for the expected future warranty costs on ALL 4,000 units sold this year, based on historical claim rates", "correct": true, "why": "Correct. The PAST EVENT is the sale; at the moment of sale, the warranty obligation springs into existence for every unit. By year-end, all 4,000 sales have already happened, so the present obligation covers all 4,000 units. The 12 claims received are merely the first settlements of an obligation that already exists across the full population. Use historical claim rates to estimate the expected provision."}, {"letter": "C", "text": "A provision should be recognised only for the 12 confirmed claims received so far", "correct": false, "why": "This understates the obligation drastically. The other 3,988 units sold this year all carry warranty rights that have already been granted (past event = sale completed). Limiting the provision to confirmed claims would defer the matching of warranty cost to the period of revenue recognition."}, {"letter": "D", "text": "Disclose as a contingent liability only", "correct": false, "why": "Disclose-only would be wrong if the warranty obligation meets recognition criteria — which it does. The past event has happened (sales completed), outflow is probable (historical claim rate suggests claims WILL come), and amount is estimable (from history). Recognise as provision, not disclose."}], "workingNote": "Past event analysis for Elm’s warranties:\n  Past event:              the SALE of each power drill (completed by year-end)\n  Present obligation:      to repair defects within 2 years (per warranty terms)\n  At year-end, all 4,000 sales completed -> obligation exists for ALL units\n  Future claims (over 2 years) are merely settlements of the existing obligation\n  Recognise provision based on EXPECTED future claim costs (using historical rate)\nThe 12 claims received are NOT the limit — they are the early settlements of a much larger obligation.", "explanation": "This is one of IAS 37’s most subtle teachings: the past event is what CREATES the obligation, not the subsequent crystallisation of individual claims. Warranties illustrate this perfectly — the sale today creates an obligation for repairs over the next 2 years. Future claims aren’t separate future events; they are mere fulfilments of an already-existing obligation. The expected provision matches warranty cost to the period of sale revenue.", "examinerNote": "Past event = SALE (creates obligation). Claims = settlements of existing obligation. Provision = expected total claims, not just confirmed."}, {"qId": "LP10", "topic": "Restructuring provision", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Fern Manufacturing’s board approved a plant closure plan on 22 December 20X5. The plan would close one factory, make 250 employees redundant, and incur estimated costs of $4 million. At 31 December 20X5 (reporting date), the plan has not yet been communicated to staff or the public; the formal announcement is scheduled for January 20X6. Should Fern recognise a restructuring provision in the 20X5 financial statements?", "options": [{"letter": "A", "text": "Yes — the board has approved the plan and it will happen", "correct": false, "why": "Board approval alone doesn’t create a constructive obligation. The plan must be detailed (✓) AND those affected must have valid expectations the plan will be implemented — typically through announcement or implementation commencement. Internal board approval doesn’t reach affected staff."}, {"letter": "B", "text": "No — the plan has not been communicated, so no constructive obligation exists yet", "correct": true, "why": "Correct. IAS 37 requires for a restructuring provision: (1) a detailed formal plan AND (2) valid expectation in those affected, raised by either commencing implementation or announcing main features. Fern has condition 1 (formal plan) but FAILS condition 2 (no communication, no implementation). No constructive obligation exists at 31 December 20X5. The provision will be recognised in 20X6, when communication occurs."}, {"letter": "C", "text": "Yes — but only half the cost ($2 million) given the time elapsed", "correct": false, "why": "Pro-rata recognition doesn’t fit IAS 37 — either criteria are met (recognise full provision) or they aren’t (no provision). Time elapsed since board approval isn’t a recognition factor."}, {"letter": "D", "text": "Yes — because the plan exists in writing", "correct": false, "why": "A documented plan satisfies one condition (detailed formal plan) but not the second (expectations in those affected). Both must be met. Without announcement or commencement, the obligation hasn’t crystallised."}], "workingNote": "IAS 37 restructuring provision — TWO conditions required:\n  Condition 1: Detailed formal plan, identifying:\n    - business or part affected\n    - principal locations\n    - approximate numbers of employees affected\n    - expenditure involved\n    - implementation timing\n  Condition 2: Valid expectation in those affected, raised by:\n    - starting to implement, OR\n    - announcing main features to those affected\nFern at 31 Dec 20X5:\n  ✓ Detailed formal plan (board approved 22 Dec)\n  ✗ No communication, no implementation started\nResult: No constructive obligation -> no provision recognised in 20X5.", "explanation": "Restructuring provisions are tightly governed precisely because companies want to take 'big bath' charges in their preferred period. IAS 37 prevents this by requiring genuine constructive obligation — the affected parties must have valid expectations, which only arises with communication or commencement. Board approval is necessary but not sufficient. The provision will be recognised in 20X6 once announcement happens.", "examinerNote": "Restructuring needs BOTH: detailed plan AND announcement/commencement. Internal board approval alone is insufficient."}, {"qId": "LP11", "topic": "Provision movement — increase (charge)", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "number", "questionText": "Gardenia Co allows customers to return faulty goods within 30 days of purchase. At 31 December 20X4, the sales returns provision was $6,548. At 31 December 20X5, Gardenia’s estimate of the year-end provision is $7,634. What amount should be CHARGED to the statement of profit or loss for the year ended 31 December 20X5 in respect of this provision? (Enter the amount in $.)", "numericAnswer": 1086, "tolerance": 0, "workingNote": "Provision movement calculation:\n  Opening provision (1 Jan 20X5):  $6,548\n  Closing provision (31 Dec 20X5): $7,634\n  Required adjustment: closing > opening, so PROVISION INCREASES by $7,634 − $6,548 = $1,086\nDouble entry:\n  Dr  Expense (P&L)         $1,086\n  Cr  Provision (SOFP)      $1,086\nP&L impact: $1,086 CHARGE (expense).\nThe SOFP shows the FULL closing provision of $7,634, not the movement.", "explanation": "This is the FA2 exam staple — the provision movement question. The amount appearing in P&L is the MOVEMENT (the change in the provision balance), NOT the full closing or opening balance. When the provision increases, the increase is an additional expense (charge). When it decreases, the reduction is a credit (income / expense reversal). Always work out the movement, then determine if it’s a charge or credit based on the direction.", "examinerNote": "Movement = closing − opening. Increase -> CHARGE (expense). Decrease -> CREDIT (income). Only the movement hits P&L, not the full balance."}, {"qId": "LP12", "topic": "Provision movement — decrease (credit)", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "number", "questionText": "Hawthorn Used Car Co repairs faulty cars within 30 days of sale free of charge. At 30 April 20X4, the repairs provision was $2,500. At 30 April 20X5, Hawthorn calculated that the provision should be $2,000. What amount should be CREDITED to the statement of profit or loss for the year ended 30 April 20X5 in respect of this provision? (Enter the amount in $.)", "numericAnswer": 500, "tolerance": 0, "workingNote": "Provision movement calculation:\n  Opening provision (1 May 20X4):  $2,500\n  Closing provision (30 Apr 20X5): $2,000\n  Required adjustment: closing < opening, so PROVISION DECREASES by $2,500 − $2,000 = $500\nDouble entry:\n  Dr  Provision (SOFP)      $500\n  Cr  Expense / P&L         $500\nP&L impact: $500 CREDIT (income or reversal of expense).\nThe SOFP shows the FULL closing provision of $2,000.", "explanation": "When the provision is REDUCED (closing balance is less than opening), the surplus provision must be reversed. This generates a CREDIT to P&L — effectively reversing previously recognised expense. Common reasons for a reduction: warranty claims fewer than expected, environmental costs revised downwards, legal claims settled below estimate. The credit is sometimes called ‘release of provision’.", "examinerNote": "Decrease in provision = CREDIT to P&L. Reverses previously recognised expense. Opposite of increase."}, {"qId": "LP13", "topic": "Movement direction — charge vs credit", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "mcq", "questionText": "Ivy Co’s legal provision had an opening balance of $40,000 at 1 January 20X5. At 31 December 20X5, the directors estimate the provision should be $50,000. How should this be reported in the financial statements for the year ended 31 December 20X5?", "options": [{"letter": "A", "text": "Charge of $50,000 to P&L; closing balance $50,000 on SOFP", "correct": false, "why": "This would charge the FULL closing amount, ignoring that $40,000 of provision was already on the books at year-start. Only the movement ($10,000 increase) is the new P&L charge."}, {"letter": "B", "text": "Charge of $10,000 to P&L; closing balance $50,000 on SOFP", "correct": true, "why": "Correct. The provision increased by $50,000 − $40,000 = $10,000. Only this MOVEMENT goes to P&L (as a charge, since the provision increased). The full $50,000 sits on the SOFP as the closing balance."}, {"letter": "C", "text": "Credit of $10,000 to P&L; closing balance $50,000 on SOFP", "correct": false, "why": "Direction error. The provision INCREASED, which means an additional expense (charge), not a credit. Credit to P&L would only arise if the provision had DECREASED."}, {"letter": "D", "text": "Charge of $90,000 to P&L; closing balance $50,000 on SOFP", "correct": false, "why": "This appears to add opening and closing (40,000 + 50,000 = 90,000), which is not the movement. The movement is simply closing minus opening = $10,000 increase."}], "workingNote": "Provision movement — mechanics:\n  Opening provision (carried forward from prior year): $40,000\n  Closing provision (required at year-end):           $50,000\n  Movement: $50,000 − $40,000 = $10,000 INCREASE\nDouble entry:\n  Dr  Expense (P&L)    $10,000   <- the new P&L charge\n  Cr  Provision (SOFP) $10,000   <- brings closing balance up to $50,000\nP&L impact: only the $10,000 movement.\nSOFP shows the full closing balance: $50,000.", "explanation": "A common error is to confuse what appears in P&L (the movement) with what appears in the SOFP (the full balance). Each year, only the change in the provision hits the P&L — not the cumulative balance. The SOFP shows the cumulative liability that exists at year-end. This is identical to the mechanics of any 'provision' or 'allowance' account: the carrying value sits on the SOFP, and only changes flow through P&L.", "examinerNote": "P&L: only the MOVEMENT. SOFP: the full closing balance. Always separate the two."}, {"qId": "LP14", "topic": "Warranty provision — year-end calc", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "number", "questionText": "Jasmine Appliances sold 8,000 units during the year. Each unit carries a 1-year warranty. Historical data indicates that 5% of units will require warranty repairs, with an average cost of $80 per repair. What is the year-end warranty provision (closing balance)? (Enter the amount in $.)", "numericAnswer": 32000, "tolerance": 0, "workingNote": "Year-end warranty provision = expected total claim cost across all units sold.\n  Units sold:                   8,000\n  Probability of claim per unit: 5% (0.05)\n  Average cost per claim:        $80\n  Expected cost per unit:       0.05 × $80 = $4\n  Year-end provision:           8,000 × $4 = $32,000\nOr equivalently:\n  Expected number of claims:    8,000 × 0.05 = 400 claims\n  Total provision:              400 × $80 = $32,000", "explanation": "Warranty provision calculation uses the EXPECTED VALUE METHOD for large populations — historical claim rate × average cost × units in the population. The result is the closing balance on the warranty provision account at year-end. From this, the movement against opening balance is calculated separately to determine the P&L charge or credit.", "examinerNote": "Year-end warranty provision = units × claim probability × cost per claim. Use historical data for the rate and cost."}, {"qId": "LP15", "topic": "Multi-line total provision", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "number", "questionText": "At 31 December 20X4, Larch Co has the following recognised provisions:\n  - Warranty provision: $40,000\n  - Restructuring provision (criteria met): $80,000\n  - Legal claim provision (single obligation, most likely outcome): $25,000\n  - Environmental cleanup provision (legally required at end of 5 years): $150,000\nWhat is the total provision balance to be reported on the statement of financial position? (Enter the amount in $.)", "numericAnswer": 295000, "tolerance": 0, "workingNote": "Total provision balance = sum of all recognised provisions:\n  Warranty:                       $40,000\n  Restructuring:                  $80,000\n  Legal claim:                    $25,000\n  Environmental cleanup:        + $150,000\n                                 ----------\n  Total provisions on SOFP:      $295,000\nDepending on settlement timing, some portion would be classified as Long-Term Provisions (non-current) and some as Short-Term Provisions (current) on the SOFP.", "explanation": "Total provisions is the aggregate of all individual provisions meeting recognition criteria. Each provision is calculated separately (using most likely outcome for single obligations, expected value for populations, present value where time effect is material), then summed for SOFP presentation. The Statement of Financial Position typically shows them split between Long-Term Provisions (non-current) and Short-Term Provisions (current).", "examinerNote": "Total provisions = sum of all individual provisions. Each calculated separately. Split current vs non-current by expected settlement timing."}, {"qId": "LP16", "topic": "Two-year provision chain", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "number", "questionText": "Magnolia Co began trading on 1 January 20X4 and offers 1-year warranties on all products. At the end of its first year (31 December 20X4), the company recognised a warranty provision of $25,000. At the end of its second year (31 December 20X5), the closing warranty provision should be $38,000. What is the warranty CHARGE to the P&L for the year ended 31 December 20X5? (Enter the amount in $.)", "numericAnswer": 13000, "tolerance": 0, "workingNote": "Year 1 (20X4):\n  Opening: $0 (first year of trading)\n  Closing: $25,000\n  Year 1 P&L charge: $25,000 (provision built from nothing)\nYear 2 (20X5):\n  Opening: $25,000 (brought forward from year 1’s closing)\n  Closing: $38,000\n  Movement: $38,000 − $25,000 = $13,000 INCREASE\n  Year 2 P&L charge: $13,000\nKey point: only the MOVEMENT hits P&L each year, not the full closing balance.", "explanation": "Two-year provision chains test understanding of the carrying-forward principle. Year 1’s closing balance becomes year 2’s opening balance. The year 2 charge is only the increase — not the full $38,000. This pattern continues each year: P&L sees only changes; SOFP shows the cumulative balance. Misreading the year 2 charge as $38,000 is a classic error.", "examinerNote": "Year N closing = Year N+1 opening. P&L sees only movement, not full balance. Build-from-zero only in year 1."}, {"qId": "LP17", "topic": "Single obligation — most likely outcome", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "number", "questionText": "Nettle Engineering faces a single legal claim. The company’s lawyers identify three possible settlement outcomes:\n  - $30,000 with probability 55%\n  - $70,000 with probability 30%\n  - $110,000 with probability 15%\nFor this single obligation, IAS 37 permits use of the most likely outcome. What is the provision at year-end? (Enter the amount in $.)", "numericAnswer": 30000, "tolerance": 0, "workingNote": "For a single obligation, IAS 37 ¶40 indicates the most likely outcome may be the best estimate.\nProbabilities ranked:\n  $30,000  -> 55% (HIGHEST probability)\n  $70,000  -> 30%\n  $110,000 -> 15%\nMost likely outcome = $30,000.\nProvision = $30,000.\n(Note: expected value would give 0.55×30 + 0.30×70 + 0.15×110 = $54,000. For a single obligation, IAS 37 favours most likely. For a large population of similar claims, expected value would be more appropriate.)", "explanation": "For a single, non-repeating obligation (one specific legal claim, one customer dispute), the most likely outcome basis applies. The reasoning: there will be ONE settlement, not a probability-weighted average. Picking the most likely amount best represents what will actually happen. For large populations (e.g., warranties across many units), expected value is more appropriate because aggregate outcomes converge toward the weighted average.", "examinerNote": "Single obligation -> MOST LIKELY outcome. Large population -> expected value (probability-weighted)."}, {"qId": "LP18", "topic": "Large population — expected value", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "number", "questionText": "Oak Appliances sold 15,000 toasters during the year, each with a 12-month warranty. Historical data indicates 8% of toasters require warranty repair, with an average cost of $25 per repair. What is the warranty provision at year-end, using the expected value method? (Enter the amount in $.)", "numericAnswer": 30000, "tolerance": 0, "workingNote": "Expected value method for large populations:\n  Total units sold:              15,000\n  Probability of claim per unit: 8% (0.08)\n  Average cost per claim:        $25\nExpected total cost = units × probability × cost per claim\n                    = 15,000 × 0.08 × $25\n                    = 15,000 × $2\n                    = $30,000", "explanation": "For large populations, expected value gives the best estimate — by the law of large numbers, actual outcomes across 15,000 units will tend toward the expected value of $30,000. Individual unit outcomes are uncertain, but the population total is reasonably predictable. This is why IAS 37 prescribes expected value for populations and most likely outcome for single obligations.", "examinerNote": "Large population: expected value = units × claim probability × average cost. Multiply through."}, {"qId": "LP19", "topic": "Discounting where time effect material", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "number", "questionText": "Pine Chemical Co has a legal obligation to clean up an environmental site at the end of its 5-year project. The estimated cleanup cost at that time is $800,000. The pre-tax discount rate reflecting current market assessments of the time value of money is 6% (discount factor at 6% for 5 years = 0.747). What is the present value of the provision recognised today? (Enter the amount in $.)", "numericAnswer": 597600, "tolerance": 100, "workingNote": "IAS 37 ¶45: where the time value of money is material, provisions are measured at PRESENT VALUE using a pre-tax discount rate.\nFuture cleanup cost:   $800,000\nDiscount rate (pre-tax): 6%\nDiscount factor (6%, 5 years): 0.747\nProvision at year-end (PV) = $800,000 × 0.747 = $597,600\nIn subsequent years, the discount unwinds: each year the carrying amount grows by the discount rate, with the increase recognised as a finance cost in P&L. By year 5, the carrying amount equals the nominal $800,000 cleanup cost.", "explanation": "For a 5-year horizon, the time value of money is material — recognising the nominal $800,000 overstates today’s obligation by $202,400. Discounting brings the provision down to its present value of $597,600. Each subsequent year, the provision ‘unwinds’ toward the nominal amount: the increase in carrying value (driven by the discount rate) is recognised as finance cost in P&L, separately from the underlying provision movement.", "examinerNote": "Discount when time effect material. PV = future cost × DF. Unwind discount each year as finance cost."}, {"qId": "LP20", "topic": "Onerous contract provision", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "number", "questionText": "Quince Co signed a 3-year supply contract requiring purchase of 5,000 widgets per year at $40 each. Due to a market downturn, Quince can now only sell each widget for $32 (net of selling costs). The contract cannot be cancelled without a $60,000 penalty. With 1 year remaining at year-end, what is the onerous contract provision under IAS 37? (Enter the amount in $.)", "numericAnswer": 40000, "tolerance": 0, "workingNote": "Onerous contract = unavoidable costs of fulfilling > expected economic benefits.\nCost of FULFILLING (1 year remaining):\n  Net loss per unit: $40 (cost) − $32 (recoverable) = $8 per unit\n  Annual loss: 5,000 × $8 = $40,000\nCost of CANCELLING:\n  Penalty payment: $60,000\nIAS 37 ¶68: provision = LOWER of (cost of fulfilling, cost of cancelling)\n             = min($40,000, $60,000)\n             = $40,000\nQuince will rationally fulfil (cheaper option), losing $40,000 over the remaining year.", "explanation": "For an onerous contract, the provision equals the LOWER of (a) the unavoidable cost of fulfilling or (b) the penalty for cancelling. The entity will rationally choose the cheaper path, so the provision reflects that minimum unavoidable cost. In Quince’s case, fulfilling costs $40k (over the remaining year) vs cancelling at $60k — fulfilling is cheaper, so the provision is $40k. If the numbers were reversed, Quince would pay the penalty.", "examinerNote": "Onerous contract: lower of (fulfilling, cancelling). The entity picks the cheaper option, provision reflects it."}, {"qId": "LP21", "topic": "Restructuring — inclusion of costs", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Rowan Co’s restructuring criteria are met at year-end. Which of the following costs may be INCLUDED in the restructuring provision?\n\n  (i) Redundancy payments to employees being made redundant\n  (ii) Costs of retraining continuing staff for new roles\n  (iii) Lease termination penalties for premises being closed\n  (iv) Future operating losses from the restructured division until the restructuring is complete", "options": [{"letter": "A", "text": "(i) and (iii) only", "correct": true, "why": "Correct. The restructuring provision includes only DIRECT expenditure that is BOTH (a) necessarily entailed by the restructuring AND (b) not associated with ongoing activities. Redundancies (i) and lease termination penalties (iii) meet both. Retraining CONTINUING staff (ii) relates to ongoing operations — excluded. Future operating losses (iv) are never provided for, restructuring or otherwise (IAS 37 ¶63)."}, {"letter": "B", "text": "(i), (ii) and (iii) only", "correct": false, "why": "Retraining continuing staff is explicitly excluded by IAS 37 ¶81 — such costs relate to the ongoing operations, not to the restructuring itself. They are operating expenses of the continuing business, not restructuring costs."}, {"letter": "C", "text": "All four", "correct": false, "why": "Future operating losses are NEVER provided for under IAS 37 ¶63 — they arise from future trading, not past events. And retraining continuing staff is excluded from restructuring provisions specifically (¶81)."}, {"letter": "D", "text": "(i), (iii) and (iv) only", "correct": false, "why": "Future operating losses are explicitly prohibited. ¶63 of IAS 37 is unambiguous: provisions for future operating losses shall not be recognised, even in a restructuring context. The losses arise from future operations, not from a past event."}], "workingNote": "IAS 37 ¶80–81 — restructuring provision INCLUDES:\n  ✓ Costs DIRECTLY entailed by restructuring AND not associated with ongoing activities\n    Examples: redundancy of departing staff, lease termination penalties\nEXCLUDES:\n  ✗ Retraining or relocating CONTINUING staff (ongoing operations)\n  ✗ Future operating losses (¶63)\n  ✗ Marketing or investment in new systems\nApplied to Rowan:\n  (i) Redundancies         -> INCLUDE\n  (ii) Retraining continuing staff -> EXCLUDE (ongoing operations)\n  (iii) Lease terminations -> INCLUDE\n  (iv) Future operating losses -> EXCLUDE (never provided for)", "explanation": "The restructuring provision is tightly drawn precisely because companies otherwise want to take large 'big bath' charges in the restructuring period. IAS 37 narrows allowed inclusions to direct restructuring-entailed costs not connected with continuing operations. Operating losses while you restructure are still future operating losses — explicitly outside the scope of any IAS 37 provision.", "examinerNote": "Restructuring inclusions: only DIRECT, restructuring-entailed costs, NOT ongoing-operation costs. Future losses never provided."}, {"qId": "LP22", "topic": "Probability bands", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "For each of the following potential outflows, what is the correct treatment under IAS 37 (assuming amount can be reliably estimated)?\n\n  (i) Probability of outflow: ~5% (remote)\n  (ii) Probability of outflow: 40% (possible)\n  (iii) Probability of outflow: 80% (probable)", "options": [{"letter": "A", "text": "(i) ignore; (ii) disclose as contingent liability; (iii) recognise as provision", "correct": true, "why": "Correct. Remote outflow (i): below the disclosure threshold, ignore entirely. Possible (ii): between remote and probable, disclose as contingent liability in the notes. Probable (iii): above 50%, recognise as provision (provided estimable)."}, {"letter": "B", "text": "All three: disclose as contingent liabilities", "correct": false, "why": "This understates the probable case (iii). At 80% probability, a provision MUST be recognised — not just disclosed. Disclosure-only is appropriate when outflow is possible but not probable."}, {"letter": "C", "text": "All three: recognise as provisions", "correct": false, "why": "Recognising a 5% probability event as a provision would massively overstate liabilities. Remote outflows are excluded from both recognition AND disclosure under IAS 37."}, {"letter": "D", "text": "(i) ignore; (ii) ignore; (iii) recognise", "correct": false, "why": "Ignoring a 40% probability outflow understates disclosures. 40% is in the ‘possible’ band — contingent liability disclosure is required so users understand the potential exposure."}], "workingNote": "IAS 37 probability bands:\n  Remote (very low):       ignore entirely (no recognition or disclosure)\n  Possible (~5% to 50%):   disclose as contingent liability in the notes\n  Probable (>50%):         recognise as provision (assuming estimable)\n  Virtually certain (~100%): recognise; for assets, also at this threshold\nRowan’s items:\n  (i) 5%   -> remote   -> ignore\n  (ii) 40% -> possible -> disclose contingent\n  (iii) 80% -> probable -> recognise provision", "explanation": "This is the backbone framework of IAS 37 — the three probability bands and their treatments. Memorise: remote = ignore; possible = disclose; probable = recognise. The 50% threshold separates disclosure from recognition. Within disclosure, the entity must describe the nature, estimate the financial effect, and indicate uncertainties.", "examinerNote": "Three bands, three treatments: remote = ignore; possible = disclose; probable = recognise. 50% threshold is critical."}, {"qId": "LP23", "topic": "Lawsuit — contingent treatment", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Sycamore Co is being sued for $800,000 in damages. The company’s lawyers assess a 35% probability of an unfavourable outcome; if the case is lost, the amount can be reliably estimated. How should this be treated in Sycamore’s financial statements?", "options": [{"letter": "A", "text": "Recognise a provision of $800,000", "correct": false, "why": "35% probability is below the >50% threshold for ‘probable’. Recognising the full $800,000 as a provision would overstate liabilities for an event that is more likely NOT to happen than to happen."}, {"letter": "B", "text": "Recognise a provision of $280,000 (expected value: 35% × $800,000)", "correct": false, "why": "Expected value is not a recognised IAS 37 approach for cases that fail the probability threshold. Below 50%, no provision is recognised — not even a probability-weighted portion. The disclosure approach (full amount) is used instead."}, {"letter": "C", "text": "Disclose as a contingent liability — no provision", "correct": true, "why": "Correct. 35% probability falls in the ‘possible’ band (between remote and probable). IAS 37 ¶86 requires disclosure of: nature of the obligation, estimate of financial effect ($800,000), uncertainties around timing/amount, possibility of reimbursement. No provision recognised."}, {"letter": "D", "text": "No disclosure or provision — the case is not yet decided", "correct": false, "why": "Pending status is not a basis for non-disclosure. ‘Possible’ contingent liabilities must be disclosed (above remote threshold, below probable). 35% is well above remote — disclosure is mandatory."}], "workingNote": "35% probability of unfavourable outcome:\n  Not remote (well above 5–10% threshold)\n  Not probable (well below 50% threshold)\n  -> Classification: POSSIBLE\n  -> Treatment: contingent liability disclosure (no recognition)\nDisclosure (IAS 37 ¶86) includes:\n  – Brief description of the nature\n  – Estimate of financial effect ($800,000)\n  – Indication of uncertainties (probability, timing)\n  – Possibility of reimbursement (e.g., insurance)", "explanation": "This is the most common IAS 37 lawsuit scenario. The trap is recognising a provision for amounts below the probability threshold (option A or B). Even though expected value math (35% × $800k = $280k) seems intuitive, it has no standing under IAS 37 for cases that fail the recognition test. Contingent liability disclosure preserves transparency without booking an obligation that more likely won’t materialise.", "examinerNote": "<50% probability + reliably estimable + not remote = contingent liability disclosure. NO provision."}, {"qId": "LP24", "topic": "Contingent asset asymmetry", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Thyme Co is suing a competitor for breach of contract, seeking $600,000 in damages. The company’s lawyers assess a 75% probability of receiving the full amount. The case is in advanced settlement discussions but not yet finalised. How should Thyme report this in its financial statements?", "options": [{"letter": "A", "text": "Recognise an asset of $600,000", "correct": false, "why": "Contingent assets are only recognised when receipt becomes VIRTUALLY CERTAIN, not when merely probable. 75% is high but not virtually certain (typically >95% or settlement essentially complete). Recognising at probable inflow would violate IAS 37’s prudence."}, {"letter": "B", "text": "Recognise an asset of $450,000 (expected value)", "correct": false, "why": "Contingent assets are not recognised on a probability-weighted basis. The IAS 37 asymmetric rule: probable inflow triggers DISCLOSURE only; virtual certainty triggers RECOGNITION. Expected-value recognition isn’t in the framework."}, {"letter": "C", "text": "Disclose as a contingent asset — probable but not virtually certain", "correct": true, "why": "Correct. The asymmetric prudence rule for contingent assets: probable inflow → disclose only; virtually certain → recognise. 75% is probable but not virtually certain. Disclose, but don’t recognise."}, {"letter": "D", "text": "Ignore until cash is received", "correct": false, "why": "Ignoring loses material information. Probable contingent inflows are disclosed under IAS 37 so users are aware of potential upside, even though they’re not yet recognised. Late-stage settlement discussions reinforce the disclosure requirement."}], "workingNote": "Contingent ASSET asymmetric treatment under IAS 37:\n  Inflow remote/possible:    ignore\n  Inflow probable:           DISCLOSE only (notes)\n  Inflow virtually certain:  RECOGNISE as asset\nThis is asymmetric vs contingent LIABILITIES (where probable triggers recognition).\nThyme’s case: 75% = probable, not virtually certain -> disclose only.", "explanation": "The asymmetric treatment between contingent assets and liabilities embodies the prudence principle. Future outflows (liabilities) are recognised at lower probability (>50%) because the entity should not understate liabilities. Future inflows (assets) require a much higher threshold (virtually certain) because the entity should not anticipate gains that might not materialise. Same probability, different treatment depending on whether it’s an asset or liability.", "examinerNote": "Contingent asset: probable -> disclose only. Virtually certain -> recognise. Higher threshold than liabilities (asymmetric)."}, {"qId": "LP25", "topic": "Reimbursement asset", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Violet Co recognises a provision of $250,000 for a customer warranty claim. The company’s insurance policy will reimburse 70% of any payout, and reimbursement is VIRTUALLY CERTAIN when the claim is settled. How should Violet present these items on its statement of financial position?", "options": [{"letter": "A", "text": "Net to $75,000 as a single liability", "correct": false, "why": "IAS 37 ¶53 explicitly PROHIBITS netting on the statement of financial position. The provision and the reimbursement asset must be reported gross to show both the gross exposure and the protection. Netting obscures the full picture."}, {"letter": "B", "text": "$250,000 provision (liability) AND $175,000 separate reimbursement asset", "correct": true, "why": "Correct. IAS 37 ¶53: where reimbursement is virtually certain, recognise as a SEPARATE asset (not netted), capped at the amount of the provision. $175,000 = 70% × $250,000 (within the cap of $250,000)."}, {"letter": "C", "text": "$250,000 provision only; disclose the insurance arrangement in notes", "correct": false, "why": "With virtual certainty of reimbursement, the asset MUST be recognised — not just disclosed. Virtual certainty is the recognition threshold for asset side reimbursements. Notes-only treatment is too weak."}, {"letter": "D", "text": "$75,000 net provision; disclose insurance separately", "correct": false, "why": "This nets the provision (prohibited) AND incorrectly disclosures the asset (which should be recognised at virtual certainty). Two violations."}], "workingNote": "IAS 37 ¶53 — reimbursement rules:\n  Reimbursement virtually certain -> recognise as SEPARATE asset\n  Asset capped at amount of the provision (cannot exceed)\n  Gross presentation REQUIRED on the SOFP\n  P&L expense MAY be presented net (allowed but optional)\nViolet’s amounts:\n  Provision (liability):       $250,000\n  Reimbursement asset (70%):   $175,000 (well within the $250,000 cap)\nBoth shown separately on the SOFP.", "explanation": "Reimbursements (typically insurance) are recognised separately when virtually certain so users see the gross exposure AND the protection. The cap (asset cannot exceed provision) ensures the reimbursement asset never appears as a net positive. Gross presentation is mandatory on SOFP; the P&L allows netting at the entity’s option. Daisy Co / Violet Co — the key insight is symmetric gross presentation.", "examinerNote": "Reimbursement virtually certain: separate asset, capped at provision. SOFP gross presentation mandatory."}, {"qId": "LP26", "topic": "Journal entry — provision increase", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "Willow Co’s warranty provision had an opening balance of $8,000 at the start of the year. At year-end, the closing balance should be $14,000. What is the correct double entry to record the year-end adjustment?", "options": [{"letter": "A", "text": "Dr Expense (P&L) $6,000; Cr Provision $6,000", "correct": true, "why": "Correct. The movement is $14,000 − $8,000 = $6,000 INCREASE. To bring the provision up to the closing balance, debit the expense (P&L charge) and credit the provision (liability increase). Only the movement is recorded — not the full closing balance."}, {"letter": "B", "text": "Dr Provision $6,000; Cr Expense (P&L) $6,000", "correct": false, "why": "This is the entry for a DECREASE in provision (credit to P&L). The provision is INCREASING here, so the debit should be to expense and the credit to the provision — the opposite of what’s shown."}, {"letter": "C", "text": "Dr Expense (P&L) $14,000; Cr Provision $14,000", "correct": false, "why": "This records the FULL closing balance, ignoring that $8,000 was already on the books from the opening balance. Only the MOVEMENT ($6,000) goes through the year’s journals."}, {"letter": "D", "text": "Dr Provision $14,000; Cr Expense (P&L) $14,000", "correct": false, "why": "This entry would empty the provision account entirely and credit the full closing amount to P&L — the opposite of what’s needed. The provision should INCREASE, not decrease, here."}], "workingNote": "Provision INCREASE accounting (from FA2 Study Hub Chapter 8):\n  When closing provision > opening provision:\n    Movement: $14,000 − $8,000 = $6,000 increase\n    Double entry:\n      Dr  Expense (Statement of Profit or Loss)    $6,000\n      Cr  Provision (Statement of Financial Position) $6,000\nResult: P&L sees the $6,000 charge; SOFP provision balance increases to $14,000.", "explanation": "For an increasing provision, the journal mirrors the underlying logic: more expense (debit) for the period, more liability (credit) on the SOFP. This double entry is the foundation of provision accounting under FA2. Memorising the direction prevents confusion under exam pressure.", "examinerNote": "Increase in provision: Dr Expense, Cr Provision. Record only the MOVEMENT, not the full balance."}, {"qId": "LP27", "topic": "Journal entry — provision decrease", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "Yew Co’s legal claim provision had an opening balance of $45,000. At year-end, after a settlement was reached for less, the closing balance should be $32,000. What is the correct double entry to record the year-end adjustment?", "options": [{"letter": "A", "text": "Dr Expense (P&L) $13,000; Cr Provision $13,000", "correct": false, "why": "This would INCREASE the provision — wrong direction. The provision is DECREASING here, so the debit should be to the provision (reducing it) and the credit to expense (reducing previously-recognised cost)."}, {"letter": "B", "text": "Dr Provision $13,000; Cr Expense (P&L) $13,000", "correct": true, "why": "Correct. The movement is $45,000 − $32,000 = $13,000 DECREASE. To reduce the provision down to the closing balance, debit the provision (decreasing the liability) and credit the expense (reversing prior expense or recognising release). The P&L sees a $13,000 credit."}, {"letter": "C", "text": "Dr Expense (P&L) $32,000; Cr Provision $32,000", "correct": false, "why": "This records the FULL closing balance and IN THE WRONG DIRECTION (this entry would INCREASE the provision). Only the movement ($13,000) is the relevant journal, and the direction is opposite to this entry."}, {"letter": "D", "text": "Dr Provision $32,000; Cr Expense (P&L) $32,000", "correct": false, "why": "This empties most of the closing balance, leaving the provision too low. Only the MOVEMENT ($13,000) should be in the journal, not the closing balance amount."}], "workingNote": "Provision DECREASE accounting:\n  When closing provision < opening provision:\n    Movement: $45,000 − $32,000 = $13,000 decrease\n    Double entry:\n      Dr  Provision (Statement of Financial Position)  $13,000\n      Cr  Expense (Statement of Profit or Loss)        $13,000\nResult: SOFP provision balance reduces to $32,000; P&L sees a $13,000 CREDIT (release of provision / reversal of expense).", "explanation": "For a decreasing provision, the journal is the mirror image of the increase entry: less liability (debit reducing) and less expense (credit — reversing prior cost or recognising income from settlement at less than estimated). The P&L credit is often called 'release of provision'. Recognising provision releases correctly is part of the conservative-yet-accurate FA2 framework.", "examinerNote": "Decrease in provision: Dr Provision, Cr Expense. Reverse direction of increase entry."}, {"qId": "LP28", "topic": "SOFP presentation — provisions placement", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Zinnia Co has the following provisions at the reporting date. Where on the Statement of Financial Position should each appear?\n\n  (i) Provision for warranty claims expected to be settled within 8 months\n  (ii) Provision for environmental cleanup at end of plant life in 12 years\n  (iii) Provision for restructuring — most costs expected within 18 months", "options": [{"letter": "A", "text": "All three under Long-Term Provisions (non-current)", "correct": false, "why": "Two of the three should be current. Warranty (i) settled within 8 months is current. Restructuring (iii) with most costs within 18 months has both current and non-current portions — not purely non-current."}, {"letter": "B", "text": "(i) Short-Term (current); (ii) Long-Term (non-current); (iii) split between Short-Term and Long-Term", "correct": true, "why": "Correct. Provisions are classified by expected settlement timing. (i) Warranty in 8 months -> Short-Term Provisions (current). (ii) Environmental in 12 years -> Long-Term Provisions (non-current). (iii) Restructuring partly within 12 months and partly later — split between current and non-current portions, as with phased loans."}, {"letter": "C", "text": "(i) Long-Term; (ii) Short-Term; (iii) Long-Term", "correct": false, "why": "This inverts the current/non-current logic entirely. Settlement WITHIN 12 months = current (short-term provisions). Settlement BEYOND 12 months = non-current (long-term provisions). The example reverses these."}, {"letter": "D", "text": "All three under Short-Term Provisions (current)", "correct": false, "why": "The environmental obligation (ii) is 12 years away — clearly non-current. Treating it as current would misstate the maturity profile of liabilities significantly."}], "workingNote": "Statement of Financial Position presentation of provisions (FA2 Study Hub format):\n\nNon-Current Liabilities:\n  Loans                       X\n  Long-Term Provisions        X         <- provisions due AFTER 12 months\n                              XX\nCurrent Liabilities:\n  Trade Payables              X\n  Short-Term Provisions       X         <- provisions due WITHIN 12 months\n                              XX\nZinnia’s provisions:\n  (i)  Warranty 8 months    -> Short-Term Provisions (current)\n  (ii) Environmental 12 yrs -> Long-Term Provisions (non-current)\n  (iii) Restructuring 18 mo -> SPLIT: within-12-month part as current; rest as non-current", "explanation": "Provisions get the same current/non-current treatment as other liabilities, based on expected settlement timing. The FA2 Study Hub explicitly shows 'Long-Term Provisions' under non-current and 'Short-Term Provisions' under current. Provisions spanning the 12-month boundary are split, just like phased loans — the portion expected within 12 months becomes current.", "examinerNote": "Within 12 months = Short-Term Provisions (current). Beyond 12 months = Long-Term Provisions (non-current). Split if straddles."}, {"qId": "LP29", "topic": "Recognition and movement concepts", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "truefalse2", "questionText": "State whether each of the following statements is true or false.", "statements": [{"text": "When a provision is increased from one year to the next, only the movement (increase) is charged to the statement of profit or loss; the full closing balance appears on the statement of financial position.", "answer": true}, {"text": "A provision should be recognised when an entity is virtually certain that an outflow of economic resources will occur.", "answer": false}], "workingNote": "Statement 1: P&L sees only the year’s movement; SOFP shows the cumulative closing balance. The opening balance carries forward each year, and only changes hit profit. -> TRUE.\nStatement 2: Provisions are recognised at PROBABLE outflow (>50%), NOT virtual certainty. Virtual certainty is the threshold for recognising contingent ASSETS, not provisions. Provisions appear at the lower 'probable' threshold. -> FALSE.", "explanation": "Statement 1 captures the core mechanic of provision accounting — only movements through P&L, full balance on SOFP. Statement 2 inverts the recognition threshold: provisions need only ‘probable’ outflow; contingent ASSETS need virtual certainty. Mixing the two thresholds is a frequent exam error.", "examinerNote": "P&L = movement only. SOFP = full balance. Provision threshold = probable. Asset (contingent) recognition = virtually certain."}, {"qId": "LP30", "topic": "Constructive obligations and contingent assets", "difficulty": "medium", "marks": 2, "timeIdeal": 130, "type": "truefalse2", "questionText": "State whether each of the following statements is true or false.", "statements": [{"text": "A constructive obligation can give rise to a provision under IAS 37, even though no legal obligation exists.", "answer": true}, {"text": "A contingent asset should be recognised in the financial statements when receipt of the economic benefit is judged to be probable.", "answer": false}], "workingNote": "Statement 1: IAS 37 explicitly recognises constructive obligations — those arising from established practice + valid expectation, even without legal force. Examples: refund policies (Daisy Department Store), warranty practices, restructuring announcements. Provisions can be recognised for these. -> TRUE.\nStatement 2: Contingent assets follow an asymmetric (prudent) rule: probable inflow -> DISCLOSE only; virtually certain -> RECOGNISE. ‘Probable’ alone is insufficient for asset recognition. -> FALSE.", "explanation": "Statement 1 reflects IAS 37’s flexibility in recognising obligations from practice as well as law. The Daisy / Sunrise / Sun department store-style refund policies are constructive obligations that trigger provision recognition. Statement 2 conflates the liability and asset thresholds. Liabilities recognise at probable; assets only at virtually certain — the prudent asymmetry prevents anticipating gains.", "examinerNote": "Constructive obligation -> can give provision. Asset recognition needs virtual certainty (not probable, which is for disclosure)."}];
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============================================================
+   APP LOGIC — Firebase real-time + localStorage backup
+   ============================================================ */
+let fbApp = null, fbDB = null, fbOK = false;
+let CURRENT_USER = null;
+let attempt = null;        // current attempt state
+let timerInt = null, paused = false, calcOn = false;
+let reviewFilter = 'wrong';
+
+/* ---------- Firebase init ---------- */
+function initFirebase() {
+  try {
+    fbApp = firebase.initializeApp(firebaseConfig);
+    fbDB = firebase.database();
+    // Connection state listener
+    fbDB.ref('.info/connected').on('value', (snap) => {
+      fbOK = snap.val() === true;
+      paintConn();
+    });
+  } catch (e) {
+    console.error('Firebase init failed', e);
+    fbOK = false;
+    paintConn();
+  }
+}
+function paintConn() {
+  const on = fbOK;
+  [['conn-dot','conn-text'],['w-conn-dot','w-conn-text']].forEach(([d,t])=>{
+    const dot = document.getElementById(d), txt = document.getElementById(t);
+    if (!dot) return;
+    dot.className = 'status-dot ' + (on ? 'dot-on' : 'dot-off');
+    if (t === 'conn-text') txt.textContent = on ? 'Online — connected' : 'Offline — work saved on device';
+    else txt.textContent = on ? 'Online — your work syncs automatically' : 'Offline — saved on device, will sync when online';
+  });
+}
+
+/* ---------- localStorage helpers ---------- */
+function lsKey(user) { return TEST.storageKey + '_' + user; }
+function lsLoad(user) {
+  try { return JSON.parse(localStorage.getItem(lsKey(user)) || '{"attempts":[]}'); }
+  catch { return { attempts: [] }; }
+}
+function lsSave(user, data) {
+  try { localStorage.setItem(lsKey(user), JSON.stringify(data)); }
+  catch (e) { console.error('localStorage save failed', e); }
+}
+
+/* ---------- toast ---------- */
+function toast(msg, ms) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), ms || 2600);
+}
+
+/* ---------- screen nav ---------- */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ---------- LOGIN ---------- */
+function doLogin() {
+  const name = document.getElementById('login-name').value;
+  const code = document.getElementById('login-code').value.trim();
+  const err = document.getElementById('login-err');
+  if (!name) { err.textContent = 'Please select your name.'; err.style.display='block'; return; }
+  if (CODES[name] !== code) { err.textContent = 'Incorrect access code.'; err.style.display='block'; return; }
+  err.style.display = 'none';
+  CURRENT_USER = name;
+  // Presence: mark active (not in test yet)
+  setPresence('dashboard', null);
+  renderWelcome();
+  show('welcome');
+}
+function logout() {
+  clearPresence();
+  CURRENT_USER = null;
+  document.getElementById('login-code').value = '';
+  show('login');
+}
+
+/* ---------- PRESENCE (Recommendation 1: Active Now) ---------- */
+let presenceRef = null;
+function setPresence(state, qInfo) {
+  if (!fbDB || !CURRENT_USER) return;
+  try {
+    presenceRef = fbDB.ref('presence/' + CURRENT_USER);
+    presenceRef.set({
+      user: CURRENT_USER, state: state, chapter: TEST.chapterName,
+      q: qInfo, ts: Date.now()
+    });
+    presenceRef.onDisconnect().remove();
+  } catch (e) { console.error('presence err', e); }
+}
+function clearPresence() {
+  if (presenceRef) { try { presenceRef.remove(); } catch(e){} presenceRef = null; }
+}
+
+/* ---------- WELCOME render ---------- */
+function renderWelcome() {
+  document.getElementById('w-name').textContent = CURRENT_USER;
+  const data = lsLoad(CURRENT_USER);
+  const atts = data.attempts || [];
+  document.getElementById('w-attempts').textContent = atts.length;
+  const list = document.getElementById('w-attempts-list');
+  if (atts.length === 0) {
+    list.innerHTML = '<p class="sub">No attempts yet. Start your first practice below.</p>';
+  } else {
+    let h = '<table><thead><tr><th>#</th><th>Date</th><th>Score</th><th>Pace</th><th>Result</th></tr></thead><tbody>';
+    atts.slice().reverse().forEach((a,i)=>{
+      const n = atts.length - i;
+      const pass = a.scorePct >= TEST.passMark;
+      h += `<tr><td>${n}</td><td>${a.dateStr}</td>
+        <td><strong>${a.scorePct}%</strong></td>
+        <td>${a.pacePct}%</td>
+        <td><span class="pill ${pass?'pill-green':'pill-red'}">${pass?'Pass':'Below 70%'}</span></td></tr>`;
+    });
+    h += '</tbody></table>';
+    list.innerHTML = h;
+  }
+  document.getElementById('w-eval-card').style.display =
+    atts.length >= TEST.targetAttempts ? 'block' : 'none';
+}
+
+/* ---------- START TEST ---------- */
+function pickQuestions() {
+  // Shuffle pool, take perAttempt, keeping difficulty mix
+  const pool = ACCRUALS_POOL.slice();
+  for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  return pool.slice(0, TEST.perAttempt);
+}
+function startTest() {
+  const qs = pickQuestions();
+  attempt = {
+    attemptId: 'att_' + CURRENT_USER + '_' + Date.now(),
+    user: CURRENT_USER,
+    startTs: Date.now(),
+    idx: 0,
+    questions: qs.map(q => ({
+      ...q, userAnswer: null, guessed: false, confused: false,
+      tfAnswers: q.type==='truefalse2' ? [null,null] : null,
+      timeSpent: 0, _enter: Date.now()
+    })),
+    remaining: TEST.durationSec,
+    pausesUsed: 0
+  };
+  reviewFilter = 'wrong';
+  show('test');
+  setPresence('in_test', { n: 1, total: TEST.perAttempt });
+  renderQ();
+  startTimer();
+}
+
+/* ---------- TIMER ---------- */
+function startTimer() {
+  clearInterval(timerInt);
+  timerInt = setInterval(()=>{
+    if (paused) return;
+    attempt.remaining--;
+    paintTimer();
+    if (attempt.remaining <= 0) { clearInterval(timerInt); submitTest(true); }
+  }, 1000);
+  paintTimer();
+}
+function paintTimer() {
+  const m = Math.floor(attempt.remaining/60), s = attempt.remaining%60;
+  const el = document.getElementById('t-timer');
+  el.textContent = `${m}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer' + (attempt.remaining <= 120 ? ' warn' : '');
+}
+let pauseSecondsLeft = 120;
+function togglePause() {
+  if (!paused) {
+    if (pauseSecondsLeft <= 0) { toast('No pause time left'); return; }
+    paused = true;
+    document.getElementById('pause-btn').textContent = '▶ Resume';
+    const pi = setInterval(()=>{
+      if (!paused) { clearInterval(pi); return; }
+      pauseSecondsLeft--;
+      if (pauseSecondsLeft <= 0) { paused=false; document.getElementById('pause-btn').textContent='⏸ Pause'; clearInterval(pi); toast('Pause time up — test resumed'); }
+    },1000);
+    toast('Paused — max 2 min total');
+  } else {
+    paused = false;
+    document.getElementById('pause-btn').textContent = '⏸ Pause';
+  }
+}
+
+/* ---------- RENDER QUESTION ---------- */
+function renderQ() {
+  const i = attempt.idx;
+  const q = attempt.questions[i];
+  q._enter = Date.now();
+  document.getElementById('t-qnum').textContent = `Q${i+1} / ${attempt.questions.length}`;
+  document.getElementById('t-progress').style.width = ((i+1)/attempt.questions.length*100)+'%';
+
+  // nav grid
+  const nav = document.getElementById('t-nav');
+  nav.innerHTML = '';
+  attempt.questions.forEach((qq,k)=>{
+    const c = document.createElement('div');
+    c.className = 'nav-cell';
+    if (k === i) c.classList.add('current');
+    else if (isAnswered(qq)) c.classList.add('answered');
+    if (qq.confused) c.classList.add('flagged');
+    c.textContent = k+1;
+    c.onclick = ()=>{ saveTime(); attempt.idx=k; renderQ(); };
+    nav.appendChild(c);
+  });
+
+  let html = '';
+  if (q.scenario) html += `<div class="scenario">${q.scenario}</div>`;
+  html += `<div class="qtext">${q.questionText}</div>`;
+
+  if (q.type === 'mcq') {
+    q.options.forEach(o=>{
+      const sel = q.userAnswer === o.letter ? ' sel' : '';
+      html += `<div class="opt${sel}" onclick="pickMCQ('${o.letter}')">
+        <span class="opt-letter">${o.letter}</span>${o.text}</div>`;
+    });
+  } else if (q.type === 'number') {
+    html += `<div class="field" style="max-width:260px;">
+      <label>Your answer (number only)</label>
+      <input type="number" id="num-input" value="${q.userAnswer ?? ''}"
+        oninput="pickNum(this.value)" placeholder="e.g. 1813" step="any"></div>`;
+  } else if (q.type === 'truefalse2') {
+    q.statements.forEach((st,si)=>{
+      const a = q.tfAnswers[si];
+      html += `<div class="tf-row">
+        <div class="stmt">${st.text}</div>
+        <button class="tf-btn ${a===true?'sel-t':''}" onclick="pickTF(${si},true)">True</button>
+        <button class="tf-btn ${a===false?'sel-f':''}" onclick="pickTF(${si},false)">False</button>
+      </div>`;
+    });
+  }
+
+  html += `<div class="guess-box">
+    <input type="checkbox" id="guess-cb" ${q.guessed?'checked':''} onchange="toggleGuess()">
+    <label for="guess-cb">I'm guessing this answer (helps your teacher see where to focus)</label></div>`;
+  html += `<div class="confuse-box">
+    <input type="checkbox" id="confuse-cb" ${q.confused?'checked':''} onchange="toggleConfuse()">
+    <label for="confuse-cb">⚑ Mark as confusing (for my own revision)</label></div>`;
+
+  document.getElementById('t-question').innerHTML = html;
+
+  document.getElementById('t-prev').style.visibility = i===0 ? 'hidden' : 'visible';
+  const last = i === attempt.questions.length-1;
+  document.getElementById('t-next').style.display = last ? 'none' : 'inline-block';
+  document.getElementById('t-submit').style.display = last ? 'inline-block' : 'none';
+
+  setPresence('in_test', { n: i+1, total: attempt.questions.length });
+}
+function isAnswered(q) {
+  if (q.type==='mcq') return q.userAnswer!=null;
+  if (q.type==='number') return q.userAnswer!=null && q.userAnswer!=='';
+  if (q.type==='truefalse2') return q.tfAnswers[0]!=null && q.tfAnswers[1]!=null;
+  return false;
+}
+function pickMCQ(l){ attempt.questions[attempt.idx].userAnswer=l; renderQ(); }
+function pickNum(v){ attempt.questions[attempt.idx].userAnswer = v===''?null:v; updateNav(); }
+function pickTF(si,v){ attempt.questions[attempt.idx].tfAnswers[si]=v; renderQ(); }
+function toggleGuess(){ attempt.questions[attempt.idx].guessed = document.getElementById('guess-cb').checked; }
+function toggleConfuse(){ attempt.questions[attempt.idx].confused = document.getElementById('confuse-cb').checked; updateNav(); }
+function updateNav(){
+  const cells = document.querySelectorAll('#t-nav .nav-cell');
+  attempt.questions.forEach((qq,k)=>{
+    cells[k].className = 'nav-cell';
+    if (k===attempt.idx) cells[k].classList.add('current');
+    else if (isAnswered(qq)) cells[k].classList.add('answered');
+    if (qq.confused) cells[k].classList.add('flagged');
+  });
+}
+function saveTime(){
+  const q = attempt.questions[attempt.idx];
+  q.timeSpent += Math.round((Date.now()-q._enter)/1000);
+}
+function nextQ(){ saveTime(); if (attempt.idx<attempt.questions.length-1){attempt.idx++;renderQ();} }
+function prevQ(){ saveTime(); if (attempt.idx>0){attempt.idx--;renderQ();} }
+
+/* ---------- SUBMIT ---------- */
+function confirmSubmit(){
+  const unans = attempt.questions.filter(q=>!isAnswered(q)).length;
+  let msg = 'Submit your test?';
+  if (unans>0) msg = `You have ${unans} unanswered question(s). Submit anyway?`;
+  if (confirm(msg)) submitTest(false);
+}
+function submitTest(auto){
+  clearInterval(timerInt);
+  saveTime();
+  const qs = attempt.questions;
+  let correct=0;
+  qs.forEach(q=>{
+    let ok=false;
+    if (q.type==='mcq') {
+      const c = q.options.find(o=>o.correct);
+      ok = q.userAnswer === c.letter;
+      q._correctAnswer = c.letter;
+    } else if (q.type==='number') {
+      const ua = parseFloat(q.userAnswer);
+      ok = !isNaN(ua) && Math.abs(ua - q.numericAnswer) <= (q.tolerance||0);
+      q._correctAnswer = String(q.numericAnswer);
+    } else if (q.type==='truefalse2') {
+      ok = q.tfAnswers[0]===q.statements[0].answer && q.tfAnswers[1]===q.statements[1].answer;
+      q._correctAnswer = q.statements.map(s=>s.answer?'T':'F').join('/');
+    }
+    q._isCorrect = ok;
+    if (ok) correct++;
+  });
+  const total = qs.length;
+  const scorePct = Math.round(correct/total*100);
+  const timeUsed = TEST.durationSec - attempt.remaining;
+  const idealTime = qs.reduce((s,q)=>s+(q.timeIdeal||120),0);
+  const pacePct = Math.min(100, Math.round(idealTime / Math.max(timeUsed,1) * 100));
+  const guessedCount = qs.filter(q=>q.guessed).length;
+  const luckyRight = qs.filter(q=>q.guessed && q._isCorrect).length;
+
+  const now = new Date();
+  const rec = {
+    attemptId: attempt.attemptId,
+    attemptNumber: (lsLoad(CURRENT_USER).attempts||[]).length + 1,
+    schemaVersion: 1,
+    student: CURRENT_USER,
+    subject: TEST.subject,
+    chapter: { id: TEST.chapterId, name: TEST.chapterName },
+    testType: TEST.testType,
+    testCode: TEST.storageKey,
+    dateStr: now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    submittedAt: now.toISOString(),
+    submittedTs: Date.now(),
+    autoSubmitted: auto,
+    scorePct, correct, wrong: total-correct, total,
+    timeUsedSec: timeUsed, pacePct,
+    guessedCount, luckyRight,
+    questions: qs.map((q,qi)=>({
+      qId:q.qId, displayIdx:qi+1, type:q.type, topic:q.topic,
+      difficulty:q.difficulty, marks:q.marks, timeIdeal:q.timeIdeal,
+      questionText:q.questionText, scenario:q.scenario||null,
+      options:q.options||null, statements:q.statements||null,
+      explanation:q.explanation, examinerNote:q.examinerNote, workingNote:q.workingNote||null,
+      userAnswer: q.type==='truefalse2' ? q.tfAnswers : q.userAnswer,
+      correctAnswer:q._correctAnswer, correct:q._isCorrect,
+      timeSpent:q.timeSpent, guessed:q.guessed, confused:q.confused
+    }))
+  };
+
+  // 1. localStorage backup (device) — ALWAYS, every attempt
+  const data = lsLoad(CURRENT_USER);
+  data.attempts = data.attempts || [];
+  data.attempts.push({
+    attemptId: rec.attemptId, dateStr: rec.dateStr, scorePct, pacePct,
+    correct, wrong: total-correct, total, full: rec
+  });
+  lsSave(CURRENT_USER, data);
+
+  // 2. Firebase sync (real-time) — EVERY attempt
+  syncToFirebase(rec);
+
+  // 3. show results
+  attempt._result = rec;
+  renderResults(rec);
+  show('results');
+  setPresence('dashboard', null);
+}
+
+function buildDashboardSnapshot(rec) {
+  // Map flat test record → dashboard schema-v1 snapshot.
+  const qd = (rec.questions || []).map(q => {
+    let ua = q.userAnswer;
+    if (q.type === 'truefalse2' && Array.isArray(ua)) {
+      ua = ua.map(v => v === true ? 'T' : v === false ? 'F' : '-').join('/');
+    }
+    return {
+      qId: q.qId, topic: q.topic || 'general',
+      difficulty: q.difficulty || 'medium',
+      correct: q.correct === true,
+      earned: q.correct === true ? (q.marks || 2) : 0,
+      marks: q.marks || 2,
+      timeSpent: q.timeSpent || 0,
+      timeIdeal: q.timeIdeal || 120,
+      userAnswer: ua == null ? null : ua,
+      correctAnswer: q.correctAnswer,
+      guessed: q.guessed === true,
+      confused: q.confused === true
+    };
+  });
+  // topicScores: aggregate earned/total/count per topic
+  const topicScores = {};
+  qd.forEach(q => {
+    const t = q.topic || 'general';
+    if (!topicScores[t]) topicScores[t] = { earned: 0, total: 0, count: 0 };
+    topicScores[t].earned += q.earned;
+    topicScores[t].total  += q.marks;
+    topicScores[t].count  += 1;
+  });
+  const totalMarks = qd.reduce((s, q) => s + q.marks, 0);
+  const totalScore = qd.reduce((s, q) => s + q.earned, 0);
+  const now = new Date(rec.submittedAt || Date.now());
+  const attemptObj = {
+    attemptId: rec.attemptId,
+    attemptNumber: rec.attemptNumber || 1,
+    date: rec.dateStr || now.toLocaleDateString('en-GB'),
+    time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+    submittedAt: rec.submittedTs || now.getTime(),
+    totalScore: totalScore,
+    totalMarks: totalMarks,
+    percent: rec.scorePct,
+    timeUsed: rec.timeUsedSec || 0,
+    passed: rec.scorePct >= (TEST.passMark || 70),
+    topicScores: topicScores,
+    perQuestionDetail: qd,
+    inProgress: false,
+    metadata: {
+      pacePct: rec.pacePct, guessedCount: rec.guessedCount,
+      luckyRight: rec.luckyRight, autoSubmitted: rec.autoSubmitted === true,
+      testCode: rec.testCode
+    }
+  };
+  return {
+    schemaVersion: 1,
+    student: rec.student,
+    subject: rec.subject,
+    chapter: rec.chapter,            // { id, name }
+    testType: rec.testType || 'chapter_test',
+    exportedAt: now.toISOString(),
+    attempts: [attemptObj]
+  };
+}
+
+function syncToFirebase(rec) {
+  const dot = document.getElementById('r-sync-dot');
+  const txt = document.getElementById('r-sync-text');
+  dot.className = 'status-dot dot-sync';
+  txt.textContent = 'Syncing your result to teacher dashboard…';
+  if (!fbDB) {
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Will sync when Firebase is available.';
+    return;
+  }
+  try {
+    const snapshot = buildDashboardSnapshot(rec);
+    // Dashboard listens at snapshots/{Student}/{pushKey}
+    const ref = fbDB.ref('snapshots/' + rec.student).push();
+    ref.set(snapshot).then(()=>{
+      dot.className='status-dot dot-on';
+      txt.textContent='✓ Synced — your teacher can see this result now.';
+    }).catch(e=>{
+      console.error(e);
+      dot.className='status-dot dot-off';
+      txt.textContent='Saved on device. Sync failed — will retry when online.';
+      queueRetry(rec);
+    });
+  } catch(e){
+    console.error(e);
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Sync will retry when online.';
+    queueRetry(rec);
+  }
+}
+function queueRetry(rec){
+  // store in a retry queue in localStorage
+  try {
+    const q = JSON.parse(localStorage.getItem('sync_retry')||'[]');
+    q.push(rec); localStorage.setItem('sync_retry', JSON.stringify(q));
+  } catch(e){}
+}
+function flushRetry(){
+  if (!fbDB || !fbOK) return;
+  let q;
+  try { q = JSON.parse(localStorage.getItem('sync_retry')||'[]'); } catch { return; }
+  if (!q.length) return;
+  const rec = q.shift();
+  try {
+    const snapshot = buildDashboardSnapshot(rec);
+    fbDB.ref('snapshots/'+rec.student).push().set(snapshot).then(()=>{
+      localStorage.setItem('sync_retry', JSON.stringify(q));
+      flushRetry();
+    }).catch(()=>{});
+  } catch(e){ console.error(e); }
+}
+setInterval(flushRetry, 15000);
+
+/* ---------- RESULTS render ---------- */
+function renderResults(rec){
+  document.getElementById('r-subtitle').textContent =
+    `${rec.chapter.name} · ${rec.dateStr}` + (rec.autoSubmitted?' · auto-submitted (time up)':'');
+  document.getElementById('r-score').textContent = rec.scorePct+'%';
+  document.getElementById('r-correct').textContent = rec.correct;
+  document.getElementById('r-wrong').textContent = rec.wrong;
+  document.getElementById('r-guessed').textContent = rec.guessedCount +
+    (rec.guessedCount? ` (${rec.luckyRight}✓)` : '');
+  const m=Math.floor(rec.timeUsedSec/60), s=rec.timeUsedSec%60;
+  document.getElementById('r-time').textContent = `${m}:${String(s).padStart(2,'0')}`;
+  document.getElementById('r-pace').textContent = rec.pacePct+'%';
+
+  const pass = rec.scorePct >= TEST.passMark;
+  document.getElementById('r-verdict').innerHTML =
+    `<div class="banner" style="border-color:${pass?'var(--green)':'var(--red)'};
+      background:${pass?'#e8f5e9':'#ffebee'};">
+      <strong>${pass?'✓ Above pass mark (70%)':'Below pass mark (70%) — keep practising'}</strong><br>
+      <span style="font-size:14px;">${pass
+        ? 'Strong work. Aim to repeat this consistency across all 6 attempts.'
+        : 'Review the wrong answers below carefully. The explanations show exactly where to improve.'}</span>
+    </div>`;
+  renderReview(rec);
+}
+function toggleReviewFilter(){
+  reviewFilter = reviewFilter==='wrong' ? 'all' : 'wrong';
+  document.getElementById('rev-toggle').textContent =
+    'Show: ' + (reviewFilter==='wrong'?'Wrong only':'All questions');
+  renderReview(attempt._result);
+}
+function renderReview(rec){
+  const box = document.getElementById('r-review');
+  let qs = rec.questions;
+  if (reviewFilter==='wrong') qs = qs.filter(q=>!q.correct);
+  if (!qs.length){ box.innerHTML='<p class="sub">No questions to show with this filter.</p>'; return; }
+  let h='';
+  qs.forEach(q=>{
+    h+=`<div class="review-q ${q.correct?'correct':'wrong'}">
+      <div class="row" style="margin-bottom:8px;">
+        <span class="pill ${q.correct?'pill-green':'pill-red'}">${q.correct?'Correct':'Wrong'}</span>
+        <span class="pill pill-grey">${q.topic}</span>
+        ${q.guessed?'<span class="pill pill-amber">Guessed</span>':''}
+        ${q.confused?'<span class="pill pill-blue">⚑ Confusing</span>':''}
+      </div>
+      ${q.scenario?`<div class="scenario">${q.scenario}</div>`:''}
+      <div style="font-weight:500;margin-bottom:10px;">Q${q.displayIdx}. ${q.questionText}</div>`;
+    if (q.type==='mcq'){
+      q.options.forEach(o=>{
+        let cls='ans-neutral';
+        if (o.correct) cls='ans-correct';
+        else if (o.letter===q.userAnswer) cls='ans-wrong';
+        h+=`<div class="ans-line ${cls}"><strong>${o.letter}.</strong> ${o.text}
+          ${o.correct?' ✓':''}${(o.letter===q.userAnswer&&!o.correct)?' ← your answer':''}
+          <div style="font-size:12.5px;margin-top:4px;opacity:.85;">${o.why}</div></div>`;
+      });
+    } else if (q.type==='number'){
+      h+=`<div class="ans-line ${q.correct?'ans-correct':'ans-wrong'}">
+        Your answer: <strong>${q.userAnswer ?? '(blank)'}</strong>
+        ${q.correct?' ✓':` — correct answer: <strong>${q.correctAnswer}</strong>`}</div>`;
+    } else if (q.type==='truefalse2'){
+      q.statements.forEach((st,si)=>{
+        const ua = q.userAnswer[si];
+        const ok = ua === st.answer;
+        h+=`<div class="ans-line ${ok?'ans-correct':'ans-wrong'}">
+          "${st.text}" — you: <strong>${ua===null?'(blank)':(ua?'True':'False')}</strong>,
+          correct: <strong>${st.answer?'True':'False'}</strong> ${ok?'✓':'✗'}</div>`;
+      });
+    }
+    if (q.workingNote){
+      h+=`<div class="working"><strong>Working:</strong><pre>${q.workingNote}</pre></div>`;
+    }
+    h+=`<div class="explain"><strong>Explanation:</strong> ${q.explanation}</div>
+      <div class="examiner"><strong>Examiner note:</strong> ${q.examinerNote}</div></div>`;
+  });
+  box.innerHTML=h;
+}
+function goWelcome(){ renderWelcome(); show('welcome'); setPresence('dashboard',null); }
+
+/* ---------- EVALUATION REPORT ---------- */
+function showEvaluation(){
+  const data = lsLoad(CURRENT_USER);
+  const atts = (data.attempts||[]).map(a=>a.full).filter(Boolean);
+  if (atts.length < TEST.targetAttempts){ toast('Need 6 attempts first'); return; }
+  const recent = atts.slice(-3);
+  const overallAvg = Math.round(atts.reduce((s,a)=>s+a.scorePct,0)/atts.length);
+  const recentAvg = Math.round(recent.reduce((s,a)=>s+a.scorePct,0)/recent.length);
+  const trend = recentAvg - Math.round(atts.slice(0,3).reduce((s,a)=>s+a.scorePct,0)/Math.min(3,atts.length));
+  // topic mastery
+  const topics = {};
+  atts.forEach(a=>a.questions.forEach(q=>{
+    topics[q.topic]=topics[q.topic]||{c:0,t:0};
+    topics[q.topic].t++; if(q.correct)topics[q.topic].c++;
+  }));
+  const tArr = Object.entries(topics).map(([k,v])=>({topic:k,pct:Math.round(v.c/v.t*100),n:v.t}))
+    .sort((a,b)=>a.pct-b.pct);
+  const ready = recentAvg>=TEST.passMark && trend>=0;
+  document.getElementById('ev-sub').textContent =
+    `${CURRENT_USER} · ${atts.length} attempts · ${TEST.chapterName}`;
+  let h = `<div class="banner" style="border-color:${ready?'var(--green)':'var(--accent)'};
+    background:${ready?'#e8f5e9':'#fff8e1'};">
+    <h3 style="margin-bottom:6px;">${ready?'✓ You look exam-ready for this chapter':'Almost there — keep practising'}</h3>
+    <span style="font-size:14px;">Recent average ${recentAvg}% · overall ${overallAvg}% ·
+    trend ${trend>=0?'+':''}${trend}%</span></div>`;
+  h += `<div class="stat-grid">
+    <div class="stat"><div class="stat-val">${overallAvg}%</div><div class="stat-lbl">Overall Avg</div></div>
+    <div class="stat"><div class="stat-val">${recentAvg}%</div><div class="stat-lbl">Recent Avg</div></div>
+    <div class="stat"><div class="stat-val">${trend>=0?'+':''}${trend}%</div><div class="stat-lbl">Trend</div></div>
+    <div class="stat"><div class="stat-val">${atts.length}</div><div class="stat-lbl">Attempts</div></div></div>`;
+  h += `<h3 style="margin-top:18px;">Topic Mastery</h3>`;
+  tArr.forEach(t=>{
+    const col = t.pct>=80?'var(--green)':t.pct>=70?'var(--primary-light)':t.pct>=50?'var(--accent)':'var(--red)';
+    h+=`<div style="margin:10px 0;">
+      <div class="row" style="font-size:13.5px;margin-bottom:2px;">
+        <span>${t.topic}</span><div class="spacer"></div>
+        <span style="font-weight:600;color:${col};">${t.pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${t.pct}%;background:${col};"></div></div>
+    </div>`;
+  });
+  const weak = tArr.filter(t=>t.pct<70).slice(0,3);
+  if (weak.length){
+    h+=`<div class="banner" style="margin-top:18px;"><strong>Focus next on:</strong> `+
+      weak.map(w=>`${w.topic} (${w.pct}%)`).join(', ')+`</div>`;
+  }
+  document.getElementById('ev-body').innerHTML = h;
+  show('eval');
+}
+
+/* ---------- CALCULATOR ---------- */
+let calcExpr='';
+function toggleCalc(){
+  calcOn=!calcOn;
+  document.getElementById('calc').classList.toggle('show',calcOn);
+  document.getElementById('calc-toggle').style.display = calcOn?'none':'block';
+}
+function calcN(n){ calcExpr+=n; paintCalc(); }
+function calcOp(o){ calcExpr+=o; paintCalc(); }
+function calcC(){ calcExpr=''; paintCalc(); }
+function calcDel(){ calcExpr=calcExpr.slice(0,-1); paintCalc(); }
+function calcEq(){
+  try{
+    let e=calcExpr.replace(/%/g,'/100');
+    const r=Function('"use strict";return ('+e+')')();
+    calcExpr=String(Math.round(r*10000)/10000);
+  }catch{ calcExpr='Error'; }
+  paintCalc();
+}
+function paintCalc(){
+  document.getElementById('calc-disp').textContent =
+    (calcExpr||'0').replace(/\*/g,'×').replace(/\//g,'÷');
+}
+
+/* ---------- INIT ---------- */
+window.addEventListener('load', ()=>{
+  initFirebase();
+  setTimeout(paintConn, 800);
+});
+window.addEventListener('beforeunload', clearPresence);
+
+</script>
+</body>
+</html>
