@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Budgets and Variances — MA2 Practice Test</title>
+<style>
+  :root {
+    --primary: #003d6b; --primary-light: #1976d2; --accent: #d4a017;
+    --green: #2e7d32; --red: #c62828; --bg: #f4f6f9; --card: #ffffff;
+    --text: #1a2332; --muted: #667085; --border: #e3e8ef;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .card { background: var(--card); border-radius: 14px; padding: 24px;
+    box-shadow: 0 1px 3px rgba(16,24,40,.08); margin-bottom: 16px; }
+  h1 { font-size: 24px; color: var(--primary); margin-bottom: 4px; }
+  h2 { font-size: 19px; color: var(--primary); margin-bottom: 12px; }
+  h3 { font-size: 16px; color: var(--primary); margin-bottom: 8px; }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+  .btn { background: var(--primary); color: #fff; border: none; padding: 12px 22px;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all .15s; }
+  .btn:hover { background: #00528f; transform: translateY(-1px); }
+  .btn:disabled { background: #b8c4d4; cursor: not-allowed; transform: none; }
+  .btn-ghost { background: transparent; color: var(--primary);
+    border: 1.5px solid var(--border); }
+  .btn-ghost:hover { background: #f0f4f9; }
+  .btn-accent { background: var(--accent); }
+  .btn-accent:hover { background: #b8890f; }
+  .btn-sm { padding: 8px 14px; font-size: 13px; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; }
+  .pill-green { background: #e8f5e9; color: var(--green); }
+  .pill-red { background: #ffebee; color: var(--red); }
+  .pill-blue { background: #e3f2fd; color: var(--primary-light); }
+  .pill-amber { background: #fff8e1; color: #a87810; }
+  .pill-grey { background: #eef1f5; color: var(--muted); }
+  input[type=text], input[type=number], select {
+    padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 9px;
+    font-size: 15px; width: 100%; font-family: inherit; background: #fff; }
+  input:focus, select:focus { outline: none; border-color: var(--primary-light); }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600;
+    color: var(--muted); margin-bottom: 6px; }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+  .status-dot { display: inline-block; width: 9px; height: 9px;
+    border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+  .dot-on { background: var(--green); box-shadow: 0 0 0 3px rgba(46,125,50,.15); }
+  .dot-off { background: var(--red); }
+  .dot-sync { background: var(--accent); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  .sync-bar { font-size: 13px; color: var(--muted); padding: 9px 14px;
+    background: #f0f4f9; border-radius: 8px; margin-bottom: 14px;
+    display: flex; align-items: center; }
+  .qhead { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .timer { font-size: 18px; font-weight: 700; color: var(--primary);
+    font-variant-numeric: tabular-nums; }
+  .timer.warn { color: var(--red); }
+  .progress-track { height: 6px; background: var(--border); border-radius: 3px;
+    overflow: hidden; margin-bottom: 18px; }
+  .progress-fill { height: 100%; background: var(--primary-light);
+    transition: width .3s; }
+  .scenario { background: #f0f4f9; border-left: 4px solid var(--primary-light);
+    padding: 14px 16px; border-radius: 0 8px 8px 0; margin-bottom: 14px;
+    font-size: 14.5px; }
+  .qtext { font-size: 16.5px; font-weight: 500; margin-bottom: 18px; }
+  .opt { display: block; padding: 14px 16px; border: 1.5px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: all .12s;
+    font-size: 15px; }
+  .opt:hover { border-color: var(--primary-light); background: #f8fafc; }
+  .opt.sel { border-color: var(--primary-light); background: #e8f1fb;
+    box-shadow: 0 0 0 1px var(--primary-light); }
+  .opt-letter { font-weight: 700; color: var(--primary); margin-right: 8px; }
+  .tf-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 10px;
+    flex-wrap: wrap; }
+  .tf-row .stmt { flex: 1; font-size: 15px; min-width: 200px; }
+  .tf-btn { padding: 8px 18px; border: 1.5px solid var(--border);
+    border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600;
+    font-size: 14px; }
+  .tf-btn.sel-t { background: var(--green); color: #fff; border-color: var(--green); }
+  .tf-btn.sel-f { background: var(--red); color: #fff; border-color: var(--red); }
+  .guess-box { display: flex; align-items: center; gap: 8px; margin-top: 16px;
+    padding: 12px 14px; background: #fff8e1; border-radius: 8px; font-size: 14px; }
+  .guess-box input, .confuse-box input { width: 18px; height: 18px; cursor: pointer; }
+  .confuse-box { display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    padding: 10px 14px; background: #f3e5f5; border-radius: 8px; font-size: 14px; }
+  .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px,1fr));
+    gap: 8px; margin-bottom: 16px; }
+  .nav-cell { aspect-ratio: 1; border: 1.5px solid var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 14px; font-weight: 600; background: #fff; position: relative; }
+  .nav-cell.answered { background: #e8f1fb; border-color: var(--primary-light);
+    color: var(--primary); }
+  .nav-cell.current { background: var(--primary); color: #fff;
+    border-color: var(--primary); }
+  .nav-cell.flagged::after { content: '•'; color: var(--accent);
+    position: absolute; top: -2px; right: 4px; font-size: 18px; }
+  .calc { position: fixed; bottom: 20px; right: 20px; width: 220px;
+    background: var(--card); border-radius: 14px; box-shadow: 0 8px 24px rgba(16,24,40,.18);
+    padding: 14px; z-index: 100; display: none; }
+  .calc.show { display: block; }
+  .calc-disp { background: #1a2332; color: #fff; padding: 12px; border-radius: 8px;
+    text-align: right; font-size: 20px; margin-bottom: 10px; font-variant-numeric: tabular-nums;
+    min-height: 44px; word-break: break-all; }
+  .calc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+  .calc-btn { padding: 12px 0; border: none; border-radius: 7px; background: #eef1f5;
+    cursor: pointer; font-size: 15px; font-weight: 600; }
+  .calc-btn:hover { background: #dde3ec; }
+  .calc-btn.op { background: var(--primary-light); color: #fff; }
+  .calc-btn.eq { background: var(--green); color: #fff; }
+  .calc-toggle { position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px;
+    border-radius: 50%; background: var(--primary); color: #fff; border: none;
+    font-size: 22px; cursor: pointer; z-index: 99; box-shadow: 0 4px 14px rgba(0,61,107,.3); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+    gap: 12px; margin-bottom: 20px; }
+  .stat { background: #f8fafc; border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-val { font-size: 26px; font-weight: 700; color: var(--primary); }
+  .stat-lbl { font-size: 12px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .04em; margin-top: 4px; }
+  .review-q { border: 1.5px solid var(--border); border-radius: 12px; padding: 18px;
+    margin-bottom: 14px; }
+  .review-q.correct { border-left: 4px solid var(--green); }
+  .review-q.wrong { border-left: 4px solid var(--red); }
+  .ans-line { padding: 8px 12px; border-radius: 7px; margin: 6px 0; font-size: 14px; }
+  .ans-correct { background: #e8f5e9; color: #1b5e20; }
+  .ans-wrong { background: #ffebee; color: #b71c1c; }
+  .ans-neutral { background: #f0f4f9; }
+  .working { background: #f4f7fb; border:1px dashed #9bb0c9; border-radius: 8px;
+    padding: 12px 14px; margin-top:10px; font-size:13.5px; }
+  .working pre { font-family: 'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+    white-space: pre-wrap; margin:6px 0 0; line-height:1.55; color:#1a2840; }
+  .explain { background: #fff8e1; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 10px; }
+  .examiner { background: #e3f2fd; border-radius: 8px; padding: 12px 14px;
+    font-size: 14px; margin-top: 8px; }
+  .banner { background: #fff8e1; border: 1.5px solid var(--accent);
+    border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 14px; z-index: 200; box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    opacity: 0; transition: opacity .3s; pointer-events: none; max-width: 90%; }
+  .toast.show { opacity: 1; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 10px; color: var(--muted); font-size: 12px;
+    text-transform: uppercase; border-bottom: 2px solid var(--border); }
+  td { padding: 10px; border-bottom: 1px solid var(--border); }
+  .bar-track { height: 10px; background: var(--border); border-radius: 5px;
+    overflow: hidden; margin: 4px 0; }
+  .bar-fill { height: 100%; border-radius: 5px; }
+  @media (max-width: 600px) {
+    .wrap { padding: 10px; } .card { padding: 16px; }
+    .calc { width: calc(100% - 40px); }
+  }
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div class="screen active" id="screen-login">
+  <div class="wrap">
+    <div class="card" style="margin-top:40px;text-align:center;">
+      <h1>MA2 — Budgets and Variances</h1>
+      <p class="sub">Practice Test &middot; Chapter 4 &middot; 15 questions &middot; 45 minutes</p>
+      <div style="max-width:320px;margin:24px auto 0;">
+        <div class="field" style="text-align:left;">
+          <label>Your Name</label>
+          <select id="login-name">
+            <option value="">— Select —</option>
+            <option value="Zara">Zara</option>
+            <option value="Amna">Amna</option>
+          </select>
+        </div>
+        <div class="field" style="text-align:left;">
+          <label>Access Code</label>
+          <input type="text" id="login-code" placeholder="Enter your code" autocomplete="off">
+        </div>
+        <button class="btn" style="width:100%;margin-top:8px;" onclick="doLogin()">Start</button>
+        <p id="login-err" style="color:var(--red);font-size:13px;margin-top:10px;display:none;"></p>
+      </div>
+      <div class="sync-bar" style="margin-top:24px;justify-content:center;">
+        <span class="status-dot" id="conn-dot"></span>
+        <span id="conn-text">Connecting…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen" id="screen-welcome">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h1>Welcome back, <span id="w-name"></span> 👋</h1>
+          <p class="sub" style="margin-bottom:0;">Budgets and Variances — Practice</p>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="logout()">Switch User</button>
+      </div>
+      <div class="sync-bar" style="margin-top:16px;">
+        <span class="status-dot" id="w-conn-dot"></span>
+        <span id="w-conn-text">Online — your work syncs automatically</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2 style="margin-bottom:2px;">Your Progress</h2>
+          <p class="sub" style="margin-bottom:0;">Target: 6 attempts &middot; pass mark 70%</p>
+        </div>
+        <div class="spacer"></div>
+        <div style="text-align:right;">
+          <div class="stat-val" id="w-attempts">0</div>
+          <div class="stat-lbl">Attempts</div>
+        </div>
+      </div>
+      <div style="margin-top:18px;" id="w-attempts-list">
+        <p class="sub">No attempts yet. Start your first practice below.</p>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" style="font-size:17px;padding:14px 32px;" onclick="startTest()">
+        Start New Attempt →
+      </button>
+      <p class="sub" style="margin:14px 0 0;">15 questions &middot; 45 minutes &middot; calculator allowed &middot; up to 3 pauses</p>
+    </div>
+    <div class="card" id="w-eval-card" style="display:none;">
+      <h2>📊 Your Evaluation Report</h2>
+      <p class="sub">Available after 6 attempts — see how exam-ready you are.</p>
+      <button class="btn btn-accent" onclick="showEvaluation()">View Evaluation Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div class="screen" id="screen-test">
+  <div class="wrap">
+    <div class="card">
+      <div class="qhead">
+        <div>
+          <strong>Budgets and Variances</strong>
+          <span class="pill pill-blue" id="t-qnum">Q1 / 15</span>
+        </div>
+        <div class="row">
+          <button class="btn-ghost btn btn-sm" id="pause-btn" onclick="togglePause()">⏸ Pause</button>
+          <span class="timer" id="t-timer">45:00</span>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="t-progress" style="width:0%"></div></div>
+      <div class="nav-grid" id="t-nav"></div>
+      <div id="t-question"></div>
+      <div class="row" style="margin-top:24px;">
+        <button class="btn-ghost btn" id="t-prev" onclick="prevQ()">← Previous</button>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" id="t-next" onclick="nextQ()">Next →</button>
+        <button class="btn btn-accent" id="t-submit" onclick="confirmSubmit()" style="display:none;">Submit Test</button>
+      </div>
+    </div>
+  </div>
+  <button class="calc-toggle" id="calc-toggle" onclick="toggleCalc()" title="Calculator">🖩</button>
+  <div class="calc" id="calc">
+    <div class="calc-disp" id="calc-disp">0</div>
+    <div class="calc-grid">
+      <button class="calc-btn" onclick="calcC()">C</button>
+      <button class="calc-btn" onclick="calcDel()">⌫</button>
+      <button class="calc-btn op" onclick="calcOp('%')">%</button>
+      <button class="calc-btn op" onclick="calcOp('/')">÷</button>
+      <button class="calc-btn" onclick="calcN('7')">7</button>
+      <button class="calc-btn" onclick="calcN('8')">8</button>
+      <button class="calc-btn" onclick="calcN('9')">9</button>
+      <button class="calc-btn op" onclick="calcOp('*')">×</button>
+      <button class="calc-btn" onclick="calcN('4')">4</button>
+      <button class="calc-btn" onclick="calcN('5')">5</button>
+      <button class="calc-btn" onclick="calcN('6')">6</button>
+      <button class="calc-btn op" onclick="calcOp('-')">−</button>
+      <button class="calc-btn" onclick="calcN('1')">1</button>
+      <button class="calc-btn" onclick="calcN('2')">2</button>
+      <button class="calc-btn" onclick="calcN('3')">3</button>
+      <button class="calc-btn op" onclick="calcOp('+')">+</button>
+      <button class="calc-btn" onclick="calcN('0')">0</button>
+      <button class="calc-btn" onclick="calcN('.')">.</button>
+      <button class="calc-btn eq" onclick="calcEq()" style="grid-column:span 2;">=</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="wrap">
+    <div class="card">
+      <h1>Test Complete 🎯</h1>
+      <p class="sub" id="r-subtitle"></p>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-val" id="r-score">0%</div><div class="stat-lbl">Score</div></div>
+        <div class="stat"><div class="stat-val" id="r-correct">0</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat"><div class="stat-val" id="r-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+        <div class="stat"><div class="stat-val" id="r-guessed">0</div><div class="stat-lbl">Guessed</div></div>
+        <div class="stat"><div class="stat-val" id="r-time">0:00</div><div class="stat-lbl">Time</div></div>
+        <div class="stat"><div class="stat-val" id="r-pace">0%</div><div class="stat-lbl">Pace</div></div>
+      </div>
+      <div id="r-verdict"></div>
+      <div class="sync-bar" id="r-sync">
+        <span class="status-dot" id="r-sync-dot"></span>
+        <span id="r-sync-text">Syncing your result…</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:14px;">
+        <h2 style="margin-bottom:0;">Question Review</h2>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn btn-sm" id="rev-toggle" onclick="toggleReviewFilter()">Show: Wrong only</button>
+      </div>
+      <div id="r-review"></div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <button class="btn" onclick="goWelcome()">Back to Dashboard</button>
+      <button class="btn btn-ghost" onclick="startTest()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- EVALUATION -->
+<div class="screen" id="screen-eval">
+  <div class="wrap">
+    <div class="card">
+      <div class="row">
+        <h1 style="margin-bottom:0;">📊 Evaluation Report</h1>
+        <div class="spacer"></div>
+        <button class="btn-ghost btn" onclick="goWelcome()">← Back</button>
+      </div>
+      <p class="sub" id="ev-sub" style="margin-top:8px;"></p>
+      <div id="ev-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCnHslK3-rMqmJuHr__h7ZUpdo4SwYCXrg",
+  authDomain: "sisters-acc.firebaseapp.com",
+  databaseURL: "https://sisters-acc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "sisters-acc",
+  storageBucket: "sisters-acc.firebasestorage.app",
+  messagingSenderId: "600306409423",
+  appId: "1:600306409423:web:eca6e7316ba9ab7a62fcba"
+};
+const CODES = { "Zara": "8976", "Amna": "2349" };
+const TEST = {
+  subject: "MA2",
+  chapterId: "MA2_04",
+  chapterName: "Budgets and Variances",
+  testType: "chapter_test",
+  storageKey: "bv_ma2_v1",
+  perAttempt: 15,
+  durationSec: 2700,
+  pauseSec: 300,
+  maxPauses: 3
+};
+const ACCRUALS_POOL = [{"qId": "BV01", "topic": "Budget vs forecast", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "mcq", "questionText": "Which of the following statements correctly distinguishes a BUDGET from a FORECAST?", "options": [{"letter": "A", "text": "A budget is a financial plan of what management wants to happen; a forecast is a prediction of what is expected to happen", "correct": true, "why": "Correct. A budget represents the entity's plan/target (what management WANTS), typically prepared before the start of the financial year. A forecast is a prediction of expected results (what management EXPECTS), typically updated during the year as actual results emerge. The distinction is plan vs prediction."}, {"letter": "B", "text": "Forecasts are always for one year; budgets are always for multiple years", "correct": false, "why": "Reversed and inaccurate. Budgets are typically annual; forecasts can be for any period (a rolling 12-month forecast, a quarterly forecast, etc.). The distinguishing feature is intent (plan vs prediction), not duration."}, {"letter": "C", "text": "A budget is prepared at the end of the financial year; a forecast at the beginning", "correct": false, "why": "Backwards. Budgets are prepared BEFORE the financial year starts (e.g., October/November for the following January start). Forecasts are typically updated DURING the financial year using actuals to predict the remainder."}, {"letter": "D", "text": "There is no meaningful difference between budgets and forecasts", "correct": false, "why": "There is a meaningful difference. Budgets are targets/plans set in advance; forecasts are predictions updated with actual data. Treating them as identical loses the planning vs prediction distinction that’s essential for management control."}], "workingNote": "Budget   = financial plan; what the organisation WANTS to happen.\n           Set BEFORE the financial year. Often the target.\nForecast = prediction of future performance; what is EXPECTED.\n           Often updated DURING the year using actuals.\nA budget can be ambitious (stretch target); a forecast should be realistic.\nBoth used for comparison with actuals (feedback control), but at different points in the cycle.", "explanation": "This distinction is foundational to management accounting. The budget represents intent (we WANT to achieve $X); the forecast represents expectation (we EXPECT to achieve $Y). When forecast differs materially from budget mid-year, it signals that the original plan needs reassessment. Forecasts also feed feedforward control — acting on expected future variances before they materialise.", "examinerNote": "Budget = plan (intent). Forecast = prediction (expectation). Different roles in the control cycle."}, {"qId": "BV02", "topic": "Principal budget factor", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Apex Watchworks manufactures luxury watches. The factory can physically produce up to 10,000 watches per year. Skilled watchmakers are in short supply nationally; the available labour pool restricts annual output to 8,000 watches. Specialist movements are imported, but the supplier can deliver up to 15,000 movements annually. Market research indicates the company can sell 6,500 watches per year at current pricing. What is Apex’s PRINCIPAL BUDGET FACTOR?", "options": [{"letter": "A", "text": "Production capacity (10,000 watches)", "correct": false, "why": "Production capacity is the maximum the factory CAN produce, but the principal budget factor is the most restrictive element — here, sales demand at 6,500 is the actual binding constraint. The factory will sit at 65% utilisation, not 100%."}, {"letter": "B", "text": "Customer demand (6,500 watches)", "correct": true, "why": "Correct. The principal budget factor is the element that LIMITS the entity’s activities. Customer demand at 6,500 is the most restrictive of all the constraints (sales 6,500 < labour 8,000 < production 10,000 < movement supply 15,000). All other budgets cascade from the sales budget."}, {"letter": "C", "text": "Skilled labour (8,000 watches)", "correct": false, "why": "Labour at 8,000 is restrictive but not the TIGHTEST constraint — customer demand at 6,500 binds first. Apex doesn’t need to mobilise all 8,000 labour units; only 6,500 worth is required."}, {"letter": "D", "text": "Movement supply (15,000 movements)", "correct": false, "why": "Movement supply is well above any other constraint. Not the binding limit at all. Identifying it as principal budget factor would lead to a wildly over-optimistic budget."}], "workingNote": "Principal budget factor = the most restrictive element limiting activities.\nRank the constraints:\n  Customer demand:      6,500 watches  <- TIGHTEST (binding)\n  Skilled labour:       8,000 watches\n  Production capacity: 10,000 watches\n  Movement supply:    15,000 movements\nPrincipal budget factor: customer demand (6,500 watches).\nAll budgets cascade from sales: production budget = 6,500; labour, material, overhead budgets follow.", "explanation": "The principal budget factor is usually customer demand — most businesses can produce more than they can sell. But in resource-constrained settings (skilled labour shortages, raw material limits), the binding factor can shift. The key technique: list ALL constraints, rank by tightness, and identify the smallest — that’s the principal budget factor. All other budgets are built from there.", "examinerNote": "Principal budget factor = the most restrictive (tightest) constraint. Sales is the usual answer, but always check all constraints first."}, {"qId": "BV03", "topic": "Strategic hierarchy", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Match each statement from Belmont Cosmetics’ strategic plan to the correct level of the planning hierarchy:\n\n(i) \"To be the leading European supplier of organic skincare by 2030\"\n(ii) \"Train 80% of production staff to ISO 9001 standards by end of next year\"\n(iii) \"Schedule 15 production supervisors for the Quality Foundation course in Q1\"\n(iv) \"Direct production cost target $4.5m; total revenue target $18m\"", "options": [{"letter": "A", "text": "(i) Vision; (ii) Objective; (iii) Action plan; (iv) Budget", "correct": true, "why": "Correct. Vision = long-term aspiration ('to be the leading...'). Objective = SMART target ('80% trained by end of next year' — specific, measurable, time-bound). Action plan = the concrete steps to achieve the objective ('schedule 15 supervisors for the course'). Budget = financial expression of the plan (target $4.5m cost, $18m revenue)."}, {"letter": "B", "text": "(i) Goal; (ii) Vision; (iii) Action plan; (iv) Budget", "correct": false, "why": "Mislabels Vision and Goal. A Vision is the highest-level long-term aspiration (the 'leading European supplier'); a Goal is medium-term and more specific. Statement (i) describes a long-term overall aspiration — Vision."}, {"letter": "C", "text": "(i) Vision; (ii) Action plan; (iii) Objective; (iv) Budget", "correct": false, "why": "Inverts Objective and Action plan. SMART targets like '80% trained by end of next year' are objectives; concrete steps like 'schedule 15 supervisors for the course' are action plans."}, {"letter": "D", "text": "(i) Objective; (ii) Goal; (iii) Action plan; (iv) Budget", "correct": false, "why": "Inverts the hierarchy. The broad long-term 'to be the leading European supplier by 2030' is the Vision, not an objective. SMART specifics with measurable targets are objectives."}], "workingNote": "Planning hierarchy (top to bottom):\n  Vision      -> Long-term aspiration ('be the leading...'). Statement (i).\n  Goals       -> Medium/long-term broad statements (sub-vision).\n  Objectives  -> SMART, specific & measurable, short/medium-term. Statement (ii).\n  Action plan -> Concrete steps (typically 1 year). Statement (iii).\n  Budget      -> Financial expression of the action plan. Statement (iv).", "explanation": "Understanding the hierarchy matters because budgets don’t exist in isolation — they’re the financial articulation of action plans, which serve objectives, which serve goals, which serve the vision. Recognising the level helps managers understand what they’re trying to achieve and at what time horizon. SMART specificity (Specific, Measurable, Achievable, Realistic, Time-bound) is the test for an objective.", "examinerNote": "Hierarchy: Vision -> Goals -> Objectives (SMART) -> Action plans -> Budget. Each layer translates the next into more concrete terms."}, {"qId": "BV04", "topic": "SMART objectives", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "Which of the following is the BEST example of a SMART objective for Calder Manufacturing?", "options": [{"letter": "A", "text": "\"Improve product quality this year\"", "correct": false, "why": "Not specific (what does 'improve' mean?) and not measurable (no quantifiable target). ‘This year’ is time-bound but the rest of the criteria fail. A SMART objective needs all five elements."}, {"letter": "B", "text": "\"Reduce defective units to below 2% of total output within 12 months\"", "correct": true, "why": "Correct. Specific (defective units), Measurable (below 2%), Achievable (a 2% target is realistic for most manufacturers), Realistic (assumes context), Time-bound (12 months). Hits all five SMART criteria."}, {"letter": "C", "text": "\"Be the most quality-focused manufacturer in our industry\"", "correct": false, "why": "This is closer to a Vision statement (broad, aspirational) than an objective. Not specific (‘most quality-focused’ is subjective), not measurable (no quantifiable target), no time-bound element."}, {"letter": "D", "text": "\"Have higher quality than our competitors\"", "correct": false, "why": "Vague and unmeasurable. ‘Higher quality’ has no agreed metric, no target value, no deadline. Useful as aspiration but doesn’t function as an operational objective."}], "workingNote": "SMART criteria:\n  S - Specific (what exactly?)\n  M - Measurable (quantifiable target?)\n  A - Achievable (within reach?)\n  R - Realistic (sensible given resources?)\n  T - Time-bound (when by?)\nOption B: 'Reduce defective units to below 2% of output within 12 months'\n  Specific: yes (defective units)\n  Measurable: yes (<2%)\n  Achievable: yes (typical target for manufacturers)\n  Realistic: yes (in normal operating conditions)\n  Time-bound: yes (12 months)\nAll 5 criteria met.", "explanation": "SMART is the standard test for whether an objective will function as an operational target. A non-SMART objective like 'improve quality' can’t drive action because there’s no benchmark for success, no deadline, no responsibility. SMART converts aspirations into accountable commitments.", "examinerNote": "Five letters: Specific, Measurable, Achievable, Realistic, Time-bound. ALL must be present, not just one or two."}, {"qId": "BV05", "topic": "Purpose of flexible budgeting", "difficulty": "hard", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "Why are flexible budgets useful for performance management when actual activity differs from planned activity?", "options": [{"letter": "A", "text": "They lock in expected results regardless of activity level", "correct": false, "why": "This describes a STATIC (fixed) budget, not a flexible one. Static budgets don’t adjust for activity differences and so are misleading when activity differs from plan."}, {"letter": "B", "text": "They allow meaningful comparison of actual results against budget when activity differs from plan", "correct": true, "why": "Correct. The flexed budget recalculates variable costs at the actual activity level, removing the volume effect from variances. The remaining variance reflects performance against expected unit costs — a like-for-like comparison."}, {"letter": "C", "text": "They eliminate the need to calculate variances", "correct": false, "why": "Flex doesn’t eliminate variances — it makes them more meaningful. After flexing, variances reflect performance (cost per unit, efficiency, price) rather than just volume effects."}, {"letter": "D", "text": "They guarantee that the resulting variances will be favourable", "correct": false, "why": "Flexing has no inherent direction — it doesn’t favour management. Adverse variances remain adverse if costs per unit exceeded expectations."}], "workingNote": "Without flexing, when actual production = 1,200 units vs budget 1,000 units, ALL costs show as adverse simply because more was made.\nFlexing recalculates the budget at the actual activity level:\n  Static budget (1,000 units): direct materials $6,000\n  Actual cost (1,200 units): direct materials $6,600 -> appears $600 ADVERSE\n  Flexed budget (1,200 units): direct materials $7,200 -> Actual $6,600 is now $600 FAVOURABLE\nThe flexed comparison reveals performance is actually GOOD on materials per unit, masked by volume effects in the static comparison.", "explanation": "Flexible budgeting separates two distinct issues: (1) volume differences (more or less was made/sold than planned) and (2) cost/efficiency differences (the cost per unit was different than planned). Without flexing, these get conflated, making variance reports misleading. The flexed budget answers the question: 'At the activity level that ACTUALLY happened, what should our costs have been?' — enabling fair comparison.", "examinerNote": "Flex = recalculate budget at ACTUAL activity. Removes volume effect; the remaining variance measures cost-per-unit performance."}, {"qId": "BV06", "topic": "Flex a budget — material cost", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "number", "questionText": "Drayton Co’s budget assumes direct materials at $6 per unit and planned production of 1,000 units. The actual production for the period was 1,300 units. What is the FLEXED budgeted material cost? (Enter the amount in $.)", "numericAnswer": 7800, "tolerance": 0, "workingNote": "Flexing rule: variable costs scale linearly with activity. Fixed costs do not flex.\nDirect materials is variable.\nFlexed material cost = $ per unit × actual units\n                     = $6 × 1,300\n                     = $7,800", "explanation": "This is the simplest case of flexing: one variable cost, one activity driver (production). Multiply the rate per unit by the actual activity to get the flexed amount. The flexed budget answers 'what should the cost have been at the activity level that actually happened?' — making the comparison with actual cost meaningful.", "examinerNote": "Variable cost flex: rate per unit × actual units. The rate stays the same; only volume changes."}, {"qId": "BV07", "topic": "Flex a budget — sales revenue", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "number", "questionText": "Eastwood Co’s budget assumed sales of 800 units at $25 per unit. Actual sales volume was 950 units. What is the FLEXED budgeted sales revenue used for comparison purposes? (Enter the amount in $.)", "numericAnswer": 23750, "tolerance": 0, "workingNote": "Flex revenue at actual volume using the BUDGETED price per unit:\nFlexed revenue = budget price per unit × actual units sold\n              = $25 × 950\n              = $23,750\nNote: the flex uses the BUDGETED price ($25), not actual price.", "explanation": "Flexing revenue uses the budgeted price per unit × actual units sold. This is what revenue WOULD have been if sold at budgeted prices. The difference between the flexed revenue and the actual revenue then isolates the price effect (was the actual selling price different from budgeted?). Without flexing, volume and price differences mix together, obscuring the cause of variance.", "examinerNote": "Flex revenue: budgeted PRICE × actual VOLUME. The variance against actual revenue then captures only the price effect."}, {"qId": "BV08", "topic": "Costs that do not flex", "difficulty": "hard", "marks": 2, "timeIdeal": 110, "type": "mcq", "questionText": "Foxbridge Co is flexing its budget for a higher actual production level. Which of the following budget items would NOT be adjusted in the flexed budget?", "options": [{"letter": "A", "text": "Direct materials cost (which varies with units produced)", "correct": false, "why": "Direct materials is a variable cost — it scales with production. The flexed budget would adjust upward to reflect the higher activity level."}, {"letter": "B", "text": "Direct labour cost (assumed variable at $/unit)", "correct": false, "why": "If labour is treated as variable per unit (as the chapter assumes), it scales with production and is flexed. Higher actual production = higher flexed labour cost."}, {"letter": "C", "text": "Variable production overheads", "correct": false, "why": "Variable overhead, by definition, scales with the activity driver (often units produced). It is included in the flex calculation alongside materials and labour."}, {"letter": "D", "text": "Fixed production overheads", "correct": true, "why": "Correct. Fixed overheads do not change with activity level (within the relevant range). The flexed budget leaves them unchanged from the original budget. Recognising this is core to constructing flexed budgets accurately."}], "workingNote": "In the flexed budget:\n  Variable costs   -> SCALE with activity (rate per unit × actual units)\n  Variable revenue -> SCALE with activity (price per unit × actual units)\n  Fixed costs      -> UNCHANGED from original budget\nFixed costs are 'fixed' precisely because they do not change with activity within the relevant range — rent, salaries, depreciation, fixed overheads.", "explanation": "The defining feature of fixed costs is their behaviour: they don’t change with activity within the relevant range. So when flexing a budget for a higher activity level, only the variable items scale up; fixed items stay at their original budgeted amount. A common error is to scale ALL costs up proportionally — this misrepresents fixed costs and inflates the flexed budget.", "examinerNote": "Flex variable costs only; fixed costs stay unchanged. The whole point of flexing is to recognise this distinction."}, {"qId": "BV09", "topic": "Multi-line flexed budget total", "difficulty": "hard", "marks": 2, "timeIdeal": 180, "type": "number", "questionText": "Glenmore Co’s static budget (for planned production of 1,500 units) shows:\n  - Direct materials: $9,000 (variable)\n  - Direct labour: $30,000 (variable)\n  - Variable production overhead: $4,500\n  - Fixed production overhead: $12,000\nActual production was 1,800 units. What is the TOTAL FLEXED BUDGET? (Enter the amount in $.)", "numericAnswer": 64200, "tolerance": 0, "workingNote": "Step 1: derive per-unit rates from the static budget:\n  Materials: $9,000  ÷ 1,500 = $6/unit\n  Labour:    $30,000 ÷ 1,500 = $20/unit\n  Var O/H:   $4,500  ÷ 1,500 = $3/unit\n  Total variable per unit: $29\nStep 2: flex variable costs to actual activity (1,800 units):\n  Variable cost flexed: $29 × 1,800 = $52,200\nStep 3: fixed costs unchanged:\n  Fixed O/H: $12,000\nStep 4: total flexed budget = $52,200 + $12,000 = $64,200", "explanation": "Multi-line flexing is the standard exam construction. The technique: split costs into variable and fixed, scale only the variables, then re-aggregate. A common error: forgetting to keep fixed overhead unchanged — scaling it would mistakenly inflate the flexed budget to $14,400 for that line, distorting the total.", "examinerNote": "Multi-line flex: per-unit rate × actual units for each variable line + unchanged fixed. Sum to get total flexed budget."}, {"qId": "BV10", "topic": "Material variance — static budget", "difficulty": "medium", "marks": 2, "timeIdeal": 100, "type": "number", "questionText": "Halton Co’s original budget shows production of 500 units with direct materials cost of $8 per unit. Actual material cost for the period was $3,950 (the actual production volume was also 500 units, so flexing is not needed). What is the MATERIAL COST VARIANCE? (Enter the amount only — do not include F/A or sign.)", "numericAnswer": 50, "tolerance": 0, "workingNote": "Budgeted material cost = 500 units × $8 = $4,000\nActual material cost = $3,950\nVariance = budget − actual = $4,000 − $3,950 = $50 FAVOURABLE\n(For cost variances, budget > actual = favourable, because the entity paid less than expected.)", "explanation": "Where actual activity matches budget activity, no flexing is needed — a direct comparison is valid. The variance is just the difference. For COSTS, lower actual than budgeted is favourable (spent less); higher actual is adverse (spent more). The $50 favourable suggests good cost control or favourable input prices.", "examinerNote": "For costs: actual < budget = Favourable. Actual > budget = Adverse. Variance amount = absolute difference."}, {"qId": "BV11", "topic": "Material variance — flexed budget", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "number", "questionText": "Inglewood Co’s original budget assumed 1,000 units at a direct material cost of $6 per unit. Actual production was 1,200 units with actual material cost of $6,800. Using the FLEXED budget approach, what is the MATERIAL COST VARIANCE? (Enter the amount only — do not include F/A or sign.)", "numericAnswer": 400, "tolerance": 0, "workingNote": "Step 1: build the flexed budget.\n  Flexed material cost = $6 × 1,200 (actual units) = $7,200\nStep 2: compare to actual.\n  Actual material cost = $6,800\nStep 3: variance.\n  Variance = $7,200 − $6,800 = $400 FAVOURABLE\n(Without flexing, the static comparison would falsely show $6,800 vs $6,000 = $800 ADVERSE — a misleading conclusion.)", "explanation": "This question shows why flexing matters. The static (unflexed) comparison gives $800 ADVERSE, suggesting cost control problems. The flexed comparison reveals the truth: cost per unit was actually BETTER than budgeted, and the apparent adverse variance was purely a volume effect. Flexing isolates real performance from volume noise.", "examinerNote": "Always flex when actual activity differs from budget activity. Static comparison can flip the F/A direction of the true performance variance."}, {"qId": "BV12", "topic": "Sales variance — flexed", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "number", "questionText": "Joyce Co’s budget assumed sales of 600 units at $45 per unit. Actual results: 720 units sold at $42 per unit. Using the FLEXED budget approach (which holds budgeted price constant at the actual volume), what is the SALES PRICE-related variance? (Enter the amount only — do not include F/A or sign.)", "numericAnswer": 2160, "tolerance": 0, "workingNote": "Flexed budget revenue (at actual volume, budgeted price):\n  720 units × $45 = $32,400\nActual revenue:\n  720 units × $42 = $30,240\nSales price variance:\n  $32,400 − $30,240 = $2,160 ADVERSE\nActual selling price ($42) was $3 BELOW budgeted price ($45). Over 720 units, that’s 720 × $3 = $2,160 lost revenue.", "explanation": "This is a classic price-volume split. The total revenue variance (actual revenue vs static budget) would mix two effects: volume (sold more than budgeted) and price (sold each unit for less than budgeted). By flexing at actual volume × budgeted price, we isolate the PRICE effect: $2,160 adverse. Separately, the volume contributed positively (selling 120 extra units), but the question asks for the price-related component.", "examinerNote": "Sales price variance = (budget price − actual price) × actual volume. Isolates price effect from volume effect."}, {"qId": "BV13", "topic": "Labour cost variance — flexed", "difficulty": "medium", "marks": 2, "timeIdeal": 110, "type": "number", "questionText": "Kingsford Co’s flexed budget for direct labour is based on 2,400 units of actual production at $15 per unit. Actual direct labour cost was $39,750. What is the LABOUR COST VARIANCE? (Enter the amount only — do not include F/A or sign.)", "numericAnswer": 3750, "tolerance": 0, "workingNote": "Flexed labour budget = 2,400 units × $15 = $36,000\nActual labour cost = $39,750\nVariance = $36,000 − $39,750 = $3,750 ADVERSE\n(Cost exceeded budget by $3,750 — unfavourable for the company.)", "explanation": "Standard cost variance: flexed budget vs actual. Since the actual cost ($39,750) exceeded the flexed budget ($36,000), the variance is adverse. Possible causes: higher labour rates than budgeted (rate variance), inefficient hours (efficiency variance), overtime premiums, or hiring more expensive grades. At MA2 level the variance is presented as a single number rather than split into rate vs efficiency.", "examinerNote": "Labour variance = flexed budget − actual. Adverse when actual > flexed. Magnitude = absolute difference."}, {"qId": "BV14", "topic": "Fixed overhead variance", "difficulty": "hard", "marks": 2, "timeIdeal": 120, "type": "number", "questionText": "Larkspur Co budgeted fixed production overheads at $48,000 for the year. Actual fixed production overheads were $51,200. Actual production was 20% above budget. What is the FIXED OVERHEAD VARIANCE? (Enter the amount only — do not include F/A or sign.)", "numericAnswer": 3200, "tolerance": 0, "workingNote": "KEY POINT: fixed overheads do NOT flex with activity — they remain at the original budget regardless of actual production level.\nFlexed budget for fixed overhead = $48,000 (unchanged)\nActual fixed overhead = $51,200\nVariance = $48,000 − $51,200 = $3,200 ADVERSE\n(The 20% higher activity is IRRELEVANT for flexing fixed costs.)", "explanation": "The trap in this question is the '20% above budget' detail. It tempts students to scale fixed overhead up by 20% (giving a flexed budget of $57,600), making the actual look favourable. But fixed costs are FIXED — they don’t flex. So the comparison is straight: $48,000 vs $51,200 = $3,200 adverse. Probable causes: utility price rises, rent increases, equipment maintenance overruns.", "examinerNote": "Fixed costs do NOT flex regardless of activity differences. Variance = original budget − actual, simply."}, {"qId": "BV15", "topic": "Total cost variance — multi-line", "difficulty": "hard", "marks": 2, "timeIdeal": 170, "type": "number", "questionText": "Maple Co’s variance report for the period:\n\n                              Flexed Budget   Actual\n  Direct materials              $24,000     $25,200\n  Direct labour                 $36,000     $34,800\n  Variable overhead              $9,000      $9,400\n  Fixed overhead                $18,000     $19,000\n\nWhat is the TOTAL COST VARIANCE for the period? (Enter the amount only — do not include F/A or sign.)", "numericAnswer": 1400, "tolerance": 0, "workingNote": "Total flexed budget cost:\n  $24,000 + $36,000 + $9,000 + $18,000 = $87,000\nTotal actual cost:\n  $25,200 + $34,800 + $9,400 + $19,000 = $88,400\nTotal cost variance:\n  $87,000 − $88,400 = $1,400 ADVERSE\nBy line:\n  Materials:    $24,000 − $25,200 = $1,200 A\n  Labour:       $36,000 − $34,800 =   $1,200 F\n  Var O/H:       $9,000 −  $9,400 =   $400 A\n  Fixed O/H:    $18,000 − $19,000 = $1,000 A\nNet: $1,400 ADVERSE", "explanation": "Aggregate variance analysis. Individual line variances may net out (here, labour favourable partly offsets the adverse lines), but the bottom-line total tells the overall cost story — $1,400 over budget. Investigation should focus on the LARGEST lines first (materials and fixed overhead, both $1,000+ adverse). The favourable labour might be a clue — lower labour cost could indicate reduced staffing, which might have caused the material wastage (more rework).", "examinerNote": "Total variance = Σ(line variances). Individual lines may partly offset; net total is what matters for the overall picture."}, {"qId": "BV16", "topic": "Profit variance", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "number", "questionText": "Norton Co’s flexed budget for the period shows revenue $50,000, total cost $38,000 (so flexed budgeted profit = $12,000). Actual results: revenue $52,500, total cost $41,000 (actual profit = $11,500). What is the PROFIT VARIANCE for the period? (Enter the amount only — do not include F/A or sign.)", "numericAnswer": 500, "tolerance": 0, "workingNote": "Flexed budget profit:  $50,000 − $38,000 = $12,000\nActual profit:         $52,500 − $41,000 = $11,500\nProfit variance:       $12,000 − $11,500 = $500 ADVERSE\n(Actual profit was $500 LOWER than flexed budgeted profit — unfavourable.)\nDecomposition:\n  Revenue variance:  $52,500 − $50,000 = $2,500 FAVOURABLE\n  Cost variance:     $38,000 − $41,000 = $3,000 ADVERSE\n  Net:               $2,500 F − $3,000 A = $500 ADVERSE  ✓", "explanation": "Profit variance captures the bottom-line story: did the actual outcome beat the flexed plan or fall short? Here, a strong revenue performance ($2,500 favourable from higher selling prices or volume above flex) was more than offset by cost overruns ($3,000 adverse). The net is $500 adverse — profit was lower than expected at the actual activity level. Always cross-check: revenue variance + (negative) cost variance should equal the profit variance.", "examinerNote": "Profit variance = revenue variance + cost variance (with cost overrun being adverse for profit). Cross-check by decomposing."}, {"qId": "BV17", "topic": "Inverse variance — find actual", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "number", "questionText": "Oakridge Co’s flexed budget for direct labour was $52,000. The labour cost variance was reported as $4,500 ADVERSE. What was the ACTUAL labour cost? (Enter the amount in $.)", "numericAnswer": 56500, "tolerance": 0, "workingNote": "Convention for COST variances:\n  Variance = budget − actual\n  Adverse means budget < actual (we spent MORE than budgeted)\n  Favourable means budget > actual (we spent LESS than budgeted)\nGiven:\n  Flexed budget = $52,000\n  Variance = $4,500 ADVERSE\nTherefore:\n  Actual = budget + |adverse variance|\n         = $52,000 + $4,500\n         = $56,500", "explanation": "Inverse problems test understanding of the F/A direction. For costs: adverse means actual EXCEEDED budget, so actual = budget + variance. For favourable, actual < budget, so actual = budget − variance. The most common error is adding when one should subtract (or vice versa) — always trace the direction logic: 'adverse means we paid more, so actual must be higher than budget.'", "examinerNote": "COST variance: Adverse -> actual = budget + variance. Favourable -> actual = budget − variance. Get the direction right first."}, {"qId": "BV18", "topic": "Identify F direction", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "mcq", "questionText": "Which of the following situations represents a FAVOURABLE variance?", "options": [{"letter": "A", "text": "Actual sales revenue $25,000 vs flexed budget revenue $28,000", "correct": false, "why": "Actual revenue was LOWER than the flexed budget — the company earned less than expected at the actual sales volume. This is ADVERSE."}, {"letter": "B", "text": "Actual material cost $12,000 vs flexed budget cost $11,000", "correct": false, "why": "Actual cost was HIGHER than the flexed budget — the company spent more than expected. This is ADVERSE."}, {"letter": "C", "text": "Actual labour cost $40,000 vs flexed budget cost $42,000", "correct": true, "why": "Correct. For costs, actual ($40,000) LESS than budget ($42,000) means the company paid less than expected — saving $2,000. This is FAVOURABLE."}, {"letter": "D", "text": "Actual fixed overhead $15,000 vs budget $14,000", "correct": false, "why": "Actual fixed overhead was $1,000 HIGHER than budget — cost overrun. This is ADVERSE."}], "workingNote": "Direction rule:\n  For COSTS:    actual < budget = FAVOURABLE (spent less)\n                actual > budget = ADVERSE   (spent more)\n  For REVENUE:  actual > budget = FAVOURABLE (earned more)\n                actual < budget = ADVERSE   (earned less)\nApplied:\n  (A) Revenue: actual $25k < budget $28k -> Adverse\n  (B) Cost:    actual $12k > budget $11k -> Adverse\n  (C) Cost:    actual $40k < budget $42k -> Favourable ✓\n  (D) Cost:    actual $15k > budget $14k -> Adverse", "explanation": "The direction depends on whether the item is a cost or revenue. Don’t apply 'higher is better' universally — for costs, lower is better; for revenue, higher is better. Variance direction reflects whether the entity is financially better off (F) or worse off (A) than planned.", "examinerNote": "Costs: lower = F. Revenue: higher = F. Always identify the item first, then assess direction."}, {"qId": "BV19", "topic": "Direction logic combinations", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "For Pemberton Manufacturing, identify the direction of each variance (compared to flexed budget where applicable):\n\n  (i) Actual revenue $1.20m, flexed budget revenue $1.00m\n  (ii) Actual material cost $0.80m, flexed budget cost $0.90m\n  (iii) Actual labour cost $0.50m, flexed budget cost $0.40m", "options": [{"letter": "A", "text": "All three are Favourable", "correct": false, "why": "Variance (iii) labour: actual $0.50m EXCEEDS budget $0.40m — the company paid more for labour than expected. That’s ADVERSE, not favourable."}, {"letter": "B", "text": "(i) F, (ii) F, (iii) A", "correct": true, "why": "Correct. (i) Revenue actual > budget = F. (ii) Cost actual < budget = F. (iii) Cost actual > budget = A. The direction follows from whether the item is cost (lower=F) or revenue (higher=F)."}, {"letter": "C", "text": "(i) F, (ii) A, (iii) F", "correct": false, "why": "Two inversions. Material cost actual ($0.80m) is BELOW budget ($0.90m) = Favourable. Labour cost actual ($0.50m) ABOVE budget ($0.40m) = Adverse. Don’t apply 'higher is good' uniformly to costs."}, {"letter": "D", "text": "(i) A, (ii) F, (iii) A", "correct": false, "why": "Inverts revenue direction. Higher actual revenue ($1.20m) vs budget ($1.00m) is FAVOURABLE — the company earned $0.20m more than planned. Revenue variances are favourable when actual exceeds budget."}], "workingNote": "Variance directions for Pemberton:\n  (i)   Revenue: $1.20m actual > $1.00m budget -> FAVOURABLE  (+$0.20m)\n  (ii)  Material cost: $0.80m actual < $0.90m budget -> FAVOURABLE  (saved $0.10m)\n  (iii) Labour cost: $0.50m actual > $0.40m budget -> ADVERSE  (overrun $0.10m)\nNet impact on profit:\n  + $0.20m (revenue) + $0.10m (material) − $0.10m (labour) = +$0.20m net favourable", "explanation": "This pattern is common in practice — a mix of F and A variances on different lines. Aggregating to a net impact on profit requires applying the correct sign to each line. Higher revenue helps; lower cost helps; higher cost hurts. Recognising the pattern is essential before drawing conclusions about overall performance.", "examinerNote": "Different items have different F directions. Always classify cost or revenue first, then apply the rule."}, {"qId": "BV20", "topic": "Favourable isn't always good", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Quincy Furniture reported a $5,000 FAVOURABLE direct material variance this period. Investigation revealed the purchasing manager substituted a cheaper grade of fabric to achieve the cost saving. What is the MOST LIKELY consequence of this action over the next 1–2 reporting periods?", "options": [{"letter": "A", "text": "The favourable material variance will continue indefinitely with no other consequences", "correct": false, "why": "Treating a one-off cost saving as permanent ignores the knock-on effects of substituting lower-grade inputs. The favourable variance is usually short-lived; downstream costs follow."}, {"letter": "B", "text": "There will likely be adverse downstream variances (higher rejection rates, customer returns, additional labour for rework), potentially offsetting or exceeding the favourable variance", "correct": true, "why": "Correct. Cheaper materials often have higher defect rates, harder workability, and quality issues that customers detect. The likely chain: higher material usage (more wastage), more labour time (rework), higher customer return rate (warranty claims), and reputational damage. The net effect is frequently NEGATIVE despite the initial 'favourable' headline."}, {"letter": "C", "text": "The company should immediately recognise this as a permanent cost reduction in the budget", "correct": false, "why": "Permanent recognition assumes the substitution has no downstream cost. Without quality-impact investigation, this would build a misleading cost saving into the budget that may unwind sharply when downstream costs emerge."}, {"letter": "D", "text": "This variance is purely positive and requires no further investigation", "correct": false, "why": "Even favourable variances should be investigated when they’re significant. Quincy needs to understand the cause: legitimate negotiation win? Substitution? Quality compromise? Without investigation, the company can’t separate sustainable savings from short-term tricks."}], "workingNote": "Common interconnected variances from cheap-material substitution:\n  Material price variance:    FAVOURABLE (cheaper unit cost) — the headline win\n  Material usage variance:    ADVERSE    (more wastage, defects, off-cuts)\n  Labour efficiency variance: ADVERSE    (harder to work with, rework time)\n  Quality cost variance:      ADVERSE    (customer returns, warranty claims)\n  Reputational damage:        intangible but real long-term\nNET: often ADVERSE overall once full picture emerges.", "explanation": "This is one of the most important lessons in variance analysis: F is not synonymous with 'good', and A is not synonymous with 'bad'. The variance label tells you DIRECTION, not VALUE. A favourable variance can hide bad decisions (cheap materials, undertraining, deferred maintenance). An adverse variance can reflect good decisions (investment in quality, training, capacity). Always investigate the cause before judging.", "examinerNote": "Favourable variance ≠ good. Adverse variance ≠ bad. Always investigate root cause. Cheap inputs cause downstream adverse variances."}, {"qId": "BV21", "topic": "Linked variances — price and quantity", "difficulty": "hard", "marks": 2, "timeIdeal": 150, "type": "mcq", "questionText": "Ridgemont Industries’ variance report for the period shows:\n  - Material PRICE variance: $2,000 FAVOURABLE (per-unit material cost was lower than budgeted)\n  - Material USAGE variance: $3,500 ADVERSE (more material was consumed than budgeted for the actual output)\n\nWhat is the MOST LIKELY underlying cause of this pattern?", "options": [{"letter": "A", "text": "The favourable price variance was achieved by purchasing lower-quality materials, which were then less efficient in production (caused more wastage, rework, off-cuts)", "correct": true, "why": "Correct. This is the textbook interconnected-variance pattern. Cheaper materials often have inferior properties (more defects, harder workability, higher off-cut rates), so although the unit price was lower, more units of material were needed to produce the same output. The favourable price effect is partly or fully cancelled by the adverse usage effect."}, {"letter": "B", "text": "The two variances are unrelated random fluctuations", "correct": false, "why": "In practice, these two variances are strongly correlated through purchasing decisions. Material price and usage are linked through quality — cheaper grades typically have higher waste rates. Treating them as independent ignores the most common cause."}, {"letter": "C", "text": "The production team is inexperienced, causing both higher waste and lower price", "correct": false, "why": "Inexperienced labour might cause higher usage, but it doesn’t explain LOWER material price (price is a purchasing decision, not a production-floor outcome). Two separate causes are needed under this story — less parsimonious."}, {"letter": "D", "text": "The original material budget was set too low", "correct": false, "why": "A budget error would systematically push both variances in the same direction (both A or both F), not in opposite directions as observed. Budget mis-estimation alone doesn’t explain a divergent pattern."}], "workingNote": "Pattern: Price F + Usage A is a textbook signal of CHEAPER, LOWER-QUALITY MATERIAL.\nMechanism:\n  Purchasing buys cheaper material -> price F\n  Cheaper material has higher defect/waste rate -> usage A\n  Net effect: $2,000 F − $3,500 A = $1,500 net ADVERSE on materials\nThe purchasing manager’s 'saving' on price came at a cost of $1,500 net in usage — a poor decision dressed up as a favourable variance.", "explanation": "Recognising linked variance patterns is what separates basic variance reporting from analytical understanding. Material price + usage variances are intimately linked through quality. Similarly, labour rate + labour efficiency are linked through skill level. Reading variances in pairs reveals causes that no single variance can show.", "examinerNote": "Material price F + usage A = classic cheap-substitute signal. Look for offset PATTERNS, not just individual variances."}, {"qId": "BV22", "topic": "Exception reporting threshold", "difficulty": "hard", "marks": 2, "timeIdeal": 130, "type": "mcq", "questionText": "Sterling Co operates an EXCEPTION REPORTING policy for variances: any variance above 5% of the budgeted material cost is reported to senior management as significant. Budgeted material cost for the period was $80,000. Which of the following actual variances would breach the threshold and be reported as significant?\n\n  (i) $3,200 favourable\n  (ii) $3,800 adverse\n  (iii) $4,500 favourable\n  (iv) $4,200 adverse", "options": [{"letter": "A", "text": "(ii) and (iv) only — only adverse variances trigger reporting", "correct": false, "why": "Exception reporting threshold applies regardless of direction. A significant favourable variance might mean a misjudged budget or lurking quality issue and deserves reporting just like an adverse one."}, {"letter": "B", "text": "(iii) and (iv) only — these are the variances exceeding 5% of $80,000 = $4,000", "correct": true, "why": "Correct. Threshold = 5% × $80,000 = $4,000. (i) $3,200 F: below. (ii) $3,800 A: below. (iii) $4,500 F: ABOVE — reported. (iv) $4,200 A: ABOVE — reported. Direction is irrelevant; size matters."}, {"letter": "C", "text": "All four variances should be reported", "correct": false, "why": "This ignores the threshold entirely. Exception reporting exists precisely to filter out non-significant variances, freeing management attention for the items that matter. Reporting everything defeats the purpose."}, {"letter": "D", "text": "None — 5% thresholds are too tight", "correct": false, "why": "Two variances ((iii) and (iv)) DO exceed the 5% threshold ($4,000 absolute). Whether the threshold is 'too tight' is a separate question; given the policy stated, the threshold is what it is."}], "workingNote": "Threshold calculation:\n  5% × $80,000 = $4,000\nApplied to each variance (sign-blind — size only):\n  (i)   $3,200 < $4,000  -> NOT reported\n  (ii)  $3,800 < $4,000  -> NOT reported\n  (iii) $4,500 > $4,000  -> REPORTED  (favourable)\n  (iv)  $4,200 > $4,000  -> REPORTED  (adverse)\nResult: (iii) and (iv) only.", "explanation": "Exception reporting concentrates management attention on the variances that truly matter. The threshold (often percentage-based) filters noise from signal. A common error is to apply the threshold only to adverse variances — but significant favourable variances also signal something worth investigating (budget miscalibration, quality compromise, unsustainable savings). Threshold applies symmetrically.", "examinerNote": "Exception reporting threshold = sign-blind. Both F and A variances above threshold are reported. Compute threshold first, then compare each variance."}, {"qId": "BV23", "topic": "Controllable vs non-controllable variances", "difficulty": "hard", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Which of the following variances is most likely to be NON-CONTROLLABLE for a production department manager?", "options": [{"letter": "A", "text": "Material price variance arising from an unexpected global commodity price spike caused by international trade sanctions", "correct": true, "why": "Correct. Global commodity prices and international trade conditions are external to the company and far beyond a department manager’s influence. The manager has no way to prevent or correct this variance; it should be reported and explained, but not held against the manager’s performance."}, {"letter": "B", "text": "Labour efficiency variance arising from inadequate training of new workers", "correct": false, "why": "Training decisions are typically within the production manager’s control (or close enough). Inadequate training is a management decision — the manager could have implemented better training. This is controllable."}, {"letter": "C", "text": "Material usage variance due to operator carelessness with material handling", "correct": false, "why": "Operator behaviour is squarely within the production manager’s sphere — through supervision, training, and discipline. Carelessness is preventable through management action. Controllable."}, {"letter": "D", "text": "Variable overhead variance due to wasteful electricity usage in the factory", "correct": false, "why": "Electricity usage in the factory is a production-floor responsibility. Setting standards, monitoring usage, repairing leaky equipment — all within the production manager’s authority. Controllable."}], "workingNote": "Controllable vs non-controllable test:\n  Can the manager influence the variance through their decisions, supervision, or actions?\n    YES -> controllable (manager is accountable)\n    NO  -> non-controllable (explain, don’t blame)\nApplied:\n  (A) International commodity price spike: external; no manager action would have changed it -> NON-CONTROLLABLE\n  (B) Training inadequacy: management decision -> controllable\n  (C) Operator carelessness: supervision/discipline -> controllable\n  (D) Energy waste: floor management -> controllable", "explanation": "The controllable/non-controllable distinction is about accountability. Holding managers responsible for variances they can’t influence is unfair and demotivating. Holding them accountable for those they can influence drives performance. Skilled variance reporting separates these clearly — the manager explains BOTH but is judged only on the controllable.", "examinerNote": "Controllable = manager can influence via decisions/supervision. External price shocks, weather, sanctions = non-controllable."}, {"qId": "BV24", "topic": "Investigation decision", "difficulty": "hard", "marks": 2, "timeIdeal": 160, "type": "mcq", "questionText": "The three standard criteria for investigating a variance are: (1) significance, (2) controllability, (3) cost-benefit. Talbot Engineering has a $5,000 adverse variance that exceeds the 10% significance threshold AND is controllable, but the cost of detailed investigation would be $8,000. What should Talbot do?", "options": [{"letter": "A", "text": "Investigate — variances above the significance threshold MUST be investigated", "correct": false, "why": "This treats significance as the sole criterion. In fact, all THREE criteria must be considered: significance + controllability + cost-benefit. A variance that fails the cost-benefit test should not be investigated regardless of significance."}, {"letter": "B", "text": "Investigate — the variance is controllable, so it must be addressed", "correct": false, "why": "Same issue — controllability alone is not enough. If investigation costs exceed the variance amount and likely correction benefit, the investigation itself wastes resources. Two of three criteria met is not enough when the third (cost-benefit) clearly fails."}, {"letter": "C", "text": "Do NOT investigate — investigation cost ($8,000) exceeds the variance ($5,000), so it fails the cost-benefit test", "correct": true, "why": "Correct. The cost-benefit criterion requires that the expected benefit from investigating and correcting the variance exceeds the cost of investigation. Here, $8,000 > $5,000 — even if the entire variance could be saved next period, investigation alone costs more than the saving. Don’t investigate."}, {"letter": "D", "text": "Investigate only if the variance recurs next period", "correct": false, "why": "Waiting for recurrence doesn’t address the cost-benefit logic — even recurrent, the variance ($5,000) is still less than investigation cost ($8,000). Cost-benefit means the math must work, not just that the issue is persistent."}], "workingNote": "Three criteria for investigation (ALL required):\n  1. Significance:    above threshold?     -> YES (>10%)\n  2. Controllability: manager can correct?  -> YES\n  3. Cost-benefit:    saving > investigation cost? -> NO (variance $5,000 < cost $8,000)\nDecision: do NOT investigate. Cost-benefit fails.\nReasoning: spending $8,000 to save up to $5,000 destroys $3,000 of value. The variance, though significant and controllable, isn’t economic to investigate.", "explanation": "The cost-benefit test is the rational economics of management investigation. Many variances meet the significance and controllability tests but fail cost-benefit — the investigation cost dwarfs the potential saving. Investigating regardless of cost destroys value. The correct response is to acknowledge the variance, learn what you can cheaply, and move on. Save investigation effort for variances where the math works.", "examinerNote": "All three criteria required. Cost-benefit is often the hardest hurdle — if investigation cost > variance saving, don’t investigate, regardless of significance."}, {"qId": "BV25", "topic": "Planning and control cycle order", "difficulty": "medium", "marks": 2, "timeIdeal": 140, "type": "mcq", "questionText": "Underhill Manufacturing’s planning and control cycle has six steps. Place them in the correct sequence (start of cycle to end):\n\n  (i)   Set objectives and action plans\n  (ii)  Implement plans\n  (iii) Set goals\n  (iv)  Monitor (compare actual to budget)\n  (v)   Budget\n  (vi)  Review and forecast", "options": [{"letter": "A", "text": "(iii) → (i) → (v) → (ii) → (iv) → (vi)", "correct": true, "why": "Correct. The cycle goes: set goals (long-term aspirations) -> set objectives (SMART targets) -> budget (financial plan for objectives) -> implement (do the work) -> monitor (compare actual to budget) -> review and forecast (use lessons to refine assumptions for the next cycle)."}, {"letter": "B", "text": "(i) → (iii) → (v) → (ii) → (vi) → (iv)", "correct": false, "why": "Reverses goals and objectives. Goals come first (long-term vision derivative), then objectives (SMART specifics). Also, monitor comes before review/forecast — monitoring is mid-period, review/forecast is end-period."}, {"letter": "C", "text": "(iii) → (v) → (i) → (vi) → (ii) → (iv)", "correct": false, "why": "Budget can’t come before objectives — the budget is the financial expression of the action plans, which themselves are derived from objectives. Sequence: goals -> objectives -> budget -> implement, not goals -> budget -> objectives."}, {"letter": "D", "text": "(i) → (ii) → (v) → (iv) → (vi) → (iii)", "correct": false, "why": "Starts with setting objectives without first setting goals, and ends with setting goals, which inverts the cycle entirely. Goals come first; review/forecast comes last (then the cycle restarts)."}], "workingNote": "Standard planning and control cycle:\n  1. SET GOALS               (long-term aspirations, derived from vision)\n  2. SET OBJECTIVES & ACTION (SMART targets and concrete steps)\n  3. BUDGET                  (financial expression of action plans)\n  4. IMPLEMENT               (execute the plans)\n  5. MONITOR                 (compare actual to budget; investigate variances)\n  6. REVIEW & FORECAST       (refine assumptions; update for next cycle)\nThe cycle then restarts — lessons learned in (6) feed back into (1) for the next period.", "explanation": "The planning and control cycle is the backbone of management accounting. Each step builds on the previous: vision becomes goals, goals become measurable objectives, objectives become budgets, budgets are implemented, implementation is monitored, and lessons learned feed back into the next round of planning. Skipping or reordering steps breaks the cycle’s logic.", "examinerNote": "Memorise the six-step order: Goals -> Objectives -> Budget -> Implement -> Monitor -> Review. Then the cycle restarts."}, {"qId": "BV26", "topic": "Feedback vs feedforward", "difficulty": "medium", "marks": 2, "timeIdeal": 120, "type": "truefalse2", "questionText": "State whether each of the following statements is true or false.", "statements": [{"text": "Feedback control involves comparing actual results to plans after the period has ended; it is reactive in nature.", "answer": true}, {"text": "Feedforward control compares historic results to historic budgets and is therefore identical to feedback control.", "answer": false}], "workingNote": "Statement 1: Feedback control = compare actual to budget AFTER the event. Reactive: corrective action takes place after the variance occurs. -> TRUE.\nStatement 2: FEEDFORWARD control is PROACTIVE — compares budget to a forward-looking FORECAST to anticipate variances BEFORE they materialise, enabling preventive action. It is distinct from feedback. -> FALSE.", "explanation": "The two control mechanisms work at different points in time. Feedback is post-event: actual vs budget, learn from the past, correct going forward. Feedforward is pre-event: budget vs forecast, anticipate the future, act preventively. Mature organisations use BOTH — feedback to learn from history, feedforward to manage the upcoming period.", "examinerNote": "Feedback = past-actual vs budget (reactive). Feedforward = future-forecast vs budget (proactive). Distinct mechanisms."}, {"qId": "BV27", "topic": "Build flexed budget — multi-step", "difficulty": "hard", "marks": 2, "timeIdeal": 200, "type": "number", "questionText": "Vauxhall Engineering’s static budget for production of 1,500 units shows:\n  - Direct materials: $4,500\n  - Direct labour: $9,000\n  - Variable production overhead: $1,500\n  - Fixed production overhead: $6,000\n\nActual production was 1,800 units. Calculate the TOTAL FLEXED BUDGET. (Enter the amount in $.)", "numericAnswer": 24000, "tolerance": 0, "workingNote": "Step 1: derive per-unit rates from static budget.\n  Materials: $4,500 ÷ 1,500 = $3 per unit\n  Labour:    $9,000 ÷ 1,500 = $6 per unit\n  Var O/H:   $1,500 ÷ 1,500 = $1 per unit\n  Total variable per unit: $10\nStep 2: flex variable costs to actual 1,800 units.\n  Variable total = $10 × 1,800 = $18,000\nStep 3: fixed costs unchanged.\n  Fixed O/H = $6,000\nStep 4: TOTAL flexed budget.\n  $18,000 + $6,000 = $24,000", "explanation": "Multi-step flexed budget construction is the foundation of variance analysis. The technique: identify variable lines, derive per-unit rates, scale to actual activity, then add unchanged fixed costs. A common student error: forgetting one of the variable lines, or scaling the fixed line incorrectly. Always tabulate to keep track of which lines are variable (flex) and which are fixed (don’t flex).", "examinerNote": "Build the per-unit rate first, then scale all variables together. Add unchanged fixed amount last. Total = (Σ variable rate) × actual + fixed."}, {"qId": "BV28", "topic": "Root cause from variance pattern", "difficulty": "hard", "marks": 2, "timeIdeal": 180, "type": "mcq", "questionText": "Whitfield Co’s variance report for the period:\n\n  - Labour rate variance: $2,000 FAVOURABLE\n  - Labour efficiency variance: $5,500 ADVERSE\n  - Material usage variance: $3,000 ADVERSE\n  - Material price variance: nil (zero)\n\nWhich of the following is the MOST LIKELY single root cause that explains this pattern?", "options": [{"letter": "A", "text": "A premium grade of material has been purchased", "correct": false, "why": "Premium material would typically produce price variance ADVERSE (paid more per unit) — but the price variance is nil. Also, premium material usually has LOWER waste (usage F), not higher (usage A). Doesn’t fit the pattern."}, {"letter": "B", "text": "Skilled experienced workers have been replaced with cheaper, less-skilled labour", "correct": true, "why": "Correct. This single cause explains all three observed variances: cheaper workers (rate F: $2,000 saving) -> but they’re slower (efficiency A: $5,500 — more hours needed) AND less careful with material handling (usage A: $3,000 — more waste). Material price stays nil because purchasing wasn’t the cause."}, {"letter": "C", "text": "Power outages caused production delays", "correct": false, "why": "Power outages would mainly affect labour efficiency (workers idle), not labour rate (which is per-hour pay). And they wouldn’t cause material usage variance — if anything, material consumption would be unchanged. Doesn’t explain rate F."}, {"letter": "D", "text": "The original budget was unrealistically tight", "correct": false, "why": "A tight budget would push ALL variances in the same direction (probably adverse) systematically. Here, labour rate is F while two others are A — the pattern isn’t consistent with budget mis-estimation, but with a real operational change."}], "workingNote": "Root cause analysis: find ONE underlying cause that explains ALL observed variances simultaneously.\nThe pattern:\n  Labour rate F    -> paid LESS per hour than expected (cheaper labour grade hired)\n  Labour efficiency A -> took MORE hours than expected (slower, less-skilled workers)\n  Material usage A -> consumed MORE material than expected (careless handling, more rework)\n  Material price nil -> purchasing didn’t change\nSingle cause that fits ALL of the above: REPLACEMENT OF SKILLED LABOUR WITH CHEAPER UNSKILLED LABOUR.\nThe 'saving' on rate F ($2,000) is more than wiped out by efficiency A ($5,500) and usage A ($3,000) — net $6,500 ADVERSE.", "explanation": "Interconnected variance analysis: real exam scenarios test whether you can identify a SINGLE underlying cause from a PATTERN of variances. Cheap labour is a classic example — it saves on rate but typically loses more on efficiency, usage, and quality. The lesson: investigate variance patterns, not individual lines. A favourable rate variance hiding deeper adverse effects is a red flag, not a success.", "examinerNote": "Read variances in groups: labour rate + efficiency are linked through skill. Material price + usage are linked through quality. One root cause often explains a pattern."}, {"qId": "BV29", "topic": "Cost-benefit of investigation (expected value)", "difficulty": "hard", "marks": 2, "timeIdeal": 200, "type": "mcq", "questionText": "Yorkbridge Co identifies a $12,000 ADVERSE labour efficiency variance. Management estimates:\n  - Cost of detailed investigation: $4,000\n  - Probability the variance is controllable (can be fixed): 70%\n  - If controllable and fixed, expected saving next period: $15,000\n  - If non-controllable, the saving is $0\n\nWhat is the EXPECTED NET BENEFIT of investigation, and should it proceed?", "options": [{"letter": "A", "text": "$4,000 net cost — do NOT investigate", "correct": false, "why": "This applies the investigation cost without considering the expected benefit. Expected benefit = 0.70 × $15,000 = $10,500, which exceeds the $4,000 cost. Net benefit = +$6,500. Should investigate."}, {"letter": "B", "text": "$6,500 net benefit — investigate", "correct": true, "why": "Correct. Expected benefit = probability of controllability × saving if controllable = 0.70 × $15,000 = $10,500. Net benefit = $10,500 − $4,000 (investigation cost) = $6,500. Positive net benefit justifies investigation."}, {"letter": "C", "text": "$11,000 net benefit — investigate", "correct": false, "why": "This calculation seems to subtract $4,000 from $15,000 without applying the 70% probability. Without the probability adjustment, the benefit is overstated by $4,500 (the 30% chance of zero benefit isn’t accounted for)."}, {"letter": "D", "text": "$15,000 net benefit — investigate", "correct": false, "why": "This ignores both the probability of controllability (only 70% chance the variance can actually be fixed) and the cost of investigation ($4,000). Both must be netted off for the proper expected-value calculation."}], "workingNote": "Cost-benefit calculation using expected value:\n  Step 1: probability-weighted expected saving\n    P(controllable) × saving + P(non-controllable) × 0\n    = 0.70 × $15,000 + 0.30 × $0\n    = $10,500\n  Step 2: deduct investigation cost\n    Expected net benefit = $10,500 − $4,000 = $6,500\nDecision: positive net benefit -> INVESTIGATE.\nNote: if probability of controllability were only 25%, expected benefit would be 0.25 × $15,000 = $3,750, which is LESS than $4,000 cost. Net would be −$250 — don’t investigate.", "explanation": "Expected-value-based investigation decisions are the rigorous version of the cost-benefit test. Real investigations have uncertain payoffs (the variance may turn out non-controllable). Weighting the saving by the probability of it being recoverable gives a realistic expected benefit. Compare to investigation cost: investigate if positive expected net benefit. This logic is the same as any decision-under-uncertainty framework.", "examinerNote": "Expected benefit = probability × saving. Net benefit = expected benefit − investigation cost. Investigate if net benefit positive."}, {"qId": "BV30", "topic": "Final concepts — flexing and control", "difficulty": "medium", "marks": 2, "timeIdeal": 130, "type": "truefalse2", "questionText": "State whether each of the following statements is true or false.", "statements": [{"text": "A flexed budget is recalculated using the actual selling price and actual material cost per unit to ensure direct comparability with actual results.", "answer": false}, {"text": "The primary purpose of a variance investigation is accountability and learning — to understand WHY actual performance differed from plan and what should change for next period.", "answer": true}], "workingNote": "Statement 1: This is INCORRECT. A flexed budget uses BUDGETED rates (per-unit cost, per-unit price) applied to ACTUAL volume. The whole point is to compare actuals to what they SHOULD HAVE BEEN at the budgeted rates — not to use actual rates (which would eliminate all variances). -> FALSE.\nStatement 2: Variance investigation is fundamentally about understanding causes and improving future decisions. Sometimes it identifies a manager who should be held accountable; sometimes it identifies an external factor; sometimes a budgeting flaw. Either way, the goal is learning that improves future plans. -> TRUE.", "explanation": "Statement 1 trips many students because the phrase 'direct comparability' sounds reasonable. But flexing uses BUDGETED rates at ACTUAL volume — not actual rates. Using actual rates would make the flexed budget equal to actual, leaving zero variances and zero information. Statement 2 captures the proper purpose: variance analysis isn’t blame-allocation, it’s learning. Even adverse variances driven by good decisions (e.g., investing in quality) should be understood, not just penalised.", "examinerNote": "Flex uses BUDGETED rates at ACTUAL volume. Variance investigation = learning, not blame. Both anchors are easy to forget under pressure."}];
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============================================================
+   APP LOGIC — Firebase real-time + localStorage backup
+   ============================================================ */
+let fbApp = null, fbDB = null, fbOK = false;
+let CURRENT_USER = null;
+let attempt = null;        // current attempt state
+let timerInt = null, paused = false, calcOn = false;
+let reviewFilter = 'wrong';
+
+/* ---------- Firebase init ---------- */
+function initFirebase() {
+  try {
+    fbApp = firebase.initializeApp(firebaseConfig);
+    fbDB = firebase.database();
+    // Connection state listener
+    fbDB.ref('.info/connected').on('value', (snap) => {
+      fbOK = snap.val() === true;
+      paintConn();
+    });
+  } catch (e) {
+    console.error('Firebase init failed', e);
+    fbOK = false;
+    paintConn();
+  }
+}
+function paintConn() {
+  const on = fbOK;
+  [['conn-dot','conn-text'],['w-conn-dot','w-conn-text']].forEach(([d,t])=>{
+    const dot = document.getElementById(d), txt = document.getElementById(t);
+    if (!dot) return;
+    dot.className = 'status-dot ' + (on ? 'dot-on' : 'dot-off');
+    if (t === 'conn-text') txt.textContent = on ? 'Online — connected' : 'Offline — work saved on device';
+    else txt.textContent = on ? 'Online — your work syncs automatically' : 'Offline — saved on device, will sync when online';
+  });
+}
+
+/* ---------- localStorage helpers ---------- */
+function lsKey(user) { return TEST.storageKey + '_' + user; }
+function lsLoad(user) {
+  try { return JSON.parse(localStorage.getItem(lsKey(user)) || '{"attempts":[]}'); }
+  catch { return { attempts: [] }; }
+}
+function lsSave(user, data) {
+  try { localStorage.setItem(lsKey(user), JSON.stringify(data)); }
+  catch (e) { console.error('localStorage save failed', e); }
+}
+
+/* ---------- toast ---------- */
+function toast(msg, ms) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), ms || 2600);
+}
+
+/* ---------- screen nav ---------- */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ---------- LOGIN ---------- */
+function doLogin() {
+  const name = document.getElementById('login-name').value;
+  const code = document.getElementById('login-code').value.trim();
+  const err = document.getElementById('login-err');
+  if (!name) { err.textContent = 'Please select your name.'; err.style.display='block'; return; }
+  if (CODES[name] !== code) { err.textContent = 'Incorrect access code.'; err.style.display='block'; return; }
+  err.style.display = 'none';
+  CURRENT_USER = name;
+  // Presence: mark active (not in test yet)
+  setPresence('dashboard', null);
+  renderWelcome();
+  show('welcome');
+}
+function logout() {
+  clearPresence();
+  CURRENT_USER = null;
+  document.getElementById('login-code').value = '';
+  show('login');
+}
+
+/* ---------- PRESENCE (Recommendation 1: Active Now) ---------- */
+let presenceRef = null;
+function setPresence(state, qInfo) {
+  if (!fbDB || !CURRENT_USER) return;
+  try {
+    presenceRef = fbDB.ref('presence/' + CURRENT_USER);
+    presenceRef.set({
+      user: CURRENT_USER, state: state, chapter: TEST.chapterName,
+      q: qInfo, ts: Date.now()
+    });
+    presenceRef.onDisconnect().remove();
+  } catch (e) { console.error('presence err', e); }
+}
+function clearPresence() {
+  if (presenceRef) { try { presenceRef.remove(); } catch(e){} presenceRef = null; }
+}
+
+/* ---------- WELCOME render ---------- */
+function renderWelcome() {
+  document.getElementById('w-name').textContent = CURRENT_USER;
+  const data = lsLoad(CURRENT_USER);
+  const atts = data.attempts || [];
+  document.getElementById('w-attempts').textContent = atts.length;
+  const list = document.getElementById('w-attempts-list');
+  if (atts.length === 0) {
+    list.innerHTML = '<p class="sub">No attempts yet. Start your first practice below.</p>';
+  } else {
+    let h = '<table><thead><tr><th>#</th><th>Date</th><th>Score</th><th>Pace</th><th>Result</th></tr></thead><tbody>';
+    atts.slice().reverse().forEach((a,i)=>{
+      const n = atts.length - i;
+      const pass = a.scorePct >= TEST.passMark;
+      h += `<tr><td>${n}</td><td>${a.dateStr}</td>
+        <td><strong>${a.scorePct}%</strong></td>
+        <td>${a.pacePct}%</td>
+        <td><span class="pill ${pass?'pill-green':'pill-red'}">${pass?'Pass':'Below 70%'}</span></td></tr>`;
+    });
+    h += '</tbody></table>';
+    list.innerHTML = h;
+  }
+  document.getElementById('w-eval-card').style.display =
+    atts.length >= TEST.targetAttempts ? 'block' : 'none';
+}
+
+/* ---------- START TEST ---------- */
+function pickQuestions() {
+  // Shuffle pool, take perAttempt, keeping difficulty mix
+  const pool = ACCRUALS_POOL.slice();
+  for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  return pool.slice(0, TEST.perAttempt);
+}
+function startTest() {
+  const qs = pickQuestions();
+  attempt = {
+    attemptId: 'att_' + CURRENT_USER + '_' + Date.now(),
+    user: CURRENT_USER,
+    startTs: Date.now(),
+    idx: 0,
+    questions: qs.map(q => ({
+      ...q, userAnswer: null, guessed: false, confused: false,
+      tfAnswers: q.type==='truefalse2' ? [null,null] : null,
+      timeSpent: 0, _enter: Date.now()
+    })),
+    remaining: TEST.durationSec,
+    pausesUsed: 0
+  };
+  reviewFilter = 'wrong';
+  show('test');
+  setPresence('in_test', { n: 1, total: TEST.perAttempt });
+  renderQ();
+  startTimer();
+}
+
+/* ---------- TIMER ---------- */
+function startTimer() {
+  clearInterval(timerInt);
+  timerInt = setInterval(()=>{
+    if (paused) return;
+    attempt.remaining--;
+    paintTimer();
+    if (attempt.remaining <= 0) { clearInterval(timerInt); submitTest(true); }
+  }, 1000);
+  paintTimer();
+}
+function paintTimer() {
+  const m = Math.floor(attempt.remaining/60), s = attempt.remaining%60;
+  const el = document.getElementById('t-timer');
+  el.textContent = `${m}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer' + (attempt.remaining <= 120 ? ' warn' : '');
+}
+let pauseSecondsLeft = 120;
+function togglePause() {
+  if (!paused) {
+    if (pauseSecondsLeft <= 0) { toast('No pause time left'); return; }
+    paused = true;
+    document.getElementById('pause-btn').textContent = '▶ Resume';
+    const pi = setInterval(()=>{
+      if (!paused) { clearInterval(pi); return; }
+      pauseSecondsLeft--;
+      if (pauseSecondsLeft <= 0) { paused=false; document.getElementById('pause-btn').textContent='⏸ Pause'; clearInterval(pi); toast('Pause time up — test resumed'); }
+    },1000);
+    toast('Paused — max 2 min total');
+  } else {
+    paused = false;
+    document.getElementById('pause-btn').textContent = '⏸ Pause';
+  }
+}
+
+/* ---------- RENDER QUESTION ---------- */
+function renderQ() {
+  const i = attempt.idx;
+  const q = attempt.questions[i];
+  q._enter = Date.now();
+  document.getElementById('t-qnum').textContent = `Q${i+1} / ${attempt.questions.length}`;
+  document.getElementById('t-progress').style.width = ((i+1)/attempt.questions.length*100)+'%';
+
+  // nav grid
+  const nav = document.getElementById('t-nav');
+  nav.innerHTML = '';
+  attempt.questions.forEach((qq,k)=>{
+    const c = document.createElement('div');
+    c.className = 'nav-cell';
+    if (k === i) c.classList.add('current');
+    else if (isAnswered(qq)) c.classList.add('answered');
+    if (qq.confused) c.classList.add('flagged');
+    c.textContent = k+1;
+    c.onclick = ()=>{ saveTime(); attempt.idx=k; renderQ(); };
+    nav.appendChild(c);
+  });
+
+  let html = '';
+  if (q.scenario) html += `<div class="scenario">${q.scenario}</div>`;
+  html += `<div class="qtext">${q.questionText}</div>`;
+
+  if (q.type === 'mcq') {
+    q.options.forEach(o=>{
+      const sel = q.userAnswer === o.letter ? ' sel' : '';
+      html += `<div class="opt${sel}" onclick="pickMCQ('${o.letter}')">
+        <span class="opt-letter">${o.letter}</span>${o.text}</div>`;
+    });
+  } else if (q.type === 'number') {
+    html += `<div class="field" style="max-width:260px;">
+      <label>Your answer (number only)</label>
+      <input type="number" id="num-input" value="${q.userAnswer ?? ''}"
+        oninput="pickNum(this.value)" placeholder="e.g. 1813" step="any"></div>`;
+  } else if (q.type === 'truefalse2') {
+    q.statements.forEach((st,si)=>{
+      const a = q.tfAnswers[si];
+      html += `<div class="tf-row">
+        <div class="stmt">${st.text}</div>
+        <button class="tf-btn ${a===true?'sel-t':''}" onclick="pickTF(${si},true)">True</button>
+        <button class="tf-btn ${a===false?'sel-f':''}" onclick="pickTF(${si},false)">False</button>
+      </div>`;
+    });
+  }
+
+  html += `<div class="guess-box">
+    <input type="checkbox" id="guess-cb" ${q.guessed?'checked':''} onchange="toggleGuess()">
+    <label for="guess-cb">I'm guessing this answer (helps your teacher see where to focus)</label></div>`;
+  html += `<div class="confuse-box">
+    <input type="checkbox" id="confuse-cb" ${q.confused?'checked':''} onchange="toggleConfuse()">
+    <label for="confuse-cb">⚑ Mark as confusing (for my own revision)</label></div>`;
+
+  document.getElementById('t-question').innerHTML = html;
+
+  document.getElementById('t-prev').style.visibility = i===0 ? 'hidden' : 'visible';
+  const last = i === attempt.questions.length-1;
+  document.getElementById('t-next').style.display = last ? 'none' : 'inline-block';
+  document.getElementById('t-submit').style.display = last ? 'inline-block' : 'none';
+
+  setPresence('in_test', { n: i+1, total: attempt.questions.length });
+}
+function isAnswered(q) {
+  if (q.type==='mcq') return q.userAnswer!=null;
+  if (q.type==='number') return q.userAnswer!=null && q.userAnswer!=='';
+  if (q.type==='truefalse2') return q.tfAnswers[0]!=null && q.tfAnswers[1]!=null;
+  return false;
+}
+function pickMCQ(l){ attempt.questions[attempt.idx].userAnswer=l; renderQ(); }
+function pickNum(v){ attempt.questions[attempt.idx].userAnswer = v===''?null:v; updateNav(); }
+function pickTF(si,v){ attempt.questions[attempt.idx].tfAnswers[si]=v; renderQ(); }
+function toggleGuess(){ attempt.questions[attempt.idx].guessed = document.getElementById('guess-cb').checked; }
+function toggleConfuse(){ attempt.questions[attempt.idx].confused = document.getElementById('confuse-cb').checked; updateNav(); }
+function updateNav(){
+  const cells = document.querySelectorAll('#t-nav .nav-cell');
+  attempt.questions.forEach((qq,k)=>{
+    cells[k].className = 'nav-cell';
+    if (k===attempt.idx) cells[k].classList.add('current');
+    else if (isAnswered(qq)) cells[k].classList.add('answered');
+    if (qq.confused) cells[k].classList.add('flagged');
+  });
+}
+function saveTime(){
+  const q = attempt.questions[attempt.idx];
+  q.timeSpent += Math.round((Date.now()-q._enter)/1000);
+}
+function nextQ(){ saveTime(); if (attempt.idx<attempt.questions.length-1){attempt.idx++;renderQ();} }
+function prevQ(){ saveTime(); if (attempt.idx>0){attempt.idx--;renderQ();} }
+
+/* ---------- SUBMIT ---------- */
+function confirmSubmit(){
+  const unans = attempt.questions.filter(q=>!isAnswered(q)).length;
+  let msg = 'Submit your test?';
+  if (unans>0) msg = `You have ${unans} unanswered question(s). Submit anyway?`;
+  if (confirm(msg)) submitTest(false);
+}
+function submitTest(auto){
+  clearInterval(timerInt);
+  saveTime();
+  const qs = attempt.questions;
+  let correct=0;
+  qs.forEach(q=>{
+    let ok=false;
+    if (q.type==='mcq') {
+      const c = q.options.find(o=>o.correct);
+      ok = q.userAnswer === c.letter;
+      q._correctAnswer = c.letter;
+    } else if (q.type==='number') {
+      const ua = parseFloat(q.userAnswer);
+      ok = !isNaN(ua) && Math.abs(ua - q.numericAnswer) <= (q.tolerance||0);
+      q._correctAnswer = String(q.numericAnswer);
+    } else if (q.type==='truefalse2') {
+      ok = q.tfAnswers[0]===q.statements[0].answer && q.tfAnswers[1]===q.statements[1].answer;
+      q._correctAnswer = q.statements.map(s=>s.answer?'T':'F').join('/');
+    }
+    q._isCorrect = ok;
+    if (ok) correct++;
+  });
+  const total = qs.length;
+  const scorePct = Math.round(correct/total*100);
+  const timeUsed = TEST.durationSec - attempt.remaining;
+  const idealTime = qs.reduce((s,q)=>s+(q.timeIdeal||120),0);
+  const pacePct = Math.min(100, Math.round(idealTime / Math.max(timeUsed,1) * 100));
+  const guessedCount = qs.filter(q=>q.guessed).length;
+  const luckyRight = qs.filter(q=>q.guessed && q._isCorrect).length;
+
+  const now = new Date();
+  const rec = {
+    attemptId: attempt.attemptId,
+    attemptNumber: (lsLoad(CURRENT_USER).attempts||[]).length + 1,
+    schemaVersion: 1,
+    student: CURRENT_USER,
+    subject: TEST.subject,
+    chapter: { id: TEST.chapterId, name: TEST.chapterName },
+    testType: TEST.testType,
+    testCode: TEST.storageKey,
+    dateStr: now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),
+    submittedAt: now.toISOString(),
+    submittedTs: Date.now(),
+    autoSubmitted: auto,
+    scorePct, correct, wrong: total-correct, total,
+    timeUsedSec: timeUsed, pacePct,
+    guessedCount, luckyRight,
+    questions: qs.map((q,qi)=>({
+      qId:q.qId, displayIdx:qi+1, type:q.type, topic:q.topic,
+      difficulty:q.difficulty, marks:q.marks, timeIdeal:q.timeIdeal,
+      questionText:q.questionText, scenario:q.scenario||null,
+      options:q.options||null, statements:q.statements||null,
+      explanation:q.explanation, examinerNote:q.examinerNote, workingNote:q.workingNote||null,
+      userAnswer: q.type==='truefalse2' ? q.tfAnswers : q.userAnswer,
+      correctAnswer:q._correctAnswer, correct:q._isCorrect,
+      timeSpent:q.timeSpent, guessed:q.guessed, confused:q.confused
+    }))
+  };
+
+  // 1. localStorage backup (device) — ALWAYS, every attempt
+  const data = lsLoad(CURRENT_USER);
+  data.attempts = data.attempts || [];
+  data.attempts.push({
+    attemptId: rec.attemptId, dateStr: rec.dateStr, scorePct, pacePct,
+    correct, wrong: total-correct, total, full: rec
+  });
+  lsSave(CURRENT_USER, data);
+
+  // 2. Firebase sync (real-time) — EVERY attempt
+  syncToFirebase(rec);
+
+  // 3. show results
+  attempt._result = rec;
+  renderResults(rec);
+  show('results');
+  setPresence('dashboard', null);
+}
+
+function buildDashboardSnapshot(rec) {
+  // Map flat test record → dashboard schema-v1 snapshot.
+  const qd = (rec.questions || []).map(q => {
+    let ua = q.userAnswer;
+    if (q.type === 'truefalse2' && Array.isArray(ua)) {
+      ua = ua.map(v => v === true ? 'T' : v === false ? 'F' : '-').join('/');
+    }
+    return {
+      qId: q.qId, topic: q.topic || 'general',
+      difficulty: q.difficulty || 'medium',
+      correct: q.correct === true,
+      earned: q.correct === true ? (q.marks || 2) : 0,
+      marks: q.marks || 2,
+      timeSpent: q.timeSpent || 0,
+      timeIdeal: q.timeIdeal || 120,
+      userAnswer: ua == null ? null : ua,
+      correctAnswer: q.correctAnswer,
+      guessed: q.guessed === true,
+      confused: q.confused === true
+    };
+  });
+  // topicScores: aggregate earned/total/count per topic
+  const topicScores = {};
+  qd.forEach(q => {
+    const t = q.topic || 'general';
+    if (!topicScores[t]) topicScores[t] = { earned: 0, total: 0, count: 0 };
+    topicScores[t].earned += q.earned;
+    topicScores[t].total  += q.marks;
+    topicScores[t].count  += 1;
+  });
+  const totalMarks = qd.reduce((s, q) => s + q.marks, 0);
+  const totalScore = qd.reduce((s, q) => s + q.earned, 0);
+  const now = new Date(rec.submittedAt || Date.now());
+  const attemptObj = {
+    attemptId: rec.attemptId,
+    attemptNumber: rec.attemptNumber || 1,
+    date: rec.dateStr || now.toLocaleDateString('en-GB'),
+    time: now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+    submittedAt: rec.submittedTs || now.getTime(),
+    totalScore: totalScore,
+    totalMarks: totalMarks,
+    percent: rec.scorePct,
+    timeUsed: rec.timeUsedSec || 0,
+    passed: rec.scorePct >= (TEST.passMark || 70),
+    topicScores: topicScores,
+    perQuestionDetail: qd,
+    inProgress: false,
+    metadata: {
+      pacePct: rec.pacePct, guessedCount: rec.guessedCount,
+      luckyRight: rec.luckyRight, autoSubmitted: rec.autoSubmitted === true,
+      testCode: rec.testCode
+    }
+  };
+  return {
+    schemaVersion: 1,
+    student: rec.student,
+    subject: rec.subject,
+    chapter: rec.chapter,            // { id, name }
+    testType: rec.testType || 'chapter_test',
+    exportedAt: now.toISOString(),
+    attempts: [attemptObj]
+  };
+}
+
+function syncToFirebase(rec) {
+  const dot = document.getElementById('r-sync-dot');
+  const txt = document.getElementById('r-sync-text');
+  dot.className = 'status-dot dot-sync';
+  txt.textContent = 'Syncing your result to teacher dashboard…';
+  if (!fbDB) {
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Will sync when Firebase is available.';
+    return;
+  }
+  try {
+    const snapshot = buildDashboardSnapshot(rec);
+    // Dashboard listens at snapshots/{Student}/{pushKey}
+    const ref = fbDB.ref('snapshots/' + rec.student).push();
+    ref.set(snapshot).then(()=>{
+      dot.className='status-dot dot-on';
+      txt.textContent='✓ Synced — your teacher can see this result now.';
+    }).catch(e=>{
+      console.error(e);
+      dot.className='status-dot dot-off';
+      txt.textContent='Saved on device. Sync failed — will retry when online.';
+      queueRetry(rec);
+    });
+  } catch(e){
+    console.error(e);
+    dot.className='status-dot dot-off';
+    txt.textContent='Saved on device. Sync will retry when online.';
+    queueRetry(rec);
+  }
+}
+function queueRetry(rec){
+  // store in a retry queue in localStorage
+  try {
+    const q = JSON.parse(localStorage.getItem('sync_retry')||'[]');
+    q.push(rec); localStorage.setItem('sync_retry', JSON.stringify(q));
+  } catch(e){}
+}
+function flushRetry(){
+  if (!fbDB || !fbOK) return;
+  let q;
+  try { q = JSON.parse(localStorage.getItem('sync_retry')||'[]'); } catch { return; }
+  if (!q.length) return;
+  const rec = q.shift();
+  try {
+    const snapshot = buildDashboardSnapshot(rec);
+    fbDB.ref('snapshots/'+rec.student).push().set(snapshot).then(()=>{
+      localStorage.setItem('sync_retry', JSON.stringify(q));
+      flushRetry();
+    }).catch(()=>{});
+  } catch(e){ console.error(e); }
+}
+setInterval(flushRetry, 15000);
+
+/* ---------- RESULTS render ---------- */
+function renderResults(rec){
+  document.getElementById('r-subtitle').textContent =
+    `${rec.chapter.name} · ${rec.dateStr}` + (rec.autoSubmitted?' · auto-submitted (time up)':'');
+  document.getElementById('r-score').textContent = rec.scorePct+'%';
+  document.getElementById('r-correct').textContent = rec.correct;
+  document.getElementById('r-wrong').textContent = rec.wrong;
+  document.getElementById('r-guessed').textContent = rec.guessedCount +
+    (rec.guessedCount? ` (${rec.luckyRight}✓)` : '');
+  const m=Math.floor(rec.timeUsedSec/60), s=rec.timeUsedSec%60;
+  document.getElementById('r-time').textContent = `${m}:${String(s).padStart(2,'0')}`;
+  document.getElementById('r-pace').textContent = rec.pacePct+'%';
+
+  const pass = rec.scorePct >= TEST.passMark;
+  document.getElementById('r-verdict').innerHTML =
+    `<div class="banner" style="border-color:${pass?'var(--green)':'var(--red)'};
+      background:${pass?'#e8f5e9':'#ffebee'};">
+      <strong>${pass?'✓ Above pass mark (70%)':'Below pass mark (70%) — keep practising'}</strong><br>
+      <span style="font-size:14px;">${pass
+        ? 'Strong work. Aim to repeat this consistency across all 6 attempts.'
+        : 'Review the wrong answers below carefully. The explanations show exactly where to improve.'}</span>
+    </div>`;
+  renderReview(rec);
+}
+function toggleReviewFilter(){
+  reviewFilter = reviewFilter==='wrong' ? 'all' : 'wrong';
+  document.getElementById('rev-toggle').textContent =
+    'Show: ' + (reviewFilter==='wrong'?'Wrong only':'All questions');
+  renderReview(attempt._result);
+}
+function renderReview(rec){
+  const box = document.getElementById('r-review');
+  let qs = rec.questions;
+  if (reviewFilter==='wrong') qs = qs.filter(q=>!q.correct);
+  if (!qs.length){ box.innerHTML='<p class="sub">No questions to show with this filter.</p>'; return; }
+  let h='';
+  qs.forEach(q=>{
+    h+=`<div class="review-q ${q.correct?'correct':'wrong'}">
+      <div class="row" style="margin-bottom:8px;">
+        <span class="pill ${q.correct?'pill-green':'pill-red'}">${q.correct?'Correct':'Wrong'}</span>
+        <span class="pill pill-grey">${q.topic}</span>
+        ${q.guessed?'<span class="pill pill-amber">Guessed</span>':''}
+        ${q.confused?'<span class="pill pill-blue">⚑ Confusing</span>':''}
+      </div>
+      ${q.scenario?`<div class="scenario">${q.scenario}</div>`:''}
+      <div style="font-weight:500;margin-bottom:10px;">Q${q.displayIdx}. ${q.questionText}</div>`;
+    if (q.type==='mcq'){
+      q.options.forEach(o=>{
+        let cls='ans-neutral';
+        if (o.correct) cls='ans-correct';
+        else if (o.letter===q.userAnswer) cls='ans-wrong';
+        h+=`<div class="ans-line ${cls}"><strong>${o.letter}.</strong> ${o.text}
+          ${o.correct?' ✓':''}${(o.letter===q.userAnswer&&!o.correct)?' ← your answer':''}
+          <div style="font-size:12.5px;margin-top:4px;opacity:.85;">${o.why}</div></div>`;
+      });
+    } else if (q.type==='number'){
+      h+=`<div class="ans-line ${q.correct?'ans-correct':'ans-wrong'}">
+        Your answer: <strong>${q.userAnswer ?? '(blank)'}</strong>
+        ${q.correct?' ✓':` — correct answer: <strong>${q.correctAnswer}</strong>`}</div>`;
+    } else if (q.type==='truefalse2'){
+      q.statements.forEach((st,si)=>{
+        const ua = q.userAnswer[si];
+        const ok = ua === st.answer;
+        h+=`<div class="ans-line ${ok?'ans-correct':'ans-wrong'}">
+          "${st.text}" — you: <strong>${ua===null?'(blank)':(ua?'True':'False')}</strong>,
+          correct: <strong>${st.answer?'True':'False'}</strong> ${ok?'✓':'✗'}</div>`;
+      });
+    }
+    if (q.workingNote){
+      h+=`<div class="working"><strong>Working:</strong><pre>${q.workingNote}</pre></div>`;
+    }
+    h+=`<div class="explain"><strong>Explanation:</strong> ${q.explanation}</div>
+      <div class="examiner"><strong>Examiner note:</strong> ${q.examinerNote}</div></div>`;
+  });
+  box.innerHTML=h;
+}
+function goWelcome(){ renderWelcome(); show('welcome'); setPresence('dashboard',null); }
+
+/* ---------- EVALUATION REPORT ---------- */
+function showEvaluation(){
+  const data = lsLoad(CURRENT_USER);
+  const atts = (data.attempts||[]).map(a=>a.full).filter(Boolean);
+  if (atts.length < TEST.targetAttempts){ toast('Need 6 attempts first'); return; }
+  const recent = atts.slice(-3);
+  const overallAvg = Math.round(atts.reduce((s,a)=>s+a.scorePct,0)/atts.length);
+  const recentAvg = Math.round(recent.reduce((s,a)=>s+a.scorePct,0)/recent.length);
+  const trend = recentAvg - Math.round(atts.slice(0,3).reduce((s,a)=>s+a.scorePct,0)/Math.min(3,atts.length));
+  // topic mastery
+  const topics = {};
+  atts.forEach(a=>a.questions.forEach(q=>{
+    topics[q.topic]=topics[q.topic]||{c:0,t:0};
+    topics[q.topic].t++; if(q.correct)topics[q.topic].c++;
+  }));
+  const tArr = Object.entries(topics).map(([k,v])=>({topic:k,pct:Math.round(v.c/v.t*100),n:v.t}))
+    .sort((a,b)=>a.pct-b.pct);
+  const ready = recentAvg>=TEST.passMark && trend>=0;
+  document.getElementById('ev-sub').textContent =
+    `${CURRENT_USER} · ${atts.length} attempts · ${TEST.chapterName}`;
+  let h = `<div class="banner" style="border-color:${ready?'var(--green)':'var(--accent)'};
+    background:${ready?'#e8f5e9':'#fff8e1'};">
+    <h3 style="margin-bottom:6px;">${ready?'✓ You look exam-ready for this chapter':'Almost there — keep practising'}</h3>
+    <span style="font-size:14px;">Recent average ${recentAvg}% · overall ${overallAvg}% ·
+    trend ${trend>=0?'+':''}${trend}%</span></div>`;
+  h += `<div class="stat-grid">
+    <div class="stat"><div class="stat-val">${overallAvg}%</div><div class="stat-lbl">Overall Avg</div></div>
+    <div class="stat"><div class="stat-val">${recentAvg}%</div><div class="stat-lbl">Recent Avg</div></div>
+    <div class="stat"><div class="stat-val">${trend>=0?'+':''}${trend}%</div><div class="stat-lbl">Trend</div></div>
+    <div class="stat"><div class="stat-val">${atts.length}</div><div class="stat-lbl">Attempts</div></div></div>`;
+  h += `<h3 style="margin-top:18px;">Topic Mastery</h3>`;
+  tArr.forEach(t=>{
+    const col = t.pct>=80?'var(--green)':t.pct>=70?'var(--primary-light)':t.pct>=50?'var(--accent)':'var(--red)';
+    h+=`<div style="margin:10px 0;">
+      <div class="row" style="font-size:13.5px;margin-bottom:2px;">
+        <span>${t.topic}</span><div class="spacer"></div>
+        <span style="font-weight:600;color:${col};">${t.pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${t.pct}%;background:${col};"></div></div>
+    </div>`;
+  });
+  const weak = tArr.filter(t=>t.pct<70).slice(0,3);
+  if (weak.length){
+    h+=`<div class="banner" style="margin-top:18px;"><strong>Focus next on:</strong> `+
+      weak.map(w=>`${w.topic} (${w.pct}%)`).join(', ')+`</div>`;
+  }
+  document.getElementById('ev-body').innerHTML = h;
+  show('eval');
+}
+
+/* ---------- CALCULATOR ---------- */
+let calcExpr='';
+function toggleCalc(){
+  calcOn=!calcOn;
+  document.getElementById('calc').classList.toggle('show',calcOn);
+  document.getElementById('calc-toggle').style.display = calcOn?'none':'block';
+}
+function calcN(n){ calcExpr+=n; paintCalc(); }
+function calcOp(o){ calcExpr+=o; paintCalc(); }
+function calcC(){ calcExpr=''; paintCalc(); }
+function calcDel(){ calcExpr=calcExpr.slice(0,-1); paintCalc(); }
+function calcEq(){
+  try{
+    let e=calcExpr.replace(/%/g,'/100');
+    const r=Function('"use strict";return ('+e+')')();
+    calcExpr=String(Math.round(r*10000)/10000);
+  }catch{ calcExpr='Error'; }
+  paintCalc();
+}
+function paintCalc(){
+  document.getElementById('calc-disp').textContent =
+    (calcExpr||'0').replace(/\*/g,'×').replace(/\//g,'÷');
+}
+
+/* ---------- INIT ---------- */
+window.addEventListener('load', ()=>{
+  initFirebase();
+  setTimeout(paintConn, 800);
+});
+window.addEventListener('beforeunload', clearPresence);
+
+</script>
+</body>
+</html>
